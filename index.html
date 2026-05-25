@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light"><head>
+<html lang="es" data-theme="dark"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LXP Manual</title>
@@ -9,7 +9,7 @@
    사용 안내 (Setup Guide)
   ============================================================
    1. 비밀번호 변경:    <script>의 PASSWORDS 객체
-   2. 페이지 관리자 비밀번호: PASSWORDS.admin_page (현재 'chinochuco')
+   2. 페이지 관리자 비밀번호: PASSWORDS.admin_page (현재 'nosoychino')
    3. 매뉴얼 항목 변경: <script>의 SECTIONS_DATA 객체
    4. 외부 링크 (구글 드라이브 등) 설정 방법:
       - 우측 하단 '페이지 관리자' 버튼 → 비밀번호 입력
@@ -66,6 +66,11 @@
     --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4), 0 16px 40px rgba(0, 0, 0, 0.3);
     --bg-glow-1: rgba(91, 149, 220, 0.10);
     --bg-glow-2: rgba(91, 149, 220, 0.05);
+    /* Use dark scheme for native widgets (scrollbars, date pickers, autofill, etc) */
+    color-scheme: dark;
+  }
+  [data-theme="light"] {
+    color-scheme: light;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -80,14 +85,14 @@
       radial-gradient(ellipse 900px 500px at 0% 100%, var(--bg-glow-2), transparent 60%);
     background-attachment: fixed;
   }
-  .screen { display: none; min-height: 100vh; padding: 36px 56px 56px; animation: fadeIn 0.5s ease-out; }
+  .screen { display: none; min-height: 100vh; padding: 24px 40px 40px; animation: fadeIn 0.5s ease-out; }
   .screen.active { display: block; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
   .top-bar {
     display: flex; justify-content: space-between; align-items: center;
-    padding-bottom: 24px; border-bottom: 1px solid var(--rule);
-    margin-bottom: 56px; gap: 24px; flex-wrap: wrap;
+    padding-bottom: 16px; border-bottom: 1px solid var(--rule);
+    margin-bottom: 28px; gap: 24px; flex-wrap: wrap;
   }
   .top-bar .brand {
     font-family: var(--display); font-weight: 700; letter-spacing: 0.24em;
@@ -146,27 +151,160 @@
     content: ""; display: inline-block; width: 36px; height: 1px; background: var(--ink-mute);
   }
 
-  .roles {
-    display: flex; flex-direction: column; gap: 0;
-    max-width: 640px; margin: 0 auto 40px;
-    border-top: 1px solid var(--rule);
+  /* ─── Welcome CTA (main screen) ─── */
+  .welcome-cta {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 32px;
+    max-width: 580px; margin: 0 auto 64px;
+    padding: 32px 24px 0;
+    text-align: center;
   }
-  .role-card {
-    position: relative; background: transparent; border: none;
-    border-bottom: 1px solid var(--rule);
-    border-radius: 0; padding: 28px 8px;
-    cursor: pointer; transition: all 0.3s ease;
-    text-align: left; font-family: inherit; color: inherit; width: 100%;
-    display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 24px;
+  .welcome-message {
+    font-family: var(--display); font-size: 18px; font-weight: 400;
+    color: var(--ink-soft); line-height: 1.6;
+    margin: 0;
+    letter-spacing: -0.01em;
+    white-space: pre-line;
   }
-  .role-card:hover { padding-left: 16px; padding-right: 0; }
-  .role-card:hover .role-num { color: var(--accent); }
-  .role-card:hover .role-name { color: var(--accent); }
-  .role-card:hover .role-arrow { transform: translateX(6px); color: var(--accent); }
-  .role-num { font-family: var(--display); font-weight: 600; font-size: 13px; line-height: 1; color: var(--ink-mute); letter-spacing: 0.16em; transition: color 0.3s ease; }
-  .role-name { font-family: var(--display); font-weight: 600; font-size: 28px; letter-spacing: -0.02em; color: var(--ink); margin: 0; transition: color 0.3s ease; }
-  .role-footer, .role-enter { display: none; }
-  .role-arrow { font-family: var(--display); font-size: 22px; color: var(--ink-mute); transition: all 0.3s ease; font-weight: 300; }
+  /* ─── Welcome form: inline password input + arrow button ─── */
+  .welcome-form {
+    width: 100%; max-width: 440px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .welcome-input-wrap {
+    position: relative;
+    display: flex; align-items: stretch;
+    background: var(--paper);
+    border: 1.5px solid var(--rule);
+    border-radius: 999px;
+    padding: 6px 6px 6px 22px;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 18px rgba(10, 36, 71, 0.08);
+  }
+  .welcome-input-wrap:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 8px 22px rgba(10, 36, 71, 0.15), 0 0 0 4px rgba(0, 71, 169, 0.08);
+  }
+  .welcome-input-wrap.shake { animation: welcomeShake 0.4s ease-in-out; }
+  .welcome-input-wrap.error {
+    border-color: var(--danger, #d04848);
+    box-shadow: 0 0 0 3px rgba(208, 72, 72, 0.12);
+  }
+  @keyframes welcomeShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+  .welcome-input {
+    flex: 1; min-width: 0;
+    border: none; background: transparent;
+    font-family: var(--sans); font-size: 16px; font-weight: 500;
+    color: var(--ink); letter-spacing: 0.03em;
+    padding: 14px 0;
+  }
+  .welcome-input:focus { outline: none; }
+  .welcome-input::placeholder {
+    color: var(--ink-mute); font-weight: 400; letter-spacing: 0;
+  }
+  .welcome-input-btn {
+    flex-shrink: 0;
+    width: 44px; height: 44px; padding: 0;
+    background: var(--ink); color: var(--paper);
+    border: none; border-radius: 50%;
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all 0.2s ease;
+  }
+  .welcome-input-btn:hover {
+    transform: translateX(2px);
+    background: var(--accent);
+  }
+  .welcome-input-btn:active { transform: translateX(1px) scale(0.96); }
+  .welcome-input-btn svg { width: 18px; height: 18px; }
+  [data-theme="dark"] .welcome-input-btn { background: var(--accent); }
+  [data-theme="dark"] .welcome-input-btn:hover { filter: brightness(1.1); }
+
+  .welcome-error {
+    color: var(--danger, #d04848);
+    font-size: 13px; font-weight: 500;
+    text-align: center;
+    padding: 0 8px;
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  /* ─── Video promo banner (top of manual view) ─── */
+  .video-promo-banner {
+    width: 100%;
+    background: linear-gradient(135deg, var(--ink) 0%, var(--accent) 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(10, 36, 71, 0.15);
+  }
+  /* In dark mode, --ink is near-white which makes the gradient too pale.
+     Override with a fixed dark navy → blue gradient so white text stays readable. */
+  [data-theme="dark"] .video-promo-banner {
+    background: linear-gradient(135deg, #1a3866 0%, #2a5fb0 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(91, 149, 220, 0.35);
+  }
+  [data-theme="dark"] .video-promo-banner:hover {
+    box-shadow: 0 6px 18px rgba(91, 149, 220, 0.3);
+    border-color: rgba(91, 149, 220, 0.55);
+  }
+  .video-promo-banner:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(10, 36, 71, 0.22);
+  }
+  .vpb-icon {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .vpb-icon svg { width: 18px; height: 18px; color: #fff; }
+  .vpb-text { min-width: 0; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .vpb-eyebrow {
+    font-family: var(--display); font-weight: 600; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.16em;
+    color: rgba(255,255,255,0.75);
+  }
+  .vpb-title {
+    font-family: var(--display); font-weight: 600; font-size: 14px;
+    color: #fff; letter-spacing: -0.01em; line-height: 1.3;
+  }
+  .vpb-desc {
+    font-size: 12px; color: rgba(255,255,255,0.8); line-height: 1.4;
+  }
+  .vpb-arrow {
+    font-family: var(--display); font-size: 18px; font-weight: 300;
+    color: #fff;
+    transition: transform 0.3s ease;
+  }
+  .video-promo-banner:hover .vpb-arrow { transform: translateX(4px); }
+
+  @media (max-width: 600px) {
+    .video-promo-banner { grid-template-columns: auto 1fr; gap: 12px; padding: 12px 14px; }
+    .vpb-arrow { display: none; }
+    .vpb-text { flex-direction: column; gap: 2px; align-items: flex-start; }
+    .vpb-title { font-size: 13px; }
+    .vpb-icon { width: 32px; height: 32px; }
+    .vpb-icon svg { width: 16px; height: 16px; }
+    .welcome-message { font-size: 16px; }
+    .welcome-input { font-size: 15px; padding: 12px 0; }
+    .welcome-input-wrap { padding-left: 18px; }
+  }
 
   .modal-backdrop {
     position: fixed; inset: 0; background: rgba(10, 36, 71, 0.55);
@@ -224,7 +362,7 @@
     display: inline-flex; align-items: center; gap: 8px;
     font-family: var(--display); font-size: 12px; font-weight: 600; letter-spacing: 0.2em;
     text-transform: uppercase; color: var(--ink-soft);
-    margin-bottom: 48px; cursor: pointer; background: none; border: none;
+    margin-bottom: 20px; cursor: pointer; background: none; border: none;
     padding: 0; transition: color 0.2s;
   }
   .back-link:hover { color: var(--accent); }
@@ -232,29 +370,29 @@
   .back-link:hover span { transform: translateX(-3px); }
 
   .doc-header {
-    display: grid; grid-template-columns: auto 1fr auto; gap: 32px;
-    align-items: end; padding-bottom: 32px; border-bottom: 1px solid var(--rule);
-    margin-bottom: 56px;
+    display: grid; grid-template-columns: auto 1fr auto; gap: 24px;
+    align-items: end; padding-bottom: 20px; border-bottom: 1px solid var(--rule);
+    margin-bottom: 28px;
   }
-  .doc-header .emblem-small { width: 72px; height: 72px; object-fit: contain; }
-  .doc-eyebrow { font-family: var(--display); font-weight: 600; color: var(--accent); font-size: 13px; text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 14px; }
-  .doc-header h1 { font-family: var(--display); font-weight: 700; font-size: clamp(36px, 5.5vw, 64px); letter-spacing: -0.025em; line-height: 1; color: var(--ink); }
+  .doc-header .emblem-small { width: 56px; height: 56px; object-fit: contain; }
+  .doc-eyebrow { font-family: var(--display); font-weight: 600; color: var(--accent); font-size: 12px; text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 8px; }
+  .doc-header h1 { font-family: var(--display); font-weight: 700; font-size: clamp(28px, 4vw, 44px); letter-spacing: -0.025em; line-height: 1.05; color: var(--ink); }
   .doc-meta { text-align: right; font-family: var(--display); font-size: 12px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute); line-height: 1.8; }
 
   .full-manual-card {
     background: var(--paper);
     color: var(--ink);
     border: 1px solid var(--rule); border-radius: 4px;
-    padding: 24px 28px;
-    display: grid; grid-template-columns: 1fr auto; gap: 28px;
-    align-items: center; margin-bottom: 64px; position: relative;
+    padding: 18px 22px;
+    display: grid; grid-template-columns: 1fr auto; gap: 20px;
+    align-items: center; margin-bottom: 24px; position: relative;
     cursor: pointer; transition: border-color 0.25s ease, background-color 0.25s ease;
     font-family: inherit; text-align: left; width: 100%;
   }
   .full-manual-card:hover { border-color: var(--accent); background: var(--hover-bg); }
-  .full-manual-card .label { font-family: var(--display); color: var(--ink-mute); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
-  .full-manual-card h3 { font-family: var(--display); font-weight: 600; font-size: 19px; letter-spacing: -0.015em; margin-bottom: 4px; color: var(--ink); }
-  .full-manual-card p { color: var(--ink-soft); font-size: 14px; margin: 0; }
+  .full-manual-card .label { font-family: var(--display); color: var(--ink-mute); font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 4px; }
+  .full-manual-card h3 { font-family: var(--display); font-weight: 600; font-size: 17px; letter-spacing: -0.015em; margin-bottom: 3px; color: var(--ink); }
+  .full-manual-card p { color: var(--ink-soft); font-size: 13px; margin: 0; }
   .download-btn-large {
     display: inline-flex; align-items: center; gap: 10px;
     background: transparent; color: var(--accent); padding: 0;
@@ -264,7 +402,7 @@
   }
   .full-manual-card:hover .download-btn-large { transform: translateX(4px); }
 
-  .section-block { margin-bottom: 56px; }
+  .section-block { margin-bottom: 28px; }
   .section-block:last-child { margin-bottom: 0; }
   .section-header {
     display: block;
@@ -415,43 +553,77 @@
   }
   .btn-preview:hover { color: var(--accent); border-color: var(--accent); }
 
-  /* ─── Kind toggle (manual/videos in download view) ─── */
+  /* ─── Kind toggle (manual/videos/updates in download view) ─── */
   .kind-toggle {
     display: inline-flex; gap: 4px;
     padding: 4px;
     background: var(--paper);
     border: 1px solid var(--rule);
     border-radius: 999px;
-    margin: 0 0 48px;
+    margin: 0 0 24px;
     box-shadow: var(--shadow-sm);
   }
   .kind-toggle button {
-    padding: 12px 32px;
+    padding: 10px 24px;
     border: none; background: transparent;
     font-family: var(--display); font-size: 14px; font-weight: 600;
     color: var(--ink-mute); cursor: pointer; transition: all 0.25s;
     letter-spacing: 0.02em;
     border-radius: 999px;
-    min-width: 120px;
+    min-width: 110px;
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    position: relative;
   }
   .kind-toggle button.on {
     background: var(--ink);
     color: var(--paper);
-    box-shadow: 0 2px 6px rgba(10, 36, 71, 0.15);
+    box-shadow: 0 2px 8px rgba(10, 36, 71, 0.18);
   }
   [data-theme="dark"] .kind-toggle button.on {
     background: var(--accent);
     color: #fff;
   }
-  .kind-toggle button:hover:not(.on) { color: var(--ink); }
+  .kind-toggle button:hover:not(.on) {
+    color: var(--ink);
+    background: var(--hover-bg);
+  }
   .kind-toggle button svg { width: 14px; height: 14px; opacity: 0.7; }
   .kind-toggle button.on svg { opacity: 1; }
+  .kind-toggle button .badge {
+    display: inline-block;
+    padding: 2px 7px;
+    background: var(--accent); color: #fff;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.06em;
+    border-radius: 999px;
+    line-height: 1.3;
+  }
+  .kind-toggle button.on .badge { background: rgba(255,255,255,0.25); }
 
-  /* Wrapper to center the pill on the page */
+  /* NEW pip — red badge on the updates tab when there are unseen recent posts.
+     Distinct from the numeric count badge: smaller, all-caps, attention-red. */
+  .kind-toggle button .tab-new-pip {
+    display: inline-block;
+    padding: 2px 7px;
+    background: #d12c2c; color: #fff;
+    font-family: var(--sans); font-size: 9.5px; font-weight: 800;
+    letter-spacing: 0.08em;
+    border-radius: 999px;
+    line-height: 1.3;
+    box-shadow: 0 0 0 2px rgba(209, 44, 44, 0.18);
+    animation: tabPipPulse 2.4s ease-in-out infinite;
+  }
+  .kind-toggle button.on .tab-new-pip { display: none; }  /* hide while user is on the tab */
+  @keyframes tabPipPulse {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(209, 44, 44, 0.16); }
+    50%      { box-shadow: 0 0 0 4px rgba(209, 44, 44, 0.28); }
+  }
+  [data-theme="dark"] .kind-toggle button .tab-new-pip { background: #e84f4f; }
+
+  /* Wrapper to center the pill */
   .kind-toggle-wrap {
     display: flex; justify-content: center;
-    margin-bottom: 48px;
+    margin: 4px 0 28px;
   }
 
   /* ─── Video grid & cards ─── */
@@ -459,8 +631,8 @@
     display: grid;
     /* When --video-cols is set, use that fixed count; otherwise auto-fill 280px+ */
     grid-template-columns: repeat(var(--video-cols, auto-fill), minmax(min(280px, 100%), 1fr));
-    gap: 20px;
-    margin-bottom: 48px;
+    gap: 14px;
+    margin-bottom: 28px;
   }
   /* When --video-cols is set explicitly, allow narrower cards */
   .video-grid[style*="--video-cols"] {
@@ -470,7 +642,7 @@
     background: var(--paper);
     border: 1px solid var(--rule);
     border-radius: 6px;
-    padding: 22px 22px 18px;
+    padding: 18px 18px 14px;
     display: flex; flex-direction: column;
     transition: border-color 0.25s ease, transform 0.25s ease;
   }
@@ -559,6 +731,160 @@
     letter-spacing: 0.02em;
   }
 
+  /* ─── Post-view modal (manual PDFs as scrollable feed) ─── */
+  .pv-backdrop {
+    position: fixed; inset: 0; z-index: 155;
+    background: rgba(10, 36, 71, 0.65);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    display: none; align-items: center; justify-content: center;
+    padding: 16px;
+    animation: fadeIn 0.3s ease-out;
+  }
+  [data-theme="dark"] .pv-backdrop { background: rgba(0, 0, 0, 0.78); }
+  .pv-backdrop.active { display: flex; }
+  .pv-shell {
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    box-shadow: var(--shadow-md);
+    width: 100%; max-width: 1400px; height: 94vh;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    animation: modalUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  /* On very wide screens, cap modal width to keep PDF pages from getting too huge */
+  @media (min-width: 1500px) {
+    .pv-shell { max-width: 1500px; }
+  }
+  .pv-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+    flex-shrink: 0;
+    gap: 14px;
+    z-index: 2;
+  }
+  .pv-header-text {
+    display: flex; align-items: baseline; gap: 12px;
+    flex: 1; min-width: 0;
+  }
+  .pv-num-badge {
+    font-family: var(--display); font-weight: 700; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.16em;
+    color: var(--accent);
+    background: rgba(0, 71, 169, 0.08);
+    padding: 4px 9px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .pv-title-text {
+    font-family: var(--display); font-weight: 600; font-size: 16px;
+    color: var(--ink); letter-spacing: -0.015em;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .pv-header-actions { display: flex; gap: 6px; align-items: center; }
+  .pv-btn-icon {
+    background: transparent; border: 1px solid var(--rule);
+    border-radius: 4px; width: 32px; height: 32px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--ink-soft); cursor: pointer; transition: all 0.2s;
+    text-decoration: none;
+  }
+  .pv-btn-icon:hover { color: var(--accent); border-color: var(--accent); }
+  .pv-btn-icon svg { width: 14px; height: 14px; }
+
+  .pv-body {
+    flex: 1; overflow-y: auto;
+    background: var(--bg);
+    padding: 20px 16px 70px;
+    display: flex; flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    scroll-behavior: smooth;
+  }
+  .pv-page {
+    position: relative;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
+    overflow: hidden;
+    max-width: 100%;
+    /* Width is determined by the canvas inside (which has inline style.width). */
+    line-height: 0;  /* Avoid extra whitespace under canvas baseline */
+  }
+  .pv-page canvas {
+    display: block;
+    /* Display size is set inline by JS (canvas.style.width / .height) based on
+       container width × cssScale. The bitmap (canvas.width / .height attrs) is
+       rendered at a higher DPR for crispness. Don't override here — CSS rules
+       like `width: 100%; height: auto` would distort the aspect ratio. */
+    max-width: 100%;
+  }
+  .pv-page-label {
+    position: absolute;
+    top: 8px; right: 10px;
+    background: rgba(10, 36, 71, 0.7);
+    color: #fff;
+    font-family: var(--display); font-weight: 600; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    padding: 3px 8px;
+    border-radius: 3px;
+    pointer-events: none;
+  }
+  .pv-loading,
+  .pv-error {
+    padding: 60px 24px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+  .pv-error iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    margin-top: 0;
+    background: #fff;
+  }
+  /* Fallback container should fill the body when showing iframe */
+  .pv-body.pv-iframe-mode {
+    padding: 0; gap: 0; align-items: stretch;
+  }
+  .pv-body.pv-iframe-mode .pv-iframe-wrap {
+    flex: 1; width: 100%; display: flex;
+  }
+  .pv-page-counter {
+    position: absolute;
+    bottom: 16px; left: 50%; transform: translateX(-50%);
+    background: rgba(10, 36, 71, 0.85);
+    color: #fff;
+    font-family: var(--display); font-size: 12px; font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 999px;
+    pointer-events: none;
+    z-index: 3;
+    backdrop-filter: blur(4px);
+  }
+  .pv-spinner {
+    width: 32px; height: 32px;
+    border: 3px solid var(--rule);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: pvSpin 0.8s linear infinite;
+    margin: 0 auto 14px;
+  }
+  @keyframes pvSpin { to { transform: rotate(360deg); } }
+  @media (max-width: 880px) {
+    .pv-backdrop { padding: 0; }
+    .pv-shell { height: 100vh; max-height: 100vh; border-radius: 0; }
+    .pv-header { padding: 12px 14px; }
+    .pv-title-text { font-size: 14px; }
+    .pv-num-badge { font-size: 10px; padding: 3px 7px; }
+    .pv-body { padding: 12px 0 60px; gap: 10px; }
+    .pv-page { border-radius: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  }
+
   /* ─── Video preview modal (split view: video left, manual right) ─── */
   .vp-backdrop {
     position: fixed; inset: 0; z-index: 160;
@@ -636,6 +962,64 @@
   .vp-fallback p { margin: 0 0 18px; font-size: 14px; }
   .vp-fallback a { text-decoration: none; }
 
+  /* ─── Update post body (shown in narrow right pane when modal is in 'update' mode) ─── */
+  .vp-post-body {
+    padding: 22px 20px 24px;
+    overflow-y: auto;
+    flex: 1;
+    display: flex; flex-direction: column;
+    gap: 14px;
+    width: 100%;
+  }
+  .vp-post-date {
+    font-family: var(--display); font-weight: 600; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.16em;
+    color: var(--ink-mute);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .vp-post-date::before {
+    content: ""; width: 14px; height: 1px; background: var(--ink-mute); opacity: 0.4;
+    display: inline-block;
+  }
+  .vp-post-content {
+    font-family: var(--sans); font-size: 14px; line-height: 1.7;
+    color: var(--ink);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  /* In update mode: manual on LEFT (80%), post body on RIGHT (20%). */
+  /* DOM order is video-pane (=post body) THEN manual-pane; we use `order` to
+     visually swap them so manual appears on the left. */
+  .vp-shell.update-mode .vp-body {
+    grid-template-columns: 4fr 1fr;  /* left 80% : right 20% */
+  }
+  .vp-shell.update-mode .vp-manual-pane {
+    order: 1;  /* visually first → LEFT */
+    border-right: 1px solid var(--rule);
+    border-left: none;
+  }
+  .vp-shell.update-mode .vp-video-pane {
+    order: 2;  /* visually second → RIGHT (post body lives here) */
+    border-right: none;
+    overflow-y: hidden;
+    background: var(--paper);  /* match other side panels */
+  }
+  .vp-shell.update-mode .vp-post-body { display: flex; }
+  /* Mobile (single column): manual on top, post body below */
+  @media (max-width: 900px) {
+    .vp-shell.update-mode .vp-body {
+      grid-template-columns: 1fr;
+      grid-template-rows: 2fr 1fr;  /* manual gets ~67% on small screens */
+    }
+    .vp-shell.update-mode .vp-manual-pane {
+      border-right: none; border-bottom: 1px solid var(--rule);
+    }
+  }
+  @media (max-width: 900px) {
+    .vp-post-body { padding: 18px 18px 22px; gap: 12px; }
+    .vp-post-content { font-size: 14px; line-height: 1.65; }
+  }
+
   #video-preview-contents { padding: 18px 24px 24px; }
   .vp-section-label {
     font-family: var(--display); font-weight: 600; font-size: 11px;
@@ -659,6 +1043,370 @@
   .vp-manual-pane.empty {
     display: flex; flex-direction: column; justify-content: center; align-items: center;
   }
+
+  /* Inline PDF view inside video modal's right panel (when user clicks a related manual) */
+  .vp-manual-pane:has(.vp-inline-pdf) { padding: 0; }  /* No padding when inline PDF is active */
+  .vp-inline-pdf {
+    display: flex; flex-direction: column;
+    height: 100%;
+  }
+  .vp-inline-pdf-header {
+    flex-shrink: 0;
+    padding: 12px 16px 14px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+    position: sticky; top: 0; z-index: 2;
+  }
+  .vp-inline-back {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 6px 10px; margin-bottom: 8px;
+    background: transparent; border: 1px solid var(--rule);
+    border-radius: 999px;
+    font-family: var(--sans); font-size: 11px; font-weight: 600;
+    color: var(--ink-soft); cursor: pointer;
+    transition: all 0.2s;
+  }
+  .vp-inline-back:hover {
+    color: var(--accent); border-color: var(--accent);
+  }
+  .vp-inline-title {
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .vp-inline-num {
+    font-family: var(--display); font-weight: 700; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--accent);
+    background: rgba(0, 71, 169, 0.08);
+    padding: 3px 7px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .vp-inline-name {
+    font-family: var(--display); font-weight: 600; font-size: 14px;
+    color: var(--ink); letter-spacing: -0.01em;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .vp-inline-body {
+    flex: 1; overflow-y: auto;
+    background: var(--bg);
+    padding: 14px 12px 24px;
+    display: flex; flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    scroll-behavior: smooth;
+  }
+  .vp-inline-body.vp-inline-iframe-mode {
+    padding: 0; gap: 0;
+  }
+  .vp-inline-body .pv-page {
+    position: relative;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    max-width: 100%;
+    line-height: 0;
+  }
+  .vp-inline-body .pv-page canvas { display: block; max-width: 100%; }
+  .vp-inline-body .pv-page-label {
+    position: absolute; top: 6px; right: 8px;
+    background: rgba(10, 36, 71, 0.7); color: #fff;
+    font-family: var(--display); font-weight: 600; font-size: 9px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 2px 6px; border-radius: 2px;
+    pointer-events: none;
+  }
+  .vp-inline-body .pv-loading,
+  .vp-inline-body .pv-error {
+    padding: 40px 18px;
+    text-align: center; color: var(--ink-soft); font-size: 13px;
+  }
+
+  /* ─── Prev/Next manual nav in video modal inline PDF ─── */
+  .vp-inline-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .vp-inline-nav-btn {
+    flex: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: var(--paper); color: var(--ink-soft);
+    border: 1px solid var(--rule); border-radius: 6px;
+    font-family: var(--sans); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer; transition: all 0.2s;
+    min-width: 0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .vp-inline-nav-btn:hover:not(:disabled) {
+    color: var(--accent); border-color: var(--accent);
+  }
+  .vp-inline-nav-btn:disabled {
+    opacity: 0.4; cursor: not-allowed;
+  }
+  .vp-inline-nav-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .vp-inline-counter {
+    font-family: var(--display); font-weight: 600; font-size: 11px;
+    color: var(--ink-mute); letter-spacing: 0.08em;
+    flex-shrink: 0; padding: 0 8px;
+    min-width: 50px; text-align: center;
+  }
+
+  /* ─── Updates feed (user-facing) — row layout: date · category · title ─── */
+  .updates-feed {
+    display: flex; flex-direction: column;
+    gap: 6px;
+    margin-bottom: 28px;
+  }
+  .update-row {
+    display: grid;
+    grid-template-columns: 110px 110px 1fr auto auto;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 14px 18px;
+    transition: border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+    position: relative;
+    font-family: inherit;
+    text-align: left;
+    color: inherit;
+    cursor: default;
+  }
+  .update-row.clickable { cursor: pointer; }
+  .update-row.clickable:hover {
+    border-color: var(--accent);
+    transform: translateX(2px);
+    box-shadow: 0 2px 10px rgba(10, 36, 71, 0.06);
+  }
+  .update-row-date {
+    font-family: var(--display); font-weight: 500; font-size: 12px;
+    color: var(--ink-mute);
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .update-row-cat {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-weight: 700; font-size: 10.5px;
+    letter-spacing: 0.05em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    width: fit-content;
+    /* default (general) — overridden by .cat-* */
+    background: rgba(120, 130, 145, 0.12);
+    color: #677387;
+    border: 1px solid rgba(120, 130, 145, 0.22);
+  }
+  /* Category colors — use solid pill backgrounds so they pop */
+  .update-row-cat.cat-urgent {
+    background: #fdecec; color: #c52828; border-color: #f3b8b8;
+  }
+  .update-row-cat.cat-feature {
+    background: #e6f0fb; color: #0d5fc4; border-color: #b8d4f0;
+  }
+  .update-row-cat.cat-fix {
+    background: #fff3df; color: #a76300; border-color: #ffd99a;
+  }
+  .update-row-cat.cat-general {
+    background: #eef0f4; color: #5a6477; border-color: #d6dae3;
+  }
+  [data-theme="dark"] .update-row-cat.cat-urgent {
+    background: rgba(229, 85, 85, 0.18); color: #ff8585; border-color: rgba(229, 85, 85, 0.4);
+  }
+  [data-theme="dark"] .update-row-cat.cat-feature {
+    background: rgba(70, 145, 240, 0.18); color: #8db8f0; border-color: rgba(70, 145, 240, 0.4);
+  }
+  [data-theme="dark"] .update-row-cat.cat-fix {
+    background: rgba(218, 158, 60, 0.18); color: #f0c585; border-color: rgba(218, 158, 60, 0.4);
+  }
+  [data-theme="dark"] .update-row-cat.cat-general {
+    background: rgba(150, 160, 175, 0.15); color: #b8c0cf; border-color: rgba(150, 160, 175, 0.3);
+  }
+  .update-row-title {
+    display: flex; align-items: center; gap: 8px;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .update-row-title-text {
+    font-family: var(--display); font-weight: 600; font-size: 15px;
+    color: var(--ink); letter-spacing: -0.012em;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    min-width: 0;
+    flex: 0 1 auto;
+  }
+  .update-row-empty {
+    color: var(--ink-mute); font-style: italic; font-weight: 400;
+  }
+  /* NEW badge inside title */
+  .update-row-new {
+    flex-shrink: 0;
+    display: inline-block;
+    padding: 2px 7px;
+    background: #d12c2c; color: #fff;
+    font-family: var(--sans); font-size: 9.5px; font-weight: 800;
+    letter-spacing: 0.08em;
+    border-radius: 999px;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+  [data-theme="dark"] .update-row-new { background: #e84f4f; }
+
+  .update-row-attach {
+    color: var(--accent); display: inline-flex; align-items: center;
+  }
+  .update-row-arrow {
+    font-family: var(--display); font-size: 15px; color: var(--ink-mute);
+    transition: transform 0.2s ease, color 0.2s ease;
+    width: 20px; text-align: right;
+  }
+  .update-row.clickable:hover .update-row-arrow {
+    color: var(--accent);
+    transform: translateX(4px);
+  }
+  @media (max-width: 700px) {
+    .update-row {
+      grid-template-columns: auto auto 1fr auto;
+      gap: 10px;
+      padding: 12px 14px;
+    }
+    .update-row-date { font-size: 11px; }
+    .update-row-cat { font-size: 9.5px; padding: 3px 8px; }
+    .update-row-title { font-size: 14px; }
+    .update-row-arrow { display: none; }
+  }
+
+  /* Admin WYSIWYG updates — share row design + drag/overlay */
+  .wys-update-row {
+    cursor: pointer;
+  }
+  .wys-update-row .drag-handle {
+    position: absolute; top: 50%; left: 2px;
+    transform: translateY(-50%);
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-mute); cursor: grab; opacity: 0;
+    border-radius: 3px;
+    transition: opacity 0.18s, color 0.18s;
+    z-index: 4;
+  }
+  .wys-update-row .drag-handle svg { width: 14px; height: 14px; pointer-events: none; }
+  .wys-update-row:hover .drag-handle,
+  .wys-update-row:hover .admin-overlay { opacity: 1; pointer-events: auto; }
+  .wys-update-row .drag-handle:hover { color: var(--accent); background: var(--hover-bg); }
+  .wys-update-row.dragging { opacity: 0.4; }
+  .wys-update-row.drop-above::before,
+  .wys-update-row.drop-below::after {
+    content: ""; position: absolute; left: 0; right: 0; height: 3px;
+    background: var(--accent); border-radius: 1.5px; pointer-events: none; z-index: 6;
+  }
+  .wys-update-row.drop-above::before { top: -5px; }
+  .wys-update-row.drop-below::after { bottom: -5px; }
+  .wys-update-row:hover {
+    border-color: var(--accent);
+    background: var(--hover-bg);
+  }
+
+  /* Category picker in update modal — visually matches the row pills */
+  .update-cat-picker {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .update-cat-picker .cat-pill {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-weight: 700; font-size: 11.5px;
+    letter-spacing: 0.04em;
+    padding: 7px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-transform: uppercase;
+    background: var(--paper-soft);
+    color: var(--ink-mute);
+    border: 1.5px solid var(--rule);
+  }
+  .update-cat-picker .cat-pill:hover {
+    border-color: var(--ink-soft); color: var(--ink);
+  }
+  [data-theme="dark"] .update-cat-picker .cat-pill {
+    color: var(--ink-soft);  /* brighter than --ink-mute so off-state is readable */
+    background: rgba(255, 255, 255, 0.04);
+  }
+  [data-theme="dark"] .update-cat-picker .cat-pill:hover {
+    color: var(--ink); background: rgba(255, 255, 255, 0.08);
+  }
+  .update-cat-picker .cat-pill.on {
+    box-shadow: 0 1px 4px rgba(10,36,71,0.1);
+  }
+  .update-cat-picker .cat-pill.cat-urgent.on {
+    background: #fdecec; color: #c52828; border-color: #c52828;
+  }
+  .update-cat-picker .cat-pill.cat-feature.on {
+    background: #e6f0fb; color: #0d5fc4; border-color: #0d5fc4;
+  }
+  .update-cat-picker .cat-pill.cat-fix.on {
+    background: #fff3df; color: #a76300; border-color: #a76300;
+  }
+  .update-cat-picker .cat-pill.cat-general.on {
+    background: #eef0f4; color: #5a6477; border-color: #5a6477;
+  }
+  [data-theme="dark"] .update-cat-picker .cat-pill.cat-urgent.on {
+    background: rgba(229, 85, 85, 0.22); color: #ff9595; border-color: #ff9595;
+  }
+  [data-theme="dark"] .update-cat-picker .cat-pill.cat-feature.on {
+    background: rgba(70, 145, 240, 0.22); color: #9bc4ff; border-color: #9bc4ff;
+  }
+  [data-theme="dark"] .update-cat-picker .cat-pill.cat-fix.on {
+    background: rgba(218, 158, 60, 0.22); color: #ffd28f; border-color: #ffd28f;
+  }
+  [data-theme="dark"] .update-cat-picker .cat-pill.cat-general.on {
+    background: rgba(150, 160, 175, 0.22); color: #c8cfd9; border-color: #c8cfd9;
+  }
+
+  /* Legacy classes kept for any backwards compat — won't be used anymore */
+  .update-post, .update-post-head, .update-post-title, .update-post-date,
+  .update-post-body, .update-post-preview, .update-post-foot,
+  .update-attach-badge, .update-read-more, .update-attach-btn,
+  .wys-update-post { /* no-op */ }
+
+  /* Textarea styling for the update modal */
+  #update-modal textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-family: var(--sans); font-size: 14px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    color: var(--ink);
+    transition: border-color 0.2s;
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.5;
+  }
+  #update-modal textarea:focus {
+    outline: none; border-color: var(--accent);
+  }
+  #update-modal input[type="date"] {
+    width: auto; min-width: 160px;
+    padding: 10px 12px;
+    font-family: var(--sans); font-size: 14px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    color: var(--ink);
+    transition: border-color 0.2s;
+  }
+  #update-modal input[type="date"]:focus {
+    outline: none; border-color: var(--accent);
+  }
+  #update-modal .modal { max-width: 640px; max-height: 92vh; overflow-y: auto; }
+
   .vp-manual-header { margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
   .vp-manual-eyebrow {
     font-family: var(--display); font-weight: 600; font-size: 11px;
@@ -900,6 +1648,97 @@
 
   /* ─── WYSIWYG admin styles ─── */
   /* Toolbar above the cards (cols selector etc.) */
+  /* ─── Promo banner editor (admin manual view) ─── */
+  .promo-editor {
+    background: var(--paper-soft);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .promo-editor-summary {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 18px;
+    cursor: pointer;
+    font-family: var(--display); font-weight: 600; font-size: 13px;
+    color: var(--ink); letter-spacing: 0.02em;
+    user-select: none;
+    list-style: none;
+    transition: background 0.2s ease;
+  }
+  .promo-editor-summary::-webkit-details-marker { display: none; }
+  .promo-editor-summary::after {
+    content: "▾";
+    margin-left: auto;
+    color: var(--ink-mute);
+    transition: transform 0.25s ease;
+    font-size: 11px;
+  }
+  .promo-editor[open] .promo-editor-summary::after { transform: rotate(180deg); }
+  .promo-editor-summary:hover { background: var(--hover-bg); }
+  .promo-editor-summary svg { color: var(--accent); flex-shrink: 0; }
+  .promo-editor-body {
+    padding: 14px 18px 18px;
+    border-top: 1px solid var(--rule);
+    background: var(--paper);
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .promo-field { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+  .promo-field label {
+    font-family: var(--display); font-weight: 600; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--ink-mute);
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .promo-lang {
+    font-size: 10px; font-weight: 500; text-transform: none; letter-spacing: 0;
+    color: var(--ink-mute); opacity: 0.7;
+  }
+  .promo-field input[type="text"] {
+    padding: 10px 12px;
+    font-family: var(--sans); font-size: 13px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    color: var(--ink);
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .promo-field input[type="text"]:focus {
+    outline: none; border-color: var(--accent);
+  }
+  .promo-field-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  }
+  .promo-position-toggle {
+    display: inline-flex; flex-wrap: wrap; gap: 4px;
+    padding: 4px;
+    background: var(--paper-soft);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+  }
+  .promo-position-toggle button {
+    padding: 8px 14px;
+    border: none; background: transparent;
+    font-family: var(--sans); font-size: 12px; font-weight: 600;
+    color: var(--ink-mute); cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .promo-position-toggle button.on {
+    background: var(--ink); color: var(--paper);
+  }
+  .promo-position-toggle button:hover:not(.on) {
+    color: var(--ink); background: var(--hover-bg);
+  }
+  .promo-actions {
+    display: flex; justify-content: flex-end; gap: 8px;
+    margin-top: 4px;
+  }
+  @media (max-width: 700px) {
+    .promo-field-row { grid-template-columns: 1fr; }
+  }
+
   .wys-toolbar {
     display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
     padding: 14px 18px; margin-bottom: 24px;
@@ -1220,10 +2059,6 @@
     .icon-btn { width: 34px; height: 34px; }
     .hero { margin-bottom: 56px; }
     .emblem { width: 112px; height: 112px; margin-bottom: 28px; }
-    .roles { grid-template-columns: 1fr; gap: 14px; }
-    .role-card { min-height: 200px; padding: 32px 28px 24px; }
-    .role-num { font-size: 48px; }
-    .role-name { margin-top: 36px; }
     .doc-header { grid-template-columns: auto 1fr; gap: 20px; }
     .doc-header .emblem-small { width: 56px; height: 56px; }
     .doc-meta { display: none; }
@@ -1250,6 +2085,13 @@
     .admin-header { flex-direction: column; align-items: flex-start; }
   }
 </style>
+<!-- PDF.js for rendering manual PDFs as scrollable pages (post-style view) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+  if (window['pdfjsLib']) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+</script>
 </head>
 <body data-screen="main">
 
@@ -1258,9 +2100,9 @@
     <span class="brand" data-i18n="brand">LXP · Manual</span>
     <div class="controls">
       <div class="toggle-pill" data-toggle="lang">
-        <button data-lang="ko">한국어</button>
         <button data-lang="es">Español</button>
         <button data-lang="en">English</button>
+        <button data-lang="ko">한국어</button>
       </div>
       <button class="icon-btn" data-toggle="theme" aria-label="Toggle theme">
         <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
@@ -1276,17 +2118,19 @@
       <em data-i18n="title_main_b">del LXP</em>
     </h1>
   </section>
-  <div class="roles">
-    <button class="role-card" data-role="teacher">
-      <span class="role-num">01</span>
-      <span class="role-name" data-i18n="teacher_name">Docentes</span>
-      <span class="role-arrow">→</span>
-    </button>
-    <button class="role-card" data-role="student">
-      <span class="role-num">02</span>
-      <span class="role-name" data-i18n="student_name">Estudiantes</span>
-      <span class="role-arrow">→</span>
-    </button>
+  <div class="welcome-cta">
+    <p class="welcome-message" data-i18n="welcome_message">Bienvenido al Manual del LXP. Por favor, introduce tu contraseña para continuar.</p>
+    <form class="welcome-form" id="welcome-form" autocomplete="off">
+      <div class="welcome-input-wrap">
+        <input type="password" id="welcome-password-input" class="welcome-input"
+               data-i18n-placeholder="welcome_input_placeholder" placeholder="Contraseña"
+               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <button type="submit" class="welcome-input-btn" id="btn-enter-manual" aria-label="Enter">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+      <div class="welcome-error" id="welcome-error" data-i18n="error_msg" style="display:none">Contraseña incorrecta. Inténtalo de nuevo.</div>
+    </form>
   </div>
   <div class="footer-bar">
     <span data-i18n="footer_org">iHFB · El Salvador</span>
@@ -1385,6 +2229,77 @@
   </div>
 </div>
 
+<!-- Update post modal: title (ko/es), date, body (ko/es), attachment -->
+<div class="modal-backdrop" id="update-modal">
+  <div class="modal modal-wide">
+    <div class="modal-eyebrow" id="update-modal-eyebrow">—</div>
+    <h2 id="update-modal-title">—</h2>
+    <div class="form-row stacked">
+      <label data-i18n="update_modal_date_label">Date</label>
+      <input type="date" id="update-date-input">
+    </div>
+    <div class="form-row stacked">
+      <label data-i18n="update_category_label">Category</label>
+      <div class="update-cat-picker" id="update-cat-picker">
+        <button type="button" class="cat-pill cat-urgent" data-cat="urgent" data-i18n="update_cat_urgent">필수 확인</button>
+        <button type="button" class="cat-pill cat-feature" data-cat="feature" data-i18n="update_cat_feature">기능 개선</button>
+        <button type="button" class="cat-pill cat-fix" data-cat="fix" data-i18n="update_cat_fix">오류 수정</button>
+        <button type="button" class="cat-pill cat-general" data-cat="general" data-i18n="update_cat_general">일반 안내</button>
+      </div>
+    </div>
+    <div class="form-row stacked">
+      <label><span data-i18n="update_modal_title_label">Title</span> <span class="promo-lang">(한국어)</span></label>
+      <input type="text" id="update-title-ko-input" placeholder="제목">
+    </div>
+    <div class="form-row stacked">
+      <label><span data-i18n="update_modal_title_label">Title</span> <span class="promo-lang">(Español)</span></label>
+      <input type="text" id="update-title-es-input" placeholder="Título">
+    </div>
+    <div class="form-row stacked">
+      <label><span data-i18n="update_modal_title_label">Title</span> <span class="promo-lang">(English)</span></label>
+      <input type="text" id="update-title-en-input" placeholder="Title">
+    </div>
+    <div class="form-row stacked">
+      <label><span data-i18n="update_modal_body_label">Body</span> <span class="promo-lang">(한국어)</span></label>
+      <textarea id="update-body-ko-input" rows="4" placeholder="내용..."></textarea>
+    </div>
+    <div class="form-row stacked">
+      <label><span data-i18n="update_modal_body_label">Body</span> <span class="promo-lang">(Español)</span></label>
+      <textarea id="update-body-es-input" rows="4" placeholder="Contenido..."></textarea>
+    </div>
+    <div class="form-row stacked">
+      <label><span data-i18n="update_modal_body_label">Body</span> <span class="promo-lang">(English)</span></label>
+      <textarea id="update-body-en-input" rows="4" placeholder="Content..."></textarea>
+    </div>
+    <div class="form-row stacked">
+      <label data-i18n="update_modal_attachment_label">Attachment</label>
+      <div class="source-tabs">
+        <button class="source-tab" data-update-source-type="none" data-i18n="item_modal_source_none">None</button>
+        <button class="source-tab" data-update-source-type="link" data-i18n="item_modal_source_link">Link</button>
+        <button class="source-tab" data-update-source-type="file" data-i18n="item_modal_source_file">File</button>
+      </div>
+      <div class="source-pane" id="update-source-pane-link">
+        <input type="text" id="update-link-input" placeholder="https://drive.google.com/...">
+        <label class="form-checkbox">
+          <input type="checkbox" id="update-link-convert" checked>
+          <span data-i18n="admin_link_modal_convert">Auto-convert Drive URL</span>
+        </label>
+      </div>
+      <div class="source-pane" id="update-source-pane-file">
+        <div class="file-picker" id="update-file-picker">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <div id="update-file-display" class="file-prompt" data-i18n="item_modal_select_file">Select file...</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="update-modal-delete" data-i18n="admin_btn_delete_node" style="display:none">Eliminar</button>
+      <button class="btn btn-ghost" id="update-modal-cancel" data-i18n="cancel">Cancelar</button>
+      <button class="btn btn-primary" id="update-modal-save" data-i18n="item_modal_save">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <input type="file" id="file-input" accept="application/pdf" style="display:none">
 
 <!-- Preview modal (admin uses this to preview the user-facing screen without leaving) -->
@@ -1400,6 +2315,34 @@
   </div>
 </div>
 
+<!-- Post-view modal: shows manual PDFs as a scrollable feed of page-images (post-style) -->
+<div class="pv-backdrop" id="post-view-modal">
+  <div class="pv-shell">
+    <div class="pv-header">
+      <div class="pv-header-text">
+        <span class="pv-num-badge" id="post-view-num">—</span>
+        <span class="pv-title-text" id="post-view-title">—</span>
+      </div>
+      <div class="pv-header-actions">
+        <button class="pv-btn-icon" id="post-view-download" title="Download" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </button>
+        <a class="pv-btn-icon" id="post-view-external" target="_blank" rel="noopener" title="Open externally" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <button class="preview-modal-close" id="post-view-close" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="pv-body" id="post-view-body">
+      <!-- PDF pages render here as <canvas> elements stacked vertically -->
+    </div>
+    <div class="pv-page-counter" id="post-view-counter" style="display:none">
+      <span id="post-view-current-page">1</span> <span data-i18n="post_view_of">/</span> <span id="post-view-total-pages">1</span>
+    </div>
+  </div>
+</div>
 <!-- Video preview modal (split: video left, manual right) -->
 <div class="vp-backdrop" id="video-preview-modal">
   <div class="vp-shell">
@@ -1414,13 +2357,18 @@
     </div>
     <div class="vp-body">
       <div class="vp-video-pane">
-        <div class="vp-video-frame">
+        <div class="vp-video-frame" id="video-preview-frame-wrap">
           <iframe id="video-preview-iframe" src="about:blank" title="Video" allow="autoplay; encrypted-media; fullscreen" allowfullscreen=""></iframe>
           <div class="vp-fallback" id="video-preview-fallback">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:48px;height:48px;color:var(--ink-mute);margin-bottom:14px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
             <p data-i18n="video_cannot_embed">Cannot play directly.</p>
             <a href="#" target="_blank" rel="noopener" class="btn btn-primary" data-i18n="video_open_external">Open externally</a>
           </div>
+        </div>
+        <!-- Post body shown only in 'update' mode (replaces video iframe area) -->
+        <div class="vp-post-body" id="video-preview-post-body" style="display:none">
+          <time class="vp-post-date" id="video-preview-post-date"></time>
+          <div class="vp-post-content" id="video-preview-post-content"></div>
         </div>
         <div id="video-preview-contents"></div>
       </div>
@@ -1435,6 +2383,7 @@
 
 <script>
 
+
 /* ════════════ SETTINGS ════════════ */
 // Capture the original HTML state BEFORE any DOM modification or screen rendering.
 // This is the truest source for HTML export — works regardless of file://, https://,
@@ -1442,10 +2391,10 @@
 const ORIGINAL_HTML = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
 
 const PASSWORDS = {
-  teacher:    'Docente!',
+  teacher:    '4prende$',
   student:    'student2026',
   admin:      'admin2026',
-  admin_page: 'chinochuco'
+  admin_page: 'nosoychino'
 };
 
 const FULL_MANUAL_FILES = {
@@ -1595,7 +2544,61 @@ const I18N = {
     "admin_grid_cols_auto": "자동",
     "admin_no_subitems": "(아직 하위 항목 없음)",
     "admin_untitled": "(제목 없음)",
-    "admin_btn_drag_hint": "드래그하여 이동"
+    "admin_btn_drag_hint": "드래그하여 이동",
+    "welcome_message": "LXP 매뉴얼 페이지에 오신 것을 환영합니다.\n계속하려면 비밀번호를 입력해주세요.",
+    "welcome_btn": "매뉴얼 페이지 입장",
+    "video_promo_eyebrow": "🎥 영상으로 배우기",
+    "video_promo_title": "영상 튜토리얼",
+    "post_view_loading": "PDF를 불러오는 중...",
+    "post_view_error": "PDF를 불러올 수 없습니다. 외부에서 열어주세요.",
+    "post_view_open_external": "외부에서 열기",
+    "post_view_no_source": "이 항목에는 콘텐츠가 없습니다.",
+    "post_view_page": "페이지",
+    "post_view_of": "/",
+    "post_view_download_btn": "다운로드",
+    "admin_promo_section_title": "영상 배너 설정",
+    "admin_promo_position_label": "배너 위치",
+    "admin_promo_position_top": "최상단",
+    "admin_promo_position_after_full": "전체 매뉴얼 아래",
+    "admin_promo_position_bottom": "매뉴얼 아래(최하단)",
+    "admin_promo_position_hidden": "숨김",
+    "admin_promo_eyebrow_label": "배너 라벨 (작은 글자)",
+    "admin_promo_title_label": "배너 제목",
+    "admin_promo_save": "저장",
+    "admin_promo_saved": "배너 설정이 저장되었습니다",
+    "admin_promo_reset": "기본값으로 복원",
+    "welcome_input_placeholder": "비밀번호 입력",
+    "video_panel_back_to_list": "← 관련 매뉴얼로 돌아가기",
+    "video_panel_inline_pdf": "매뉴얼 보기",
+    "tab_updates": "신규 업데이트",
+    "updates_coming_title": "업데이트가 없습니다",
+    "updates_coming_desc": "새로운 기능 업데이트가 게시되면 여기에 표시됩니다.",
+    "update_view_attachment": "첨부 파일 보기",
+    "admin_btn_add_update": "+ 새 게시글",
+    "admin_btn_preview_updates": "업데이트 미리보기",
+    "admin_no_updates": "아직 게시글이 없습니다. '+ 새 게시글' 버튼으로 시작하세요.",
+    "update_modal_new": "새 업데이트 게시글",
+    "update_modal_edit": "게시글 수정",
+    "update_modal_date_label": "게시일",
+    "update_modal_title_label": "제목",
+    "update_modal_body_label": "본문",
+    "update_modal_attachment_label": "첨부 (선택)",
+    "video_panel_prev_manual": "이전 매뉴얼",
+    "video_panel_next_manual": "다음 매뉴얼",
+    "video_panel_manual_counter": "/",
+    "admin_subtab_updates": "업데이트",
+    "update_has_attachment": "첨부 있음",
+    "update_read_more": "자세히 보기",
+    "update_no_attachment": "첨부",
+    "update_no_attachment_desc": "이 게시글에는 첨부 파일이 없습니다.",
+    "update_category_label": "카테고리",
+    "update_cat_urgent": "필수 확인",
+    "update_cat_feature": "기능 개선",
+    "update_cat_fix": "오류 수정",
+    "update_cat_general": "일반 안내",
+    "update_modal_title_label_en": "제목 (English)",
+    "update_modal_body_label_en": "본문 (English)",
+    "update_new_badge": "NEW"
   },
   "es": {
     "brand": "LXP · Manual",
@@ -1737,7 +2740,61 @@ const I18N = {
     "admin_grid_cols_auto": "Automático",
     "admin_no_subitems": "(Sin sub-elementos aún)",
     "admin_untitled": "(Sin título)",
-    "admin_btn_drag_hint": "Arrastra para mover"
+    "admin_btn_drag_hint": "Arrastra para mover",
+    "welcome_message": "Bienvenido al Manual del LXP.\nPor favor, introduce tu contraseña para continuar.",
+    "welcome_btn": "Acceder al manual",
+    "video_promo_eyebrow": "🎥 Aprende con videos",
+    "video_promo_title": "Videos tutoriales",
+    "post_view_loading": "Cargando PDF...",
+    "post_view_error": "No se puede cargar el PDF. Ábrelo externamente.",
+    "post_view_open_external": "Abrir externamente",
+    "post_view_no_source": "Este elemento no tiene contenido.",
+    "post_view_page": "Página",
+    "post_view_of": "/",
+    "post_view_download_btn": "Descargar",
+    "admin_promo_section_title": "Configuración del banner de videos",
+    "admin_promo_position_label": "Posición del banner",
+    "admin_promo_position_top": "Arriba (primero)",
+    "admin_promo_position_after_full": "Debajo del manual completo",
+    "admin_promo_position_bottom": "Abajo del manual",
+    "admin_promo_position_hidden": "Oculto",
+    "admin_promo_eyebrow_label": "Etiqueta del banner (texto pequeño)",
+    "admin_promo_title_label": "Título del banner",
+    "admin_promo_save": "Guardar",
+    "admin_promo_saved": "Configuración del banner guardada",
+    "admin_promo_reset": "Restaurar valores por defecto",
+    "welcome_input_placeholder": "Introduce la contraseña",
+    "video_panel_back_to_list": "← Volver al manual relacionado",
+    "video_panel_inline_pdf": "Ver manual",
+    "tab_updates": "Novedades",
+    "updates_coming_title": "Aún no hay novedades",
+    "updates_coming_desc": "Las actualizaciones de funciones aparecerán aquí.",
+    "update_view_attachment": "Ver adjunto",
+    "admin_btn_add_update": "+ Nueva publicación",
+    "admin_btn_preview_updates": "Vista previa de novedades",
+    "admin_no_updates": "Aún no hay publicaciones. Usa '+ Nueva publicación' para empezar.",
+    "update_modal_new": "Nueva publicación",
+    "update_modal_edit": "Editar publicación",
+    "update_modal_date_label": "Fecha",
+    "update_modal_title_label": "Título",
+    "update_modal_body_label": "Contenido",
+    "update_modal_attachment_label": "Adjunto (opcional)",
+    "video_panel_prev_manual": "Manual anterior",
+    "video_panel_next_manual": "Siguiente manual",
+    "video_panel_manual_counter": "/",
+    "admin_subtab_updates": "Novedades",
+    "update_has_attachment": "Tiene adjunto",
+    "update_read_more": "Leer más",
+    "update_no_attachment": "Adjunto",
+    "update_no_attachment_desc": "Esta publicación no tiene archivos adjuntos.",
+    "update_category_label": "Categoría",
+    "update_cat_urgent": "Importante",
+    "update_cat_feature": "Nueva función",
+    "update_cat_fix": "Corrección",
+    "update_cat_general": "General",
+    "update_modal_title_label_en": "Título (English)",
+    "update_modal_body_label_en": "Contenido (English)",
+    "update_new_badge": "NUEVO"
   },
   "en": {
     "brand": "LXP · Manual",
@@ -1879,7 +2936,61 @@ const I18N = {
     "admin_grid_cols_auto": "Auto",
     "admin_no_subitems": "(No sub-items yet)",
     "admin_untitled": "(Untitled)",
-    "admin_btn_drag_hint": "Drag to move"
+    "admin_btn_drag_hint": "Drag to move",
+    "welcome_message": "Welcome to the LXP Manual.\nPlease enter your password to continue.",
+    "welcome_btn": "Enter manual",
+    "video_promo_eyebrow": "🎥 Learn with videos",
+    "video_promo_title": "Video tutorials",
+    "post_view_loading": "Loading PDF...",
+    "post_view_error": "Cannot load PDF. Open externally.",
+    "post_view_open_external": "Open externally",
+    "post_view_no_source": "This item has no content.",
+    "post_view_page": "Page",
+    "post_view_of": "/",
+    "post_view_download_btn": "Download",
+    "admin_promo_section_title": "Video Banner Settings",
+    "admin_promo_position_label": "Banner position",
+    "admin_promo_position_top": "Top (first)",
+    "admin_promo_position_after_full": "Below full manual",
+    "admin_promo_position_bottom": "Bottom of manual",
+    "admin_promo_position_hidden": "Hidden",
+    "admin_promo_eyebrow_label": "Banner label (small text)",
+    "admin_promo_title_label": "Banner title",
+    "admin_promo_save": "Save",
+    "admin_promo_saved": "Banner settings saved",
+    "admin_promo_reset": "Reset to default",
+    "welcome_input_placeholder": "Enter password",
+    "video_panel_back_to_list": "← Back to related manual",
+    "video_panel_inline_pdf": "View manual",
+    "tab_updates": "Updates",
+    "updates_coming_title": "No updates yet",
+    "updates_coming_desc": "Feature updates will appear here.",
+    "update_view_attachment": "View attachment",
+    "admin_btn_add_update": "+ New post",
+    "admin_btn_preview_updates": "Preview updates",
+    "admin_no_updates": "No posts yet. Use '+ New post' to get started.",
+    "update_modal_new": "New Update Post",
+    "update_modal_edit": "Edit Post",
+    "update_modal_date_label": "Date",
+    "update_modal_title_label": "Title",
+    "update_modal_body_label": "Body",
+    "update_modal_attachment_label": "Attachment (optional)",
+    "video_panel_prev_manual": "Previous manual",
+    "video_panel_next_manual": "Next manual",
+    "video_panel_manual_counter": "/",
+    "admin_subtab_updates": "Updates",
+    "update_has_attachment": "Has attachment",
+    "update_read_more": "Read more",
+    "update_no_attachment": "Attachment",
+    "update_no_attachment_desc": "This post has no attachment.",
+    "update_category_label": "Category",
+    "update_cat_urgent": "Important",
+    "update_cat_feature": "New feature",
+    "update_cat_fix": "Bug fix",
+    "update_cat_general": "General",
+    "update_modal_title_label_en": "Title (English)",
+    "update_modal_body_label_en": "Body (English)",
+    "update_new_badge": "NEW"
   }
 };
 
@@ -2656,6 +3767,161 @@ const FULL_VIDEO_FILES = {
   "admin": ""
 };
 
+// Layout settings baked into the exported HTML (admin's customizations).
+// Each role has its own object with keys like promoPosition, promo_eyebrow_ko, etc.
+// localStorage wins over this on first load; if both empty, i18n defaults apply.
+const LAYOUT_SETTINGS_DEFAULT = {
+  "teacher": {},
+  "student": {},
+  "admin": {}
+};
+
+// "Updates" feed — flat list of posts per role. Each post:
+//   { id, title: {ko, es, en}, date (ISO YYYY-MM-DD), body: {ko, es, en} }
+// Attachments use the same links system as manual/videos (links[post.id] = URL).
+const UPDATES_DATA_DEFAULT = {
+  "teacher": [],
+  "student": [],
+  "admin": []
+};
+
+const UPDATES_KEY_PREFIX = 'lxp_updates_';
+
+function getUpdates(role) {
+  const key = UPDATES_KEY_PREFIX + role;
+  const stored = localStorage.getItem(key);
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) return parsed;
+    } catch (e) { console.warn('Failed to parse updates:', e); }
+  }
+  // Fall back to baked default
+  const def = UPDATES_DATA_DEFAULT[role];
+  if (!def) return [];
+  const copy = JSON.parse(JSON.stringify(def));
+  // Persist immediately so generated IDs are stable across calls
+  try { localStorage.setItem(key, JSON.stringify(copy)); } catch (e) {}
+  return copy;
+}
+
+function setUpdates(role, list) {
+  const key = UPDATES_KEY_PREFIX + role;
+  if (list === null) {
+    localStorage.removeItem(key);
+  } else {
+    localStorage.setItem(key, JSON.stringify(list));
+  }
+}
+
+function addUpdate(role, partial) {
+  const list = getUpdates(role) || [];
+  const post = {
+    id: genId(),
+    title: { ko: partial.title_ko || '', es: partial.title_es || '', en: partial.title_en || '' },
+    date: partial.date || new Date().toISOString().slice(0, 10),
+    category: partial.category || 'general',
+    body: { ko: partial.body_ko || '', es: partial.body_es || '', en: partial.body_en || '' }
+  };
+  list.unshift(post);  // newest first
+  setUpdates(role, list);
+  return post;
+}
+
+function updateUpdate(role, id, partial) {
+  const list = getUpdates(role) || [];
+  const idx = list.findIndex(p => p.id === id);
+  if (idx === -1) return false;
+  const p = list[idx];
+  if (partial.title_ko !== undefined) p.title = { ...(p.title || {}), ko: partial.title_ko };
+  if (partial.title_es !== undefined) p.title = { ...(p.title || {}), es: partial.title_es };
+  if (partial.title_en !== undefined) p.title = { ...(p.title || {}), en: partial.title_en };
+  if (partial.body_ko !== undefined) p.body = { ...(p.body || {}), ko: partial.body_ko };
+  if (partial.body_es !== undefined) p.body = { ...(p.body || {}), es: partial.body_es };
+  if (partial.body_en !== undefined) p.body = { ...(p.body || {}), en: partial.body_en };
+  if (partial.date !== undefined) p.date = partial.date;
+  if (partial.category !== undefined) p.category = partial.category;
+  setUpdates(role, list);
+  return true;
+}
+
+async function deleteUpdate(role, id) {
+  const list = getUpdates(role) || [];
+  const idx = list.findIndex(p => p.id === id);
+  if (idx === -1) return false;
+  list.splice(idx, 1);
+  setUpdates(role, list);
+  // Clean up associated link/file
+  const links = loadLinks();
+  delete links[id];
+  saveLinksObj(links);
+  try { await dbDelete(id); } catch (e) {}
+  return true;
+}
+
+function moveUpdateTo(role, id, targetIndex) {
+  const list = getUpdates(role) || [];
+  const from = list.findIndex(p => p.id === id);
+  if (from === -1) return false;
+  let to = targetIndex;
+  if (to > from) to -= 1;
+  if (to === from) return true;
+  if (to < 0 || to > list.length - 1) to = Math.max(0, Math.min(list.length - 1, to));
+  const [item] = list.splice(from, 1);
+  list.splice(to, 0, item);
+  setUpdates(role, list);
+  return true;
+}
+
+/* ── NEW-badge tracking for updates feed ────────────────────────
+ * Two-layer logic:
+ *  (1) A post is "recent" if its date is within the last 30 days. Recent posts
+ *      always get a per-row NEW badge (auto-expires after 30 days).
+ *  (2) The TAB shows a NEW pip when there is at least one recent post AND the
+ *      user hasn't viewed the updates tab since that post was added. Once the
+ *      user opens the updates tab, last-viewed is set to now → tab pip clears.
+ * Per-row badges stay until the post itself ages out of the 30-day window.
+ */
+const UPDATES_LAST_VIEWED_PREFIX = 'lxp_updates_last_viewed_';
+const NEW_BADGE_DAYS = 30;
+
+function getUpdatesLastViewed(role) {
+  try {
+    const raw = localStorage.getItem(UPDATES_LAST_VIEWED_PREFIX + role);
+    if (raw) return new Date(raw);
+  } catch (e) {}
+  return null;  // never viewed
+}
+function markUpdatesViewed(role) {
+  try {
+    localStorage.setItem(UPDATES_LAST_VIEWED_PREFIX + role, new Date().toISOString());
+  } catch (e) {}
+}
+function isPostRecent(post) {
+  if (!post || !post.date) return false;
+  const postDate = new Date(post.date + 'T00:00:00');
+  if (isNaN(postDate.getTime())) return false;
+  const now = new Date();
+  const diffMs = now.getTime() - postDate.getTime();
+  const diffDays = diffMs / (1000 * 60 * 60 * 24);
+  return diffDays >= 0 && diffDays <= NEW_BADGE_DAYS;
+}
+// Tab pip: shown when there's at least one recent post whose date is after the
+// last-viewed timestamp (i.e. the user hasn't seen it since opening the tab).
+function hasUnseenRecentUpdates(role) {
+  const list = getUpdates(role) || [];
+  if (list.length === 0) return false;
+  const lastViewed = getUpdatesLastViewed(role);
+  for (const p of list) {
+    if (!isPostRecent(p)) continue;
+    if (!lastViewed) return true;  // never viewed → all recents are unseen
+    const postDate = new Date(p.date + 'T00:00:00');
+    if (isNaN(postDate.getTime())) continue;
+    if (postDate.getTime() >= lastViewed.getTime()) return true;
+  }
+  return false;
+}
+
 // "kind" is either 'manual' or 'videos'
 const TREE_KEY_PREFIX = 'lxp_tree_v3_';
 const SECTIONS_KEY_PREFIX = 'lxp_sections_v2_';  // legacy key for migration
@@ -3013,7 +4279,7 @@ function findMatchingManualSection(role, videoNum) {
 // Anyone with an older saved preference gets the new default on next load.
 (function() {
   const LANG_VERSION_KEY = 'lxp_lang_version';
-  const CURRENT_LANG_VERSION = '3';  // bumped when English was added & default re-confirmed as Spanish
+  const CURRENT_LANG_VERSION = '4';  // bumped: confirmed es default + reorder es-en-ko in UI
   if (localStorage.getItem(LANG_VERSION_KEY) !== CURRENT_LANG_VERSION) {
     localStorage.removeItem('lxp_lang');
     localStorage.setItem(LANG_VERSION_KEY, CURRENT_LANG_VERSION);
@@ -3021,7 +4287,9 @@ function findMatchingManualSection(role, videoNum) {
 })();
 
 /* ════════════ LAYOUT SETTINGS (per-role grid prefs) ════════════ */
-// Stored as: lxp_layout_<role>_<kind> = { videoCols: 'auto'|'1'|'2'|'3'|'4' }
+// Stored as: lxp_layout_<role>_<kind> = { videoCols: 'auto'|'1'|'2'|'3'|'4', promoPosition: ..., ... }
+// On first load, falls back to LAYOUT_SETTINGS_DEFAULT[role] (baked into exported HTML),
+// and finally to the `fallback` argument supplied by the caller.
 function getLayoutSetting(role, kind, key, fallback) {
   try {
     const raw = localStorage.getItem('lxp_layout_' + role + '_' + kind);
@@ -3030,6 +4298,9 @@ function getLayoutSetting(role, kind, key, fallback) {
       if (parsed && parsed[key] !== undefined) return parsed[key];
     }
   } catch (e) {}
+  // Baked-in default (set via Export HTML by admin)
+  const baked = LAYOUT_SETTINGS_DEFAULT[role];
+  if (baked && baked[key] !== undefined) return baked[key];
   return fallback;
 }
 function setLayoutSetting(role, kind, key, value) {
@@ -3051,9 +4322,40 @@ function videoGridStyle(role) {
   return `style="--video-cols: ${cols}"`;
 }
 
+/* ════════════ PROMO BANNER SETTINGS (per-role on manual view) ════════════ */
+// Position: 'top' | 'after_full' | 'bottom' | 'hidden'
+// Default: 'after_full' (below the full-manual card)
+function getPromoPosition(role) {
+  return getLayoutSetting(role, 'manual', 'promoPosition', 'after_full');
+}
+// Eyebrow / title per language. Falls back to i18n defaults.
+function getPromoText(role, lang, key) {
+  // key: 'eyebrow' or 'title'
+  const settingKey = 'promo_' + key + '_' + lang;
+  const val = getLayoutSetting(role, 'manual', settingKey, null);
+  if (val !== null && val !== undefined) return val;
+  // Fallback to i18n default
+  return (I18N[lang] && I18N[lang]['video_promo_' + key]) || '';
+}
+function setPromoSetting(role, key, value) {
+  setLayoutSetting(role, 'manual', key, value);
+}
+function resetPromoSettings(role) {
+  // Remove all promo_* keys (and promoPosition) from the layout entry
+  try {
+    const raw = localStorage.getItem('lxp_layout_' + role + '_manual');
+    if (!raw) return;
+    const cur = JSON.parse(raw) || {};
+    for (const k of Object.keys(cur)) {
+      if (k === 'promoPosition' || k.startsWith('promo_')) delete cur[k];
+    }
+    localStorage.setItem('lxp_layout_' + role + '_manual', JSON.stringify(cur));
+  } catch (e) {}
+}
+
 const state = {
   lang:    localStorage.getItem('lxp_lang')  || 'es',
-  theme:   localStorage.getItem('lxp_theme') || 'light',
+  theme:   localStorage.getItem('lxp_theme') || 'dark',
   currentScreen: 'main',
   currentRole: null,
   downloadKind: 'manual',  // 'manual' | 'videos' — which sub-view is shown on download screen
@@ -3087,6 +4389,10 @@ function setTheme(theme) {
 }
 function applyI18n() {
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  // Placeholders (input/textarea use placeholder, not textContent)
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = t(el.dataset.i18nPlaceholder);
+  });
   const pwd = document.getElementById('password-input');
   if (pwd) pwd.placeholder = t('auth_placeholder');
   const numIn = document.getElementById('item-num-input');
@@ -3168,21 +4474,52 @@ function enterTarget(target) {
   }
 }
 
-document.querySelectorAll('.role-card').forEach(card => {
-  card.addEventListener('click', () => {
-    const role = card.dataset.role;
-    if (role === 'student') {
-      // Student: never requires password
-      state.currentRole = 'student';
-      renderDownloadScreen('student');
-    } else if (isAuthed(role)) {
-      // Already entered this password earlier in this session
-      enterTarget(role);
+// Welcome form: enter teacher password right in main screen.
+// If already authenticated this session, just enter immediately when form submits.
+const welcomeForm = document.getElementById('welcome-form');
+const welcomePasswordInput = document.getElementById('welcome-password-input');
+const welcomeError = document.getElementById('welcome-error');
+const welcomeInputWrap = welcomeForm ? welcomeForm.querySelector('.welcome-input-wrap') : null;
+
+function clearWelcomeError() {
+  if (!welcomeError) return;
+  welcomeError.style.display = 'none';
+  if (welcomeInputWrap) welcomeInputWrap.classList.remove('error');
+}
+function showWelcomeError() {
+  if (!welcomeError) return;
+  welcomeError.style.display = 'block';
+  if (welcomeInputWrap) {
+    welcomeInputWrap.classList.add('error');
+    welcomeInputWrap.classList.add('shake');
+    setTimeout(() => welcomeInputWrap.classList.remove('shake'), 450);
+  }
+}
+
+if (welcomeForm) {
+  welcomeForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // If session is already authed (e.g. user logged out & came back), let them through
+    if (isAuthed('teacher')) {
+      enterTarget('teacher');
+      return;
+    }
+    const val = (welcomePasswordInput.value || '');
+    if (val === PASSWORDS.teacher) {
+      markAuthed('teacher');
+      clearWelcomeError();
+      welcomePasswordInput.value = '';
+      enterTarget('teacher');
     } else {
-      openAuth(role);
+      showWelcomeError();
+      welcomePasswordInput.focus();
+      welcomePasswordInput.select();
     }
   });
-});
+  // Clear error when user starts typing again
+  welcomePasswordInput.addEventListener('input', clearWelcomeError);
+}
+
 document.getElementById('page-admin-btn').addEventListener('click', () => {
   if (isAuthed('admin_page')) {
     enterTarget('admin_page');
@@ -3208,6 +4545,9 @@ document.addEventListener('keydown', e => {
     if (itemModal.classList.contains('active')) closeItemModal();
     if (previewModal.classList.contains('active')) closePreviewModal();
     if (videoModal && videoModal.classList.contains('active')) closeVideoPreviewModal();
+    if (postViewModal && postViewModal.classList.contains('active')) closePostViewModal();
+    const um = document.getElementById('update-modal');
+    if (um && um.classList.contains('active')) closeUpdateModal();
   }
 });
 document.getElementById('modal-submit').addEventListener('click', tryEnter);
@@ -3613,9 +4953,9 @@ function topBarHtml() {
       <span class="brand">${t('brand')}</span>
       <div class="controls">
         <div class="toggle-pill" data-toggle="lang">
-          <button data-lang="ko" class="${state.lang === 'ko' ? 'on' : ''}">한국어</button>
           <button data-lang="es" class="${state.lang === 'es' ? 'on' : ''}">Español</button>
           <button data-lang="en" class="${state.lang === 'en' ? 'on' : ''}">English</button>
+          <button data-lang="ko" class="${state.lang === 'ko' ? 'on' : ''}">한국어</button>
         </div>
         <button class="icon-btn" data-toggle="theme" aria-label="Toggle theme">
           <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
@@ -3637,11 +4977,27 @@ let downloadNodeMap = {};
 function kindToggleHtml(currentKind, prefix = 'view') {
   const manualIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
   const videosIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>';
+  const updatesIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+  // Badges
+  let videoBadge = '';
+  let updatesBadge = '';
+  let updatesNewPip = '';
+  if (state.currentRole) {
+    const vt = getTree(state.currentRole, 'videos');
+    if (vt && vt.length > 0) videoBadge = `<span class="badge">${vt.length}</span>`;
+    const ut = getUpdates(state.currentRole);
+    if (ut && ut.length > 0) updatesBadge = `<span class="badge">${ut.length}</span>`;
+    // NEW pip: only if there are unseen recent posts AND we're not currently viewing the updates tab
+    if (currentKind !== 'updates' && hasUnseenRecentUpdates(state.currentRole)) {
+      updatesNewPip = `<span class="tab-new-pip">${t('update_new_badge')}</span>`;
+    }
+  }
   return `
     <div class="kind-toggle-wrap">
       <div class="kind-toggle" data-toggle="kind">
         <button data-kind="manual" class="${currentKind === 'manual' ? 'on' : ''}">${manualIcon}<span>${t('tab_manual')}</span></button>
-        <button data-kind="videos" class="${currentKind === 'videos' ? 'on' : ''}">${videosIcon}<span>${t('tab_videos')}</span></button>
+        <button data-kind="videos" class="${currentKind === 'videos' ? 'on' : ''}">${videosIcon}<span>${t('tab_videos')}</span>${videoBadge}</button>
+        <button data-kind="updates" class="${currentKind === 'updates' ? 'on' : ''}">${updatesIcon}<span>${t('tab_updates')}</span>${updatesBadge}${updatesNewPip}</button>
       </div>
     </div>
   `;
@@ -3671,12 +5027,38 @@ function renderDownloadScreen(role, opts = {}) {
           <span class="download-btn-large">${t('full_btn')}</span>
         </button>
       ` : '';
-      body = fullCard + `<div>${tree.map(renderTopSection).join('')}</div>`;
+      // Video promo — visible only on manual view, if videos exist AND position is not 'hidden'
+      const videoTree = getTree(role, 'videos');
+      const promoPosition = getPromoPosition(role);
+      const promoEyebrow = getPromoText(role, state.lang, 'eyebrow');
+      const promoTitle = getPromoText(role, state.lang, 'title');
+      const showPromo = videoTree && videoTree.length > 0 && promoPosition !== 'hidden';
+      const videoPromo = showPromo ? `
+        <button class="video-promo-banner" id="video-promo-banner">
+          <div class="vpb-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+          </div>
+          <div class="vpb-text">
+            ${promoEyebrow ? `<span class="vpb-eyebrow">${promoEyebrow}</span>` : ''}
+            ${promoTitle ? `<span class="vpb-title">${promoTitle}</span>` : ''}
+          </div>
+          <div class="vpb-arrow">→</div>
+        </button>
+      ` : '';
+      const sectionsHtml = `<div>${tree.map(renderTopSection).join('')}</div>`;
+      // Place promo according to position setting
+      if (promoPosition === 'top') {
+        body = videoPromo + fullCard + sectionsHtml;
+      } else if (promoPosition === 'bottom') {
+        body = fullCard + sectionsHtml + videoPromo;
+      } else {
+        // 'after_full' (default) — below full-manual card, above the sections list
+        body = fullCard + videoPromo + sectionsHtml;
+      }
     } else {
       body = `<div class="coming-soon"><h3>${t('coming_title')}</h3><p>${t('coming_desc')}</p></div>`;
     }
-  } else {
-    // videos
+  } else if (kind === 'videos') {
     if (tree && tree.length > 0) {
       const fullSrc = getNodeSource(fullNode);
       const fullCard = (fullSrc.type !== 'none') ? `
@@ -3693,6 +5075,18 @@ function renderDownloadScreen(role, opts = {}) {
     } else {
       body = `<div class="coming-soon"><h3>${t('videos_coming_title')}</h3><p>${t('videos_coming_desc')}</p></div>`;
     }
+  } else if (kind === 'updates') {
+    const updates = getUpdates(role) || [];
+    // User entered the updates tab — clear the NEW pip by marking it viewed.
+    markUpdatesViewed(role);
+    if (updates.length > 0) {
+      body = `<div class="updates-feed">${updates.map(p => renderUpdatePost(p, role)).join('')}</div>`;
+    } else {
+      body = `<div class="coming-soon"><h3>${t('updates_coming_title')}</h3><p>${t('updates_coming_desc')}</p></div>`;
+    }
+  } else {
+    // unknown kind — fall back to manual
+    body = '';
   }
 
   downloadScreen.innerHTML = `
@@ -3718,11 +5112,31 @@ function renderDownloadScreen(role, opts = {}) {
       renderDownloadScreen(role, { kind: btn.dataset.kind });
     });
   });
-  // Click any downloadable node
+  // Video promo banner → switch to videos view
+  const promoBtn = downloadScreen.querySelector('#video-promo-banner');
+  if (promoBtn) {
+    promoBtn.addEventListener('click', () => {
+      state.downloadKind = 'videos';
+      renderDownloadScreen(role, { kind: 'videos' });
+    });
+  }
+  // Click any downloadable node — on manual view, open as a scrollable post-view;
+  // on videos view, the per-card video-preview handler below takes precedence (since
+  // every video card has both data-node-id and data-action="video-preview", we skip
+  // those here).
   downloadScreen.querySelectorAll('[data-node-id]').forEach(el => {
     el.addEventListener('click', () => {
+      // Skip clicks on video cards — they're handled by the video-preview binding below
+      if (el.dataset.action === 'video-preview') return;
       const node = downloadNodeMap[el.dataset.nodeId];
-      if (node) attemptDownload(node, (node.title && node.title[state.lang]) || node.id);
+      if (!node) return;
+      if (kind === 'manual') {
+        // Manual: open as scrollable feed of PDF pages (post-view)
+        openPostViewModal(node);
+      } else {
+        // Other (full playlist card etc.): keep download fallback
+        attemptDownload(node, (node.title && node.title[state.lang]) || node.id);
+      }
     });
   });
   // Click a video card → open inline video preview modal
@@ -3731,6 +5145,16 @@ function renderDownloadScreen(role, opts = {}) {
       const videoId = el.dataset.videoId;
       const node = downloadNodeMap[videoId];
       if (node) openVideoPreviewModal(node, role);
+    });
+  });
+  // Click an update post card → open in the video-preview modal (post mode)
+  downloadScreen.querySelectorAll('[data-action="update-preview"]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = el.dataset.updateId;
+      const wrapped = downloadNodeMap[id];
+      const post = wrapped && wrapped._post;
+      if (post) openPostPreviewModal(post, role);
     });
   });
   setScreen('download');
@@ -3815,39 +5239,372 @@ function renderVideoCard(video, displayIndex) {
   `;
 }
 
+// Render a single update post (board-style post card)
+/* Pick the best-available translation. Tries current lang → es → ko → en, returns '' if all empty. */
+function pickLangValue(obj, lang) {
+  if (!obj) return '';
+  const order = [lang, 'es', 'ko', 'en'];
+  const seen = new Set();
+  for (const code of order) {
+    if (seen.has(code)) continue;
+    seen.add(code);
+    const v = obj[code];
+    if (v != null && String(v).trim() !== '') return v;
+  }
+  return '';
+}
+
+/* Update post category metadata — used by both card rendering and admin selector. */
+const UPDATE_CATEGORIES = ['urgent', 'feature', 'fix', 'general'];
+function getCategoryLabel(cat) {
+  switch (cat) {
+    case 'urgent':  return t('update_cat_urgent');
+    case 'feature': return t('update_cat_feature');
+    case 'fix':     return t('update_cat_fix');
+    case 'general':
+    default:        return t('update_cat_general');
+  }
+}
+
+function renderUpdatePost(post, role) {
+  const title = pickLangValue(post.title, state.lang);
+  const date = post.date || '';
+  const category = post.category || 'general';
+  const src = getNodeSource({ id: post.id });
+  const hasSource = src.type !== 'none';
+  const recent = isPostRecent(post);
+  // Save the full post into downloadNodeMap so the modal can read body, etc.
+  downloadNodeMap[post.id] = { id: post.id, title: post.title, body: post.body, date, category, num: '', _kind: 'update', _post: post };
+
+  // Escape user-supplied text for safe HTML insertion
+  const escTitle = String(title).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const escCatLabel = String(getCategoryLabel(category)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const titleDisplay = escTitle || `<span class="update-row-empty">${t('admin_untitled')}</span>`;
+
+  const attachDot = hasSource
+    ? `<span class="update-row-attach" title="${t('update_has_attachment')}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></span>`
+    : '';
+
+  // NEW badge appears after the title (auto-expires after 30 days from post date)
+  const newBadge = recent ? `<span class="update-row-new">${t('update_new_badge')}</span>` : '';
+
+  return `
+    <button class="update-row clickable${recent ? ' is-recent' : ''}" data-action="update-preview" data-update-id="${post.id}">
+      <time class="update-row-date">${date}</time>
+      <span class="update-row-cat cat-${category}">${escCatLabel}</span>
+      <span class="update-row-title"><span class="update-row-title-text">${titleDisplay}</span>${newBadge}</span>
+      ${attachDot}
+      <span class="update-row-arrow">→</span>
+    </button>
+  `;
+}
+
+/* ════════════ UPDATE POST MODAL ════════════ */
+const updateModal = document.getElementById('update-modal');
+const updateModalEyebrow = document.getElementById('update-modal-eyebrow');
+const updateModalTitle = document.getElementById('update-modal-title');
+const updateDateInput = document.getElementById('update-date-input');
+const updateTitleKoInput = document.getElementById('update-title-ko-input');
+const updateTitleEsInput = document.getElementById('update-title-es-input');
+const updateTitleEnInput = document.getElementById('update-title-en-input');
+const updateBodyKoInput = document.getElementById('update-body-ko-input');
+const updateBodyEsInput = document.getElementById('update-body-es-input');
+const updateBodyEnInput = document.getElementById('update-body-en-input');
+const updateLinkInput = document.getElementById('update-link-input');
+const updateLinkConvert = document.getElementById('update-link-convert');
+const updateFilePicker = document.getElementById('update-file-picker');
+const updateFileDisplayEl = document.getElementById('update-file-display');
+const updateDeleteBtn = document.getElementById('update-modal-delete');
+const updateCatPicker = document.getElementById('update-cat-picker');
+
+let updateModalCtx = null;
+
+function setUpdateSourceTab(type) {
+  if (!updateModalCtx) return;
+  updateModalCtx.currentSourceType = type;
+  updateModal.querySelectorAll('[data-update-source-type]').forEach(b => {
+    b.classList.toggle('on', b.dataset.updateSourceType === type);
+  });
+  document.getElementById('update-source-pane-link').style.display = (type === 'link') ? 'block' : 'none';
+  document.getElementById('update-source-pane-file').style.display = (type === 'file') ? 'block' : 'none';
+}
+
+function setUpdateCategoryPick(cat) {
+  if (!updateModalCtx) return;
+  updateModalCtx.currentCategory = cat;
+  if (!updateCatPicker) return;
+  updateCatPicker.querySelectorAll('[data-cat]').forEach(b => {
+    b.classList.toggle('on', b.dataset.cat === cat);
+  });
+}
+
+function updateUpdateFileDisplay() {
+  if (!updateModalCtx) return;
+  const ctx = updateModalCtx;
+  if (ctx.pendingFile) {
+    updateFileDisplayEl.textContent = '📄 ' + ctx.pendingFile.name;
+    updateFileDisplayEl.classList.add('selected');
+  } else if (ctx.currentFileName) {
+    updateFileDisplayEl.textContent = '📄 ' + ctx.currentFileName;
+    updateFileDisplayEl.classList.add('selected');
+  } else {
+    updateFileDisplayEl.textContent = t('item_modal_select_file');
+    updateFileDisplayEl.classList.remove('selected');
+  }
+}
+
+async function openUpdateModal(opts) {
+  // opts: { mode: 'add'|'edit', role, postId? }
+  const ctx = {
+    mode: opts.mode,
+    role: opts.role,
+    postId: opts.postId || null,
+    currentSourceType: 'none',
+    currentFileName: null,
+    pendingFile: null,
+    currentCategory: 'general'
+  };
+  updateModalCtx = ctx;
+
+  if (opts.mode === 'edit') {
+    updateModalEyebrow.textContent = t('admin_btn_edit');
+    updateModalTitle.textContent = t('update_modal_edit');
+  } else {
+    updateModalEyebrow.textContent = t('admin_btn_add_update');
+    updateModalTitle.textContent = t('update_modal_new');
+  }
+
+  if (opts.mode === 'edit' && opts.postId) {
+    const post = (getUpdates(opts.role) || []).find(p => p.id === opts.postId);
+    if (post) {
+      updateDateInput.value = post.date || new Date().toISOString().slice(0, 10);
+      updateTitleKoInput.value = (post.title && post.title.ko) || '';
+      updateTitleEsInput.value = (post.title && post.title.es) || '';
+      updateTitleEnInput.value = (post.title && post.title.en) || '';
+      updateBodyKoInput.value = (post.body && post.body.ko) || '';
+      updateBodyEsInput.value = (post.body && post.body.es) || '';
+      updateBodyEnInput.value = (post.body && post.body.en) || '';
+      ctx.currentCategory = post.category || 'general';
+      const link = getLink(opts.postId);
+      const hasFile = state.uploadedKeys.has(opts.postId);
+      if (link) {
+        ctx.currentSourceType = 'link';
+        updateLinkInput.value = link;
+        updateLinkConvert.checked = false;
+      } else if (hasFile) {
+        ctx.currentSourceType = 'file';
+        try {
+          const rec = await dbGet(opts.postId);
+          ctx.currentFileName = rec ? (rec.originalName || 'archivo.pdf') : 'archivo.pdf';
+        } catch {}
+        updateLinkInput.value = '';
+        updateLinkConvert.checked = true;
+      } else {
+        ctx.currentSourceType = 'none';
+        updateLinkInput.value = '';
+        updateLinkConvert.checked = true;
+      }
+    }
+    updateDeleteBtn.style.display = 'inline-block';
+  } else {
+    updateDateInput.value = new Date().toISOString().slice(0, 10);
+    updateTitleKoInput.value = '';
+    updateTitleEsInput.value = '';
+    updateTitleEnInput.value = '';
+    updateBodyKoInput.value = '';
+    updateBodyEsInput.value = '';
+    updateBodyEnInput.value = '';
+    updateLinkInput.value = '';
+    updateLinkConvert.checked = true;
+    ctx.currentCategory = 'general';
+    updateDeleteBtn.style.display = 'none';
+  }
+
+  setUpdateSourceTab(ctx.currentSourceType);
+  setUpdateCategoryPick(ctx.currentCategory);
+  updateUpdateFileDisplay();
+  updateModal.classList.add('active');
+  setTimeout(() => updateTitleKoInput.focus(), 100);
+}
+
+function closeUpdateModal() {
+  updateModal.classList.remove('active');
+  updateModalCtx = null;
+}
+
+async function saveUpdateModal() {
+  const ctx = updateModalCtx;
+  if (!ctx) return;
+  const date = updateDateInput.value || new Date().toISOString().slice(0, 10);
+  const titleKo = updateTitleKoInput.value;
+  const titleEs = updateTitleEsInput.value;
+  const titleEn = updateTitleEnInput.value;
+  const bodyKo = updateBodyKoInput.value;
+  const bodyEs = updateBodyEsInput.value;
+  const bodyEn = updateBodyEnInput.value;
+  const category = ctx.currentCategory || 'general';
+
+  let postId;
+  if (ctx.mode === 'add') {
+    const post = addUpdate(ctx.role, {
+      title_ko: titleKo, title_es: titleEs, title_en: titleEn,
+      body_ko: bodyKo, body_es: bodyEs, body_en: bodyEn,
+      date, category
+    });
+    postId = post.id;
+  } else if (ctx.mode === 'edit') {
+    postId = ctx.postId;
+    updateUpdate(ctx.role, postId, {
+      title_ko: titleKo, title_es: titleEs, title_en: titleEn,
+      body_ko: bodyKo, body_es: bodyEs, body_en: bodyEn,
+      date, category
+    });
+  }
+
+  // Apply attachment
+  const sourceType = ctx.currentSourceType;
+  if (sourceType === 'none') {
+    setLink(postId, null);
+    if (state.uploadedKeys.has(postId)) {
+      try { await dbDelete(postId); } catch {}
+      state.uploadedKeys.delete(postId);
+    }
+  } else if (sourceType === 'link') {
+    let url = updateLinkInput.value.trim();
+    if (url) {
+      if (updateLinkConvert.checked && isGoogleDriveUrl(url)) url = convertGoogleDriveUrl(url);
+      setLink(postId, url);
+      if (state.uploadedKeys.has(postId)) {
+        try { await dbDelete(postId); } catch {}
+        state.uploadedKeys.delete(postId);
+      }
+    } else {
+      setLink(postId, null);
+    }
+  } else if (sourceType === 'file') {
+    if (ctx.pendingFile) {
+      try {
+        await dbPut({
+          path: postId,
+          blob: ctx.pendingFile,
+          size: ctx.pendingFile.size,
+          originalName: ctx.pendingFile.name,
+          uploadedAt: new Date().toISOString()
+        });
+        state.uploadedKeys.add(postId);
+        setLink(postId, null);
+      } catch (err) {
+        console.error(err);
+        showToast('Error: ' + err.message, 'error');
+        return;
+      }
+    }
+  }
+
+  closeUpdateModal();
+  showToast(ctx.mode === 'edit' ? t('admin_item_updated') : t('admin_item_added'), 'success');
+  renderAdminScreen();
+}
+
+document.getElementById('update-modal-cancel').addEventListener('click', closeUpdateModal);
+document.getElementById('update-modal-save').addEventListener('click', saveUpdateModal);
+updateModal.addEventListener('click', e => { if (e.target === updateModal) closeUpdateModal(); });
+
+updateModal.querySelectorAll('[data-update-source-type]').forEach(btn => {
+  btn.addEventListener('click', () => setUpdateSourceTab(btn.dataset.updateSourceType));
+});
+
+// Category picker for update modal
+if (updateCatPicker) {
+  updateCatPicker.querySelectorAll('[data-cat]').forEach(btn => {
+    btn.addEventListener('click', () => setUpdateCategoryPick(btn.dataset.cat));
+  });
+}
+
+// File picker for update modal
+updateFilePicker.addEventListener('click', () => {
+  if (!updateModalCtx) return;
+  const fileInput = document.getElementById('file-input');
+  fileInput.value = '';
+  // Mark that the file picker is for the update modal
+  fileInput.dataset.targetModal = 'update';
+  fileInput.click();
+});
+
+// Hook file input change to dispatch between item modal and update modal
+const _fileInputEl = document.getElementById('file-input');
+_fileInputEl.addEventListener('change', (e) => {
+  if (_fileInputEl.dataset.targetModal !== 'update') return;
+  delete _fileInputEl.dataset.targetModal;
+  const file = e.target.files[0];
+  if (!file || !updateModalCtx) return;
+  // Allow any file type for updates (could be PDF, images, etc.) — but recommend PDF
+  updateModalCtx.pendingFile = file;
+  updateUpdateFileDisplay();
+});
+
+updateDeleteBtn.addEventListener('click', async () => {
+  if (!updateModalCtx || updateModalCtx.mode !== 'edit') return;
+  const post = (getUpdates(updateModalCtx.role) || []).find(p => p.id === updateModalCtx.postId);
+  if (!post) return;
+  const title = (post.title && post.title[state.lang]) || '';
+  if (!confirm(t('admin_confirm_delete_node') + '\n\n' + title)) return;
+  await deleteUpdate(updateModalCtx.role, updateModalCtx.postId);
+  closeUpdateModal();
+  showToast(t('admin_item_deleted'), 'success');
+  renderAdminScreen();
+});
+
+
 /* ════════════ ADMIN SCREEN ════════════ */
 async function renderAdminScreen() {
   try { state.uploadedKeys = new Set(await dbListKeys()); } catch (e) {}
   const role = state.adminTab;
   const kind = state.adminKind || 'manual';
-  const tree = getTree(role, kind) || [];
+  const tree = (kind === 'updates') ? [] : (getTree(role, kind) || []);
+  const updatesList = (kind === 'updates') ? (getUpdates(role) || []) : null;
 
   // Stats: count all nodes that have any source set
   const links = loadLinks();
-  const fullNode = (kind === 'videos') ? getFullVideosNode(role) : getFullManualNode(role);
-  let totalCount = 1; // full
-  let setCount = (links[fullNode.id] || state.uploadedKeys.has(fullNode.id) || fullNode.file) ? 1 : 0;
-  if (links[fullNode.id] || state.uploadedKeys.has(fullNode.id)) {
-    // already counted above (only counts as "set" if it has explicit link/file or fallback file)
-  } else if (fullNode.file) {
-    // counted via fullNode.file above
-  } else {
-    setCount = 0;
-  }
-  function walk(nodes) {
-    if (!nodes) return;
-    for (const n of nodes) {
-      totalCount++;
-      if (links[n.id] || state.uploadedKeys.has(n.id)) setCount++;
-      else if (n.file) setCount++;
-      if (n.children) walk(n.children);
+  let totalCount = 0;
+  let setCount = 0;
+  if (kind === 'updates') {
+    // For updates: total = number of posts; "set" = posts with link or file
+    totalCount = updatesList.length;
+    for (const p of updatesList) {
+      if (links[p.id] || state.uploadedKeys.has(p.id)) setCount++;
     }
+  } else {
+    const fullNode = (kind === 'videos') ? getFullVideosNode(role) : getFullManualNode(role);
+    totalCount = 1;  // full card
+    setCount = (links[fullNode.id] || state.uploadedKeys.has(fullNode.id) || fullNode.file) ? 1 : 0;
+    if (!(links[fullNode.id] || state.uploadedKeys.has(fullNode.id)) && !fullNode.file) setCount = 0;
+    function walk(nodes) {
+      if (!nodes) return;
+      for (const n of nodes) {
+        totalCount++;
+        if (links[n.id] || state.uploadedKeys.has(n.id)) setCount++;
+        else if (n.file) setCount++;
+        if (n.children) walk(n.children);
+      }
+    }
+    walk(tree);
   }
-  walk(tree);
 
-  const treeHtml = renderAdminTreeForRole(role, tree, kind);
+  const treeHtml = (kind === 'updates')
+    ? renderAdminUpdatesWysiwyg(role, updatesList)
+    : renderAdminTreeForRole(role, tree, kind);
 
-  const addBtnLabel = (kind === 'videos') ? t('admin_btn_add_video') : t('admin_btn_add_section');
+  let addBtnLabel;
+  if (kind === 'updates') addBtnLabel = t('admin_btn_add_update');
+  else if (kind === 'videos') addBtnLabel = t('admin_btn_add_video');
+  else addBtnLabel = t('admin_btn_add_section');
+
+  // Preview label for header button
+  let previewLabel;
+  if (kind === 'updates') previewLabel = t('admin_btn_preview_updates');
+  else if (kind === 'videos') previewLabel = t('admin_btn_preview_videos');
+  else previewLabel = t('admin_btn_preview_manual');
 
   adminScreen.innerHTML = `
     ${topBarHtml()}
@@ -3860,7 +5617,7 @@ async function renderAdminScreen() {
       <div class="admin-header-actions">
         <button class="btn-preview" id="btn-preview">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-          ${kind === 'videos' ? t('admin_btn_preview_videos') : t('admin_btn_preview_manual')}
+          ${previewLabel}
         </button>
         <button class="btn-reset" id="btn-reset-structure">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
@@ -3872,15 +5629,14 @@ async function renderAdminScreen() {
         </button>
       </div>
     </div>
-    <div class="admin-tabs">
+    <div class="admin-tabs" style="display: none">
       <button data-tab="teacher" class="${role==='teacher'?'on':''}">${t('teacher_name')}</button>
-      <button data-tab="student" class="${role==='student'?'on':''}">${t('student_name')}</button>
-      <button data-tab="admin"   class="${role==='admin'  ?'on':''}">${t('admin_name')}</button>
     </div>
     <div class="admin-subtabs-row">
       <div class="admin-subtabs">
         <button data-kind="manual" class="${kind==='manual'?'on':''}">${t('admin_subtab_manual')}</button>
         <button data-kind="videos" class="${kind==='videos'?'on':''}">${t('admin_subtab_videos')}</button>
+        <button data-kind="updates" class="${kind==='updates'?'on':''}">${t('admin_subtab_updates')}</button>
       </div>
       <button class="btn-add-primary" id="btn-add-section">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
@@ -3909,12 +5665,20 @@ async function renderAdminScreen() {
   document.getElementById('btn-export-html').addEventListener('click', exportHtml);
   document.getElementById('btn-reset-structure').addEventListener('click', () => {
     if (!confirm(t('admin_confirm_reset'))) return;
-    resetTree(role, kind);
+    if (kind === 'updates') {
+      setUpdates(role, null);
+    } else {
+      resetTree(role, kind);
+    }
     showToast(t('admin_reset_done'), 'success');
     renderAdminScreen();
   });
   document.getElementById('btn-add-section').addEventListener('click', () => {
-    openItemModal({ mode: 'add-section', role, kind });
+    if (kind === 'updates') {
+      openUpdateModal({ mode: 'add', role });
+    } else {
+      openItemModal({ mode: 'add-section', role, kind });
+    }
   });
   adminScreen.querySelectorAll('[data-action]').forEach(btn => {
     const act = btn.dataset.action;
@@ -3933,6 +5697,41 @@ async function renderAdminScreen() {
       renderAdminScreen();
     });
   });
+  // Promo banner position toggle (live update — saves immediately on click)
+  adminScreen.querySelectorAll('.promo-position-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setPromoSetting(role, 'promoPosition', btn.dataset.pos);
+      // Visual update without re-rendering the whole admin screen — keep the editor open
+      adminScreen.querySelectorAll('.promo-position-toggle button').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      showToast(t('admin_promo_saved'), 'success');
+    });
+  });
+  // Promo save button (eyebrow + title)
+  const promoSaveBtn = document.getElementById('promo-save-btn');
+  if (promoSaveBtn) {
+    promoSaveBtn.addEventListener('click', () => {
+      const eyKo = document.getElementById('promo-eyebrow-ko').value.trim();
+      const eyEs = document.getElementById('promo-eyebrow-es').value.trim();
+      const tiKo = document.getElementById('promo-title-ko').value.trim();
+      const tiEs = document.getElementById('promo-title-es').value.trim();
+      // Save (empty string also saved so user can intentionally clear; only `null` means "fall back to default")
+      setPromoSetting(role, 'promo_eyebrow_ko', eyKo);
+      setPromoSetting(role, 'promo_eyebrow_es', eyEs);
+      setPromoSetting(role, 'promo_title_ko', tiKo);
+      setPromoSetting(role, 'promo_title_es', tiEs);
+      showToast(t('admin_promo_saved'), 'success');
+    });
+  }
+  // Promo reset button — clear all customizations, go back to i18n defaults
+  const promoResetBtn = document.getElementById('promo-reset-btn');
+  if (promoResetBtn) {
+    promoResetBtn.addEventListener('click', () => {
+      resetPromoSettings(role);
+      renderAdminScreen();
+      showToast(t('admin_promo_saved'), 'success');
+    });
+  }
   // Click WYSIWYG cards/rows that have a source — open the same way the user would.
   // This excludes clicks on the overlay buttons (which already have stopPropagation).
   adminScreen.querySelectorAll('[data-wys-source="1"]').forEach(el => {
@@ -3943,7 +5742,6 @@ async function renderAdminScreen() {
       // Special handling for full nodes
       if (nodeId.startsWith('_full_videos_')) {
         const node = getFullVideosNode(role);
-        // Full playlist: just attempt download/open in new tab (it's a single URL, not a video to embed)
         attemptDownload(node, t('admin_videos_full_label'));
         return;
       }
@@ -3956,12 +5754,18 @@ async function renderAdminScreen() {
       const found = findNode(role, nodeId, kind);
       if (!found) return;
       if (kind === 'videos') {
-        // Open the video preview modal so admin sees what users see
         openVideoPreviewModal(found.node, role);
       } else {
-        // Manual: download or open
-        attemptDownload(found.node, (found.node.title && found.node.title[state.lang]) || nodeId);
+        openPostViewModal(found.node);
       }
+    });
+  });
+  // Click an admin update post → open edit modal (kind === 'updates')
+  adminScreen.querySelectorAll('.wys-update-row').forEach(el => {
+    el.addEventListener('click', (e) => {
+      if (e.target.closest('.admin-overlay') || e.target.closest('.drag-handle')) return;
+      const id = el.dataset.nodeId;
+      if (id) openUpdateModal({ mode: 'edit', role, postId: id });
     });
   });
   bindDragAndDrop();
@@ -4040,7 +5844,11 @@ function bindDragAndDrop() {
       const dropAt = dndState.dropPosition === 'above' ? targetIndex : targetIndex + 1;
       const role = state.adminTab;
       const kind = state.adminKind || 'manual';
-      moveNodeTo(role, dndState.sourceNodeId, dropAt, kind);
+      if (kind === 'updates') {
+        moveUpdateTo(role, dndState.sourceNodeId, dropAt);
+      } else {
+        moveNodeTo(role, dndState.sourceNodeId, dropAt, kind);
+      }
       adminScreen.querySelectorAll('.dnd-item').forEach(el => el.classList.remove('drop-above', 'drop-below'));
       renderAdminScreen();
     });
@@ -4148,7 +5956,14 @@ function renderAdminVideoCard(video, role, index, total) {
 /* ════════════ WYSIWYG: MANUAL (download-view-like) ════════════ */
 function renderAdminManualWysiwyg(role, tree) {
   const fullNode = getFullManualNode(role);
-  let html = renderAdminFullCard(fullNode, role, 'manual');
+
+  // Promo banner editor (only relevant when videos exist for this role)
+  const videoTree = getTree(role, 'videos');
+  const promoEditor = (videoTree && videoTree.length > 0)
+    ? renderPromoBannerEditor(role)
+    : '';
+
+  let html = promoEditor + renderAdminFullCard(fullNode, role, 'manual');
 
   if (!tree || tree.length === 0) {
     html += `<div class="admin-empty">${t('admin_no_items')}</div>`;
@@ -4160,6 +5975,61 @@ function renderAdminManualWysiwyg(role, tree) {
     html += renderAdminManualSection(tree[i], role, i, tree.length);
   }
   return html;
+}
+
+function renderPromoBannerEditor(role) {
+  const pos = getPromoPosition(role);
+  const eyebrowKo = getPromoText(role, 'ko', 'eyebrow');
+  const eyebrowEs = getPromoText(role, 'es', 'eyebrow');
+  const titleKo = getPromoText(role, 'ko', 'title');
+  const titleEs = getPromoText(role, 'es', 'title');
+
+  // Escape HTML in user-supplied values for safe display in input value attributes
+  const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  return `
+    <details class="promo-editor" id="promo-editor">
+      <summary class="promo-editor-summary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+        <span>${t('admin_promo_section_title')}</span>
+      </summary>
+      <div class="promo-editor-body">
+        <div class="promo-field">
+          <label>${t('admin_promo_position_label')}</label>
+          <div class="promo-position-toggle">
+            <button data-pos="top" class="${pos==='top'?'on':''}">${t('admin_promo_position_top')}</button>
+            <button data-pos="after_full" class="${pos==='after_full'?'on':''}">${t('admin_promo_position_after_full')}</button>
+            <button data-pos="bottom" class="${pos==='bottom'?'on':''}">${t('admin_promo_position_bottom')}</button>
+            <button data-pos="hidden" class="${pos==='hidden'?'on':''}">${t('admin_promo_position_hidden')}</button>
+          </div>
+        </div>
+        <div class="promo-field-row">
+          <div class="promo-field">
+            <label>${t('admin_promo_eyebrow_label')} <span class="promo-lang">(한국어)</span></label>
+            <input type="text" id="promo-eyebrow-ko" value="${esc(eyebrowKo)}" placeholder="${esc((I18N.ko && I18N.ko.video_promo_eyebrow) || '')}">
+          </div>
+          <div class="promo-field">
+            <label>${t('admin_promo_eyebrow_label')} <span class="promo-lang">(Español)</span></label>
+            <input type="text" id="promo-eyebrow-es" value="${esc(eyebrowEs)}" placeholder="${esc((I18N.es && I18N.es.video_promo_eyebrow) || '')}">
+          </div>
+        </div>
+        <div class="promo-field-row">
+          <div class="promo-field">
+            <label>${t('admin_promo_title_label')} <span class="promo-lang">(한국어)</span></label>
+            <input type="text" id="promo-title-ko" value="${esc(titleKo)}" placeholder="${esc((I18N.ko && I18N.ko.video_promo_title) || '')}">
+          </div>
+          <div class="promo-field">
+            <label>${t('admin_promo_title_label')} <span class="promo-lang">(Español)</span></label>
+            <input type="text" id="promo-title-es" value="${esc(titleEs)}" placeholder="${esc((I18N.es && I18N.es.video_promo_title) || '')}">
+          </div>
+        </div>
+        <div class="promo-actions">
+          <button class="btn btn-ghost" id="promo-reset-btn">${t('admin_promo_reset')}</button>
+          <button class="btn btn-primary" id="promo-save-btn">${t('admin_promo_save')}</button>
+        </div>
+      </div>
+    </details>
+  `;
 }
 
 function renderAdminManualSection(section, role, index, total) {
@@ -4277,7 +6147,50 @@ function renderAdminFullCard(node, role, kind) {
   `;
 }
 
-/* ════════════ Legacy wrappers (kept for backwards-compat with existing helpers) ════════════ */
+/* ════════════ WYSIWYG: UPDATES (board-style feed) ════════════ */
+function renderAdminUpdatesWysiwyg(role, list) {
+  if (!list || list.length === 0) {
+    return `<div class="admin-empty">${t('admin_no_updates')}</div>`;
+  }
+  let html = `<div class="updates-feed wys-updates-feed" data-parent-key="updates_root">`;
+  for (let i = 0; i < list.length; i++) {
+    html += renderAdminUpdatePost(list[i], role, i, list.length);
+  }
+  html += `</div>`;
+  return html;
+}
+
+function renderAdminUpdatePost(post, role, index, total) {
+  const title = pickLangValue(post.title, state.lang);
+  const date = post.date || '';
+  const category = post.category || 'general';
+  const link = getLink(post.id);
+  const hasFile = state.uploadedKeys.has(post.id);
+  const hasSource = !!(link || hasFile);
+
+  // Source status dot
+  let statusDot;
+  if (link) statusDot = '<span class="wys-source-dot link" title="🔗">🔗</span>';
+  else if (hasFile) statusDot = '<span class="wys-source-dot file" title="📎">📎</span>';
+  else statusDot = `<span class="wys-source-dot empty" title="${t('admin_status_empty')}">○</span>`;
+
+  const escTitle = String(title).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const titleDisplay = escTitle || `<span class="wys-placeholder">${t('admin_untitled')}</span>`;
+  const escCatLabel = String(getCategoryLabel(category)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  return `
+    <div class="update-row wys-update-row dnd-item" data-node-id="${post.id}" data-parent-key="updates_root" data-index="${index}">
+      ${dragHandleHtml()}
+      ${adminOverlay(post.id, null, { allowAddChild: false })}
+      <time class="update-row-date">${date}</time>
+      <span class="update-row-cat cat-${category}">${escCatLabel}</span>
+      <span class="update-row-title">${titleDisplay}</span>
+      ${statusDot}
+    </div>
+  `;
+}
+
+
 function renderAdminSection(section, role, index, total) {
   return renderAdminManualSection(section, role, index, total);
 }
@@ -4306,6 +6219,17 @@ async function handleAdminAction(action, nodeId, parentId) {
       const label = (kind === 'videos') ? t('admin_videos_full_label') : t('admin_full_label');
       attemptDownload(node, label);
       return;
+    }
+    return;
+  }
+
+  // Updates kind has its own modal — manual/videos use the original item modal
+  if (kind === 'updates') {
+    if (action === 'edit-node') {
+      openUpdateModal({ mode: 'edit', role, postId: nodeId });
+    } else if (action === 'download-source') {
+      const post = (getUpdates(role) || []).find(p => p.id === nodeId);
+      if (post) attemptDownload({ id: post.id, title: post.title }, (post.title && post.title[state.lang]) || nodeId);
     }
     return;
   }
@@ -4457,6 +6381,249 @@ previewModal.addEventListener('click', e => {
   if (e.target === previewModal) closePreviewModal();
 });
 
+/* ════════════ POST-VIEW MODAL (manual PDFs as scrollable feed of pages) ════════════ */
+const postViewModal = document.getElementById('post-view-modal');
+const postViewTitle = document.getElementById('post-view-title');
+const postViewNum = document.getElementById('post-view-num');
+const postViewBody = document.getElementById('post-view-body');
+const postViewDownloadBtn = document.getElementById('post-view-download');
+const postViewExternalBtn = document.getElementById('post-view-external');
+const postViewCounter = document.getElementById('post-view-counter');
+const postViewCurrentPage = document.getElementById('post-view-current-page');
+const postViewTotalPages = document.getElementById('post-view-total-pages');
+
+let postViewCurrentNode = null;
+let postViewObserver = null;  // IntersectionObserver to update page counter as user scrolls
+let postViewRenderToken = 0;  // increments on each open; in-flight renders compare against this
+
+// Convert a Google Drive URL to its raw download URL (for fetch). Returns null if not Drive.
+function driveRawUrl(url) {
+  if (!url) return null;
+  let m = url.match(/drive\.google\.com\/file\/d\/([\w-]+)/);
+  if (m) return `https://drive.google.com/uc?export=download&id=${m[1]}`;
+  m = url.match(/drive\.google\.com\/(?:open|uc)\?(?:[^&]*&)*id=([\w-]+)/);
+  if (m) return `https://drive.google.com/uc?export=download&id=${m[1]}`;
+  return null;
+}
+
+// Convert a Google Drive URL to its embed/preview URL (for iframe fallback)
+function drivePreviewUrl(url) {
+  if (!url) return null;
+  let m = url.match(/drive\.google\.com\/file\/d\/([\w-]+)/);
+  if (m) return `https://drive.google.com/file/d/${m[1]}/preview`;
+  m = url.match(/drive\.google\.com\/(?:open|uc)\?(?:[^&]*&)*id=([\w-]+)/);
+  if (m) return `https://drive.google.com/file/d/${m[1]}/preview`;
+  return null;
+}
+
+async function openPostViewModal(node) {
+  if (!node) return;
+  postViewCurrentNode = node;
+  const myToken = ++postViewRenderToken;  // token for this open; invalidate older renders
+
+  const title = (node.title && node.title[state.lang]) || node.id;
+  postViewTitle.textContent = title;
+  postViewNum.textContent = node.num || '';
+
+  // Reset body
+  postViewBody.innerHTML = `
+    <div class="pv-loading">
+      <div class="pv-spinner"></div>
+      <p>${t('post_view_loading')}</p>
+    </div>
+  `;
+  postViewCounter.style.display = 'none';
+  postViewDownloadBtn.style.display = 'none';
+  postViewExternalBtn.style.display = 'none';
+  if (postViewObserver) { postViewObserver.disconnect(); postViewObserver = null; }
+
+  // Determine source: uploaded file (IndexedDB), link, or fallback URL
+  const src = getNodeSource(node);
+  let pdfBlob = null;
+  let externalUrl = null;
+
+  if (src.type === 'file') {
+    try {
+      const rec = await dbGet(node.id);
+      if (rec && rec.blob) pdfBlob = rec.blob;
+    } catch (e) { console.warn(e); }
+  } else if (src.type === 'link') {
+    externalUrl = src.value;
+    // Try to convert Google Drive to raw download URL for fetch
+    const rawUrl = driveRawUrl(src.value);
+    if (rawUrl) {
+      try {
+        // Note: this fetch will likely fail due to CORS on Drive — graceful fallback to iframe
+        const resp = await fetch(rawUrl, { mode: 'cors' });
+        if (resp.ok) pdfBlob = await resp.blob();
+      } catch (e) { /* expected for Drive; fall through to iframe fallback */ }
+    }
+  } else if (src.type === 'fallback' && /^https?:\/\//i.test(src.value)) {
+    externalUrl = src.value;
+    try {
+      const resp = await fetch(src.value, { mode: 'cors' });
+      if (resp.ok) pdfBlob = await resp.blob();
+    } catch (e) { /* try iframe fallback */ }
+  }
+
+  // Show external/download buttons
+  if (externalUrl) {
+    postViewExternalBtn.href = externalUrl;
+    postViewExternalBtn.style.display = 'inline-flex';
+  }
+  postViewDownloadBtn.style.display = 'inline-flex';
+  postViewDownloadBtn.onclick = () => attemptDownload(node, title);
+
+  // Show modal
+  postViewModal.classList.add('active');
+  document.body.classList.add('modal-open');
+
+  // If we got a Blob (uploaded file or CORS-allowed URL), render via PDF.js
+  if (pdfBlob) {
+    if (myToken !== postViewRenderToken) return;  // user opened another in the meantime
+    try {
+      const arrayBuffer = await pdfBlob.arrayBuffer();
+      if (myToken !== postViewRenderToken) return;
+      await renderPdfPages(arrayBuffer, myToken);
+    } catch (err) {
+      console.warn('PDF.js render failed:', err);
+      showPdfFallback(externalUrl);
+    }
+    return;
+  }
+
+  // No blob — use iframe fallback (works for Drive without CORS)
+  showPdfFallback(externalUrl);
+}
+
+async function renderPdfPages(arrayBuffer, myToken) {
+  if (!window.pdfjsLib) {
+    showPdfFallback(null);
+    return;
+  }
+  try {
+    const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+    const pdf = await loadingTask.promise;
+    if (myToken !== postViewRenderToken) return;
+
+    postViewBody.innerHTML = '';
+    postViewBody.classList.remove('pv-iframe-mode');
+    postViewCounter.style.display = 'block';
+    postViewTotalPages.textContent = pdf.numPages;
+    postViewCurrentPage.textContent = '1';
+
+    // Wait for the modal layout to settle so clientWidth is accurate.
+    // Two animation frames guarantee the active class has been applied + composited.
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    if (myToken !== postViewRenderToken) return;
+
+    // Available width inside the body (account for body padding from CSS: 16px each side)
+    const bodyStyle = getComputedStyle(postViewBody);
+    const padL = parseFloat(bodyStyle.paddingLeft) || 0;
+    const padR = parseFloat(bodyStyle.paddingRight) || 0;
+    const availableWidth = Math.max(320, postViewBody.clientWidth - padL - padR);
+    // Use device pixel ratio so canvas is crisp on high-DPI screens
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);  // cap at 2x to limit memory
+
+    // Build page wrappers up front so layout is stable as renders complete
+    const pageWrappers = [];
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'pv-page';
+      wrapper.dataset.pageNum = i;
+      const label = document.createElement('div');
+      label.className = 'pv-page-label';
+      label.textContent = `${i} / ${pdf.numPages}`;
+      wrapper.appendChild(label);
+      postViewBody.appendChild(wrapper);
+      pageWrappers.push(wrapper);
+    }
+
+    // Render pages sequentially to avoid memory spikes
+    for (let i = 1; i <= pdf.numPages; i++) {
+      if (myToken !== postViewRenderToken) return;
+      const page = await pdf.getPage(i);
+      const viewport = page.getViewport({ scale: 1 });
+      // CSS-display scale: fits page width to available container width
+      const cssScale = availableWidth / viewport.width;
+      // Render at higher pixel density for crispness, then scale canvas via CSS
+      const renderScale = cssScale * dpr;
+      const renderViewport = page.getViewport({ scale: renderScale });
+      const canvas = document.createElement('canvas');
+      canvas.width = renderViewport.width;
+      canvas.height = renderViewport.height;
+      // CSS-display dimensions (logical pixels)
+      canvas.style.width = (viewport.width * cssScale) + 'px';
+      canvas.style.height = (viewport.height * cssScale) + 'px';
+      pageWrappers[i - 1].appendChild(canvas);
+      const ctx = canvas.getContext('2d');
+      await page.render({ canvasContext: ctx, viewport: renderViewport }).promise;
+    }
+
+    // Observe pages to update the counter as user scrolls
+    if (myToken === postViewRenderToken) {
+      postViewObserver = new IntersectionObserver((entries) => {
+        for (const ent of entries) {
+          if (ent.isIntersecting) {
+            const n = ent.target.dataset.pageNum;
+            if (n) postViewCurrentPage.textContent = n;
+          }
+        }
+      }, { root: postViewBody, threshold: 0.5 });
+      pageWrappers.forEach(w => postViewObserver.observe(w));
+    }
+  } catch (err) {
+    console.warn('PDF render error:', err);
+    showPdfFallback(null);
+  }
+}
+
+function showPdfFallback(externalUrl) {
+  postViewCounter.style.display = 'none';
+  // Try Drive preview iframe if it's a Drive URL
+  const previewUrl = externalUrl ? drivePreviewUrl(externalUrl) : null;
+  if (previewUrl) {
+    postViewBody.classList.add('pv-iframe-mode');
+    postViewBody.innerHTML = `
+      <div class="pv-iframe-wrap">
+        <iframe src="${previewUrl}" title="PDF Preview" style="flex:1; width:100%; height:100%; border:none; background:#fff;"></iframe>
+      </div>
+    `;
+  } else if (externalUrl) {
+    postViewBody.classList.remove('pv-iframe-mode');
+    postViewBody.innerHTML = `
+      <div class="pv-error">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;opacity:0.6;margin-bottom:14px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <p>${t('post_view_error')}</p>
+        <a href="${externalUrl}" target="_blank" rel="noopener" class="btn btn-primary" style="display:inline-block; margin-top: 18px;">${t('post_view_open_external')}</a>
+      </div>
+    `;
+  } else {
+    postViewBody.classList.remove('pv-iframe-mode');
+    postViewBody.innerHTML = `
+      <div class="pv-error">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;opacity:0.6;margin-bottom:14px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <p>${t('post_view_no_source')}</p>
+      </div>
+    `;
+  }
+}
+
+function closePostViewModal() {
+  postViewModal.classList.remove('active');
+  document.body.classList.remove('modal-open');
+  postViewBody.innerHTML = '';
+  postViewBody.classList.remove('pv-iframe-mode');
+  postViewCounter.style.display = 'none';
+  postViewCurrentNode = null;
+  postViewRenderToken++;  // invalidate any in-flight render
+  if (postViewObserver) { postViewObserver.disconnect(); postViewObserver = null; }
+}
+document.getElementById('post-view-close').addEventListener('click', closePostViewModal);
+postViewModal.addEventListener('click', e => {
+  if (e.target === postViewModal) closePostViewModal();
+});
+
 /* ════════════ VIDEO PREVIEW MODAL (split: video left, manual right) ════════════ */
 const videoModal = document.getElementById('video-preview-modal');
 const videoModalTitle = document.getElementById('video-preview-title');
@@ -4472,6 +6639,14 @@ function openVideoPreviewModal(video, role) {
   const title = (video.title && video.title[state.lang]) || '';
   videoModalNum.textContent = t('video_label') + ' ' + video.num;
   videoModalTitle.textContent = title;
+
+  // Ensure update-mode visual state is cleared (in case we previously opened a post)
+  const vpShell = videoModal.querySelector('.vp-shell');
+  if (vpShell) vpShell.classList.remove('update-mode');
+  const frameWrap = document.getElementById('video-preview-frame-wrap');
+  if (frameWrap) frameWrap.style.display = '';
+  const postBody = document.getElementById('video-preview-post-body');
+  if (postBody) postBody.style.display = 'none';
 
   // Get the video URL from its source
   const src = getNodeSource(video);
@@ -4553,10 +6728,23 @@ function openVideoPreviewModal(video, role) {
     }
     videoModalManualPanel.innerHTML = manualHtml;
     videoModalManualPanel.classList.remove('empty');
+    // Save the manual-list HTML so we can restore it when user clicks "back"
+    videoModalManualPanel.dataset.listHtml = manualHtml;
+    // Build a flat ordered list of clickable manual nodes (with sources) so that
+    // prev/next navigation in inline view can iterate through them.
+    const clickableList = [];
+    videoModalManualPanel.querySelectorAll('[data-vp-node-id]').forEach(el => {
+      const node = videoModalNodeMap[el.dataset.vpNodeId];
+      if (node) clickableList.push(node);
+    });
+    // Stash on the panel so the inline opener can access it
+    videoModalManualPanel._clickableNodes = clickableList;
     videoModalManualPanel.querySelectorAll('[data-vp-node-id]').forEach(el => {
       el.addEventListener('click', () => {
         const node = videoModalNodeMap[el.dataset.vpNodeId];
-        if (node) attemptDownload(node, (node.title && node.title[state.lang]) || node.id);
+        if (!node) return;
+        const idx = clickableList.findIndex(n => n.id === node.id);
+        openInlineManualInVideoPanel(node, clickableList, idx);
       });
     });
   } else {
@@ -4601,9 +6789,307 @@ function closeVideoPreviewModal() {
   videoModal.classList.remove('active');
   document.body.classList.remove('modal-open');
   videoModalIframe.src = 'about:blank';  // stop video playback
+  videoPanelRenderToken++;  // invalidate any in-flight inline PDF render
+  // Reset update mode visual state
+  const vpShell = videoModal.querySelector('.vp-shell');
+  if (vpShell) vpShell.classList.remove('update-mode');
+  const frameWrap = document.getElementById('video-preview-frame-wrap');
+  if (frameWrap) frameWrap.style.display = '';
+  const postBody = document.getElementById('video-preview-post-body');
+  if (postBody) postBody.style.display = 'none';
 }
 document.getElementById('video-preview-close').addEventListener('click', closeVideoPreviewModal);
 videoModal.addEventListener('click', e => { if (e.target === videoModal) closeVideoPreviewModal(); });
+
+/* ─── Open the video preview modal in "update post" mode ─── */
+/* Reuses the same shell: left pane shows post body, right pane shows the attachment as inline PDF. */
+async function openPostPreviewModal(post, role) {
+  if (!post) return;
+  const lang = state.lang;
+  const title = pickLangValue(post.title, lang);
+  const body = pickLangValue(post.body, lang);
+  const date = post.date || '';
+  const category = post.category || 'general';
+  const catLabel = getCategoryLabel(category);
+
+  // Toggle modal into update mode (hide video frame, show post body)
+  const vpShell = videoModal.querySelector('.vp-shell');
+  if (vpShell) vpShell.classList.add('update-mode');
+  const frameWrap = document.getElementById('video-preview-frame-wrap');
+  if (frameWrap) frameWrap.style.display = 'none';
+  const postBodyEl = document.getElementById('video-preview-post-body');
+  if (postBodyEl) postBodyEl.style.display = 'flex';
+  // Stop any video playback that might be lingering
+  videoModalIframe.src = 'about:blank';
+  videoModalFallback.style.display = 'none';
+
+  // Header: show category badge + post title
+  const escCat = String(catLabel).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  videoModalNum.innerHTML = `<span class="update-row-cat cat-${category}" style="font-size: 11px;">${escCat}</span>`;
+  videoModalTitle.textContent = title || t('admin_untitled');
+
+  // Populate post body (date + content)
+  document.getElementById('video-preview-post-date').textContent = date;
+  const contentEl = document.getElementById('video-preview-post-content');
+  // Plain-text body — set textContent so HTML is escaped; newlines preserved via CSS pre-wrap
+  contentEl.textContent = body || '';
+  // Hide the video-children list (not relevant for updates)
+  videoModalContents.innerHTML = '';
+
+  // Show modal
+  videoModal.classList.add('active');
+  document.body.classList.add('modal-open');
+
+  // Right pane: render the attachment as inline PDF (if any), else show empty hint
+  const src = getNodeSource({ id: post.id });
+  if (src.type === 'none') {
+    // No attachment
+    videoModalManualPanel.classList.add('empty');
+    videoModalManualPanel.innerHTML = `
+      <div class="vp-manual-header">
+        <div class="vp-manual-eyebrow">${t('update_no_attachment')}</div>
+      </div>
+      <div class="vp-manual-empty">${t('update_no_attachment_desc')}</div>
+    `;
+    return;
+  }
+
+  // There is an attachment — render it inline using the existing PDF infrastructure.
+  // Build a synthetic "node" with this post's ID so getNodeSource picks up its link/file.
+  const attachNode = {
+    id: post.id,
+    num: '',
+    title: post.title,
+    _kind: 'update'
+  };
+  videoModalManualPanel.classList.remove('empty');
+  // _clickableNodes is just this single attachment (no prev/next nav needed)
+  videoModalManualPanel._clickableNodes = [attachNode];
+  // Open the inline PDF viewer in the right panel directly (no "back to list" needed —
+  // but we hide the back button since there's nothing to go back to)
+  await openInlineManualInVideoPanel(attachNode, [attachNode], 0);
+  // Hide the back-to-list button since there's no list to go back to in update mode
+  const backBtn = document.getElementById('vp-inline-back');
+  if (backBtn) backBtn.style.display = 'none';
+}
+
+/* ───── Inline manual PDF viewer (rendered inside the video modal's right panel) ───── */
+// Token to invalidate stale renders if user navigates away (back to list, close modal, etc.)
+let videoPanelRenderToken = 0;
+
+async function openInlineManualInVideoPanel(node, siblings, currentIndex) {
+  if (!node) return;
+  const myToken = ++videoPanelRenderToken;
+  const title = (node.title && node.title[state.lang]) || node.id;
+  const num = node.num || '';
+
+  // siblings + currentIndex enable prev/next navigation. Default: single-item list.
+  if (!Array.isArray(siblings) || siblings.length === 0) {
+    siblings = videoModalManualPanel._clickableNodes || [node];
+    currentIndex = siblings.findIndex(n => n.id === node.id);
+    if (currentIndex < 0) currentIndex = 0;
+  }
+  const hasMultiple = siblings.length > 1;
+  const hasPrev = currentIndex > 0;
+  const hasNext = currentIndex < siblings.length - 1;
+
+  // Build prev/next nav HTML (only when there are siblings)
+  const navHtml = hasMultiple ? `
+    <div class="vp-inline-nav">
+      <button class="vp-inline-nav-btn" id="vp-inline-prev" ${!hasPrev ? 'disabled' : ''}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        <span>${t('video_panel_prev_manual')}</span>
+      </button>
+      <span class="vp-inline-counter">${currentIndex + 1} ${t('video_panel_manual_counter')} ${siblings.length}</span>
+      <button class="vp-inline-nav-btn" id="vp-inline-next" ${!hasNext ? 'disabled' : ''}>
+        <span>${t('video_panel_next_manual')}</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+  ` : '';
+
+  // Replace right panel with an inline PDF viewer skeleton
+  videoModalManualPanel.innerHTML = `
+    <div class="vp-inline-pdf">
+      <div class="vp-inline-pdf-header">
+        <button class="vp-inline-back" id="vp-inline-back">${t('video_panel_back_to_list')}</button>
+        <div class="vp-inline-title">
+          <span class="vp-inline-num">${num}</span>
+          <span class="vp-inline-name">${title}</span>
+        </div>
+        ${navHtml}
+      </div>
+      <div class="vp-inline-body" id="vp-inline-body">
+        <div class="pv-loading">
+          <div class="pv-spinner"></div>
+          <p>${t('post_view_loading')}</p>
+        </div>
+      </div>
+    </div>
+  `;
+  // Restore-on-back
+  const backBtn = document.getElementById('vp-inline-back');
+  if (backBtn) backBtn.addEventListener('click', () => restoreVideoPanelList());
+
+  // Prev/Next bindings
+  const prevBtn = document.getElementById('vp-inline-prev');
+  const nextBtn = document.getElementById('vp-inline-next');
+  if (prevBtn) prevBtn.addEventListener('click', () => {
+    if (hasPrev) openInlineManualInVideoPanel(siblings[currentIndex - 1], siblings, currentIndex - 1);
+  });
+  if (nextBtn) nextBtn.addEventListener('click', () => {
+    if (hasNext) openInlineManualInVideoPanel(siblings[currentIndex + 1], siblings, currentIndex + 1);
+  });
+
+  // Fetch PDF data (same logic as openPostViewModal)
+  const src = getNodeSource(node);
+  let pdfBlob = null;
+  let externalUrl = null;
+  if (src.type === 'file') {
+    try {
+      const rec = await dbGet(node.id);
+      if (rec && rec.blob) pdfBlob = rec.blob;
+    } catch (e) { console.warn(e); }
+  } else if (src.type === 'link') {
+    externalUrl = src.value;
+    const rawUrl = driveRawUrl(src.value);
+    if (rawUrl) {
+      try {
+        const resp = await fetch(rawUrl, { mode: 'cors' });
+        if (resp.ok) pdfBlob = await resp.blob();
+      } catch (e) { /* fall through to iframe */ }
+    }
+  } else if (src.type === 'fallback' && /^https?:\/\//i.test(src.value)) {
+    externalUrl = src.value;
+    try {
+      const resp = await fetch(src.value, { mode: 'cors' });
+      if (resp.ok) pdfBlob = await resp.blob();
+    } catch (e) {}
+  }
+
+  if (myToken !== videoPanelRenderToken) return;
+  const inlineBody = document.getElementById('vp-inline-body');
+  if (!inlineBody) return;
+
+  if (pdfBlob) {
+    try {
+      const arrayBuffer = await pdfBlob.arrayBuffer();
+      if (myToken !== videoPanelRenderToken) return;
+      await renderInlinePdf(arrayBuffer, inlineBody, () => videoPanelRenderToken, myToken);
+    } catch (err) {
+      console.warn('Inline PDF render failed:', err);
+      showInlinePdfFallback(inlineBody, externalUrl);
+    }
+    return;
+  }
+  showInlinePdfFallback(inlineBody, externalUrl);
+}
+
+async function renderInlinePdf(arrayBuffer, container, getCurrentToken, myToken) {
+  if (!window.pdfjsLib) {
+    showInlinePdfFallback(container, null);
+    return;
+  }
+  try {
+    const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+    const pdf = await loadingTask.promise;
+    if (myToken !== getCurrentToken()) return;
+
+    container.innerHTML = '';
+    container.classList.remove('vp-inline-iframe-mode');
+
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    if (myToken !== getCurrentToken()) return;
+
+    const cs = getComputedStyle(container);
+    const padL = parseFloat(cs.paddingLeft) || 0;
+    const padR = parseFloat(cs.paddingRight) || 0;
+    const availableWidth = Math.max(220, container.clientWidth - padL - padR);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const wrappers = [];
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const w = document.createElement('div');
+      w.className = 'pv-page';
+      w.dataset.pageNum = i;
+      const lbl = document.createElement('div');
+      lbl.className = 'pv-page-label';
+      lbl.textContent = `${i} / ${pdf.numPages}`;
+      w.appendChild(lbl);
+      container.appendChild(w);
+      wrappers.push(w);
+    }
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      if (myToken !== getCurrentToken()) return;
+      const page = await pdf.getPage(i);
+      const viewport = page.getViewport({ scale: 1 });
+      const cssScale = availableWidth / viewport.width;
+      const renderScale = cssScale * dpr;
+      const renderViewport = page.getViewport({ scale: renderScale });
+      const canvas = document.createElement('canvas');
+      canvas.width = renderViewport.width;
+      canvas.height = renderViewport.height;
+      canvas.style.width = (viewport.width * cssScale) + 'px';
+      canvas.style.height = (viewport.height * cssScale) + 'px';
+      wrappers[i - 1].appendChild(canvas);
+      const ctx = canvas.getContext('2d');
+      await page.render({ canvasContext: ctx, viewport: renderViewport }).promise;
+    }
+  } catch (err) {
+    console.warn('Inline PDF render error:', err);
+    showInlinePdfFallback(container, null);
+  }
+}
+
+function showInlinePdfFallback(container, externalUrl) {
+  const previewUrl = externalUrl ? drivePreviewUrl(externalUrl) : null;
+  if (previewUrl) {
+    container.classList.add('vp-inline-iframe-mode');
+    container.innerHTML = `
+      <iframe src="${previewUrl}" title="PDF Preview" style="width:100%; height:100%; border:none; background:#fff;"></iframe>
+    `;
+  } else if (externalUrl) {
+    container.classList.remove('vp-inline-iframe-mode');
+    container.innerHTML = `
+      <div class="pv-error">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;opacity:0.6;margin-bottom:14px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <p>${t('post_view_error')}</p>
+        <a href="${externalUrl}" target="_blank" rel="noopener" class="btn btn-primary" style="display:inline-block; margin-top: 18px;">${t('post_view_open_external')}</a>
+      </div>
+    `;
+  } else {
+    container.classList.remove('vp-inline-iframe-mode');
+    container.innerHTML = `
+      <div class="pv-error">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;opacity:0.6;margin-bottom:14px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <p>${t('post_view_no_source')}</p>
+      </div>
+    `;
+  }
+}
+
+function restoreVideoPanelList() {
+  videoPanelRenderToken++;  // invalidate in-flight inline renders
+  const html = videoModalManualPanel.dataset.listHtml;
+  if (!html) return;
+  videoModalManualPanel.innerHTML = html;
+  // Rebuild clickable list and rebind clicks
+  const clickableList = [];
+  videoModalManualPanel.querySelectorAll('[data-vp-node-id]').forEach(el => {
+    const node = videoModalNodeMap[el.dataset.vpNodeId];
+    if (node) clickableList.push(node);
+  });
+  videoModalManualPanel._clickableNodes = clickableList;
+  videoModalManualPanel.querySelectorAll('[data-vp-node-id]').forEach(el => {
+    el.addEventListener('click', () => {
+      const node = videoModalNodeMap[el.dataset.vpNodeId];
+      if (!node) return;
+      const idx = clickableList.findIndex(n => n.id === node.id);
+      openInlineManualInVideoPanel(node, clickableList, idx);
+    });
+  });
+}
 
 
 /* ════════════ EXPORT HTML ════════════ */
@@ -4681,6 +7167,43 @@ async function exportHtml() {
     const newFullVideoBlock = 'const FULL_VIDEO_FILES = ' + JSON.stringify(newFullVideoFiles, null, 2) + ';';
     if (fullVideoBlockRe.test(html)) {
       html = html.replace(fullVideoBlockRe, newFullVideoBlock);
+    }
+
+    // Bake in updates data (the board-style feed posts).
+    // Attachments stay in localStorage (links[postId] = url) and are baked via the
+    // FULL_*_FILES / SECTIONS / VIDEOS pipeline. Posts themselves go into UPDATES_DATA_DEFAULT.
+    const newUpdates = {
+      teacher: getUpdates('teacher') || [],
+      student: getUpdates('student') || [],
+      admin:   getUpdates('admin') || []
+    };
+    const updatesBlockRe = /const\s+UPDATES_DATA_DEFAULT\s*=\s*\{[\s\S]*?\n\};/;
+    const newUpdatesBlock = 'const UPDATES_DATA_DEFAULT = ' + JSON.stringify(newUpdates, null, 2) + ';';
+    if (updatesBlockRe.test(html)) {
+      html = html.replace(updatesBlockRe, newUpdatesBlock);
+    }
+
+    // Bake in layout settings (promo banner position/text, video grid cols).
+    // Read localStorage and combine with any existing LAYOUT_SETTINGS_DEFAULT.
+    const newLayoutSettings = {};
+    for (const role of ['teacher', 'student', 'admin']) {
+      const merged = { ...(LAYOUT_SETTINGS_DEFAULT[role] || {}) };
+      // Read manual + videos layout entries for this role and merge into one object
+      for (const kind of ['manual', 'videos']) {
+        try {
+          const raw = localStorage.getItem('lxp_layout_' + role + '_' + kind);
+          if (raw) {
+            const parsed = JSON.parse(raw) || {};
+            Object.assign(merged, parsed);
+          }
+        } catch (e) {}
+      }
+      newLayoutSettings[role] = merged;
+    }
+    const layoutBlockRe = /const\s+LAYOUT_SETTINGS_DEFAULT\s*=\s*\{[\s\S]*?\n\};/;
+    const newLayoutBlock = 'const LAYOUT_SETTINGS_DEFAULT = ' + JSON.stringify(newLayoutSettings, null, 2) + ';';
+    if (layoutBlockRe.test(html)) {
+      html = html.replace(layoutBlockRe, newLayoutBlock);
     }
 
     const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
