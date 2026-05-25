@@ -319,6 +319,13 @@
     max-width: 520px; width: 100%; box-shadow: var(--shadow-md);
     border: 1px solid var(--rule);
     animation: modalUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  /* Smaller backdrop padding on short viewports so modal has more room */
+  @media (max-height: 700px) {
+    .modal-backdrop { padding: 12px; }
+    .modal { padding: 32px 36px 28px; max-height: 95vh; }
   }
   @keyframes modalUp { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
   .modal-eyebrow { font-family: var(--display); font-weight: 600; color: var(--accent); font-size: 12px; text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 10px; }
@@ -1615,10 +1622,22 @@
     background: var(--ink); color: var(--paper);
     padding: 14px 24px; border-radius: 4px;
     font-size: 14px; box-shadow: var(--shadow-md);
-    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+                visibility 0s linear 0.4s,
+                opacity 0.4s ease;
     z-index: 200; max-width: 90vw;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
   }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    visibility: visible;
+    opacity: 1;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+                visibility 0s linear 0s,
+                opacity 0.2s ease;
+  }
   .toast.error { background: var(--danger); }
   .toast.success { background: var(--success); }
 
@@ -2401,7 +2420,7 @@ const PASSWORDS = {
 
 const FULL_MANUAL_FILES = {
   "teacher": "https://drive.google.com/uc?export=download&id=1HXRKQyKGclCr2X5hLXi_qCpYGucf83AM",
-  "student": "https://drive.google.com/file/d/11h9zMnO90OnWrcg8UMDo32cYJewDmfYx/view?usp=drive_link",
+  "student": "https://drive.google.com/uc?export=download&id=11h9zMnO90OnWrcg8UMDo32cYJewDmfYx",
   "admin": "manuals/admin/full.pdf"
 };
 
@@ -3001,7 +3020,7 @@ const I18N = {
 
 // Default sections; structure can be edited in the admin and stored in localStorage.
 const SECTIONS_DATA_DEFAULT = {
-  teacher: [
+  "teacher": [
     {
       "num": "1",
       "title": {
@@ -3301,8 +3320,29 @@ const SECTIONS_DATA_DEFAULT = {
       "id": "n_rc9fitw4ztcc"
     }
   ],
-  student: [{"id":"n_bxxp4idq5cv3","num":"1","title":{"ko":"학생용 매뉴얼","es":"Manual para Estudiantes"},"children":[{"id":"n_tq42xjgm0rcv","num":"1.1","title":{"ko":"전체 매뉴얼","es":"Manual para Estudiantes"},"file":"https://drive.google.com/file/d/11h9zMnO90OnWrcg8UMDo32cYJewDmfYx/view?usp=drive_link"}],"file":"https://drive.google.com/file/d/11h9zMnO90OnWrcg8UMDo32cYJewDmfYx/view?usp=drive_link"}],
-  admin: null
+  "student": [
+    {
+      "id": "n_bxxp4idq5cv3",
+      "num": "1",
+      "title": {
+        "ko": "학생용 매뉴얼",
+        "es": "Manual para Estudiantes"
+      },
+      "children": [
+        {
+          "id": "n_tq42xjgm0rcv",
+          "num": "1.1",
+          "title": {
+            "ko": "전체 매뉴얼",
+            "es": "Manual para Estudiantes"
+          },
+          "file": "https://drive.google.com/file/d/11h9zMnO90OnWrcg8UMDo32cYJewDmfYx/view?usp=drive_link"
+        }
+      ],
+      "file": "https://drive.google.com/file/d/11h9zMnO90OnWrcg8UMDo32cYJewDmfYx/view?usp=drive_link"
+    }
+  ],
+  "admin": null
 };
 
 /* ════════════ ID & STORAGE HELPERS ════════════ */
@@ -3616,7 +3656,14 @@ const VIDEOS_DATA_DEFAULT = {
           "id": "n_epe2tqp6anbr"
         }
       ],
-      "id": "n_8ghkb6svlnbr"
+      "id": "n_8ghkb6svlnbr",
+      "manualRefs": [
+        "p:manuals/teacher/2.1.6.3.pdf",
+        "p:manuals/teacher/2.1.6.4.pdf",
+        "p:manuals/teacher/2.1.6.5.pdf",
+        "p:manuals/teacher/2.1.6.6.pdf"
+      ],
+      "file": "https://drive.google.com/file/d/14UubVvryWCRA5nXeFK0euOx9Sl5KXeAn/view?usp=drive_link"
     },
     {
       "num": "9",
@@ -3645,7 +3692,13 @@ const VIDEOS_DATA_DEFAULT = {
           "id": "n_jwi89zjcwnbr"
         }
       ],
-      "id": "n_d93zxox22nbr"
+      "id": "n_d93zxox22nbr",
+      "manualRefs": [
+        "p:manuals/teacher/2.1.6.7.pdf",
+        "p:manuals/teacher/2.1.7.pdf",
+        "p:manuals/teacher/2.1.8.pdf"
+      ],
+      "file": "https://drive.google.com/file/d/102Crucax4I4_OVCjVatE60oCF8bVXEBj/view?usp=drive_link"
     },
     {
       "num": "10",
@@ -3665,7 +3718,11 @@ const VIDEOS_DATA_DEFAULT = {
           "id": "n_rvzsdsjounbr"
         }
       ],
-      "id": "n_gpra5wejdnbr"
+      "id": "n_gpra5wejdnbr",
+      "manualRefs": [
+        "p:manuals/teacher/2.1.10.pdf"
+      ],
+      "file": "https://drive.google.com/uc?export=download&id=13uausK1fKHZ21EbTzT46cOYWhrDgkQLw"
     },
     {
       "num": "11",
@@ -3818,19 +3875,19 @@ const LAYOUT_SETTINGS_DEFAULT = {
 const UPDATES_DATA_DEFAULT = {
   "teacher": [
     {
-      "id": "n_9gft86s7di9o",
+      "id": "n_v8rdd1im8x5q",
       "title": {
         "ko": "수업 전 리뷰",
         "es": "Revisión antes de la clase",
         "en": "Pre-Class Review"
       },
       "date": "2026-05-25",
+      "category": "urgent",
       "body": {
         "ko": "수업을 시작하기 전에, 기존의 「오늘의 수업」 메뉴에서 오늘 진행할 수업의 주제와 학습 목표를 미리 확인하고, 이전 수업의 진행 상황을 함께 리뷰할 수 있는 기능이 추가되었습니다.\n\n교사는 이를 통해 오늘 수업에서 다루어야 할 핵심 내용을 사전에 파악하고, 이전 차시가 완료되지 않았거나 추가 확인이 필요한 경우 수업 흐름을 조정할 수 있습니다. 또한 학급의 전체 진도와 학생별 학습 상태를 참고하여, 수업을 시작하기 전 어떤 부분을 다시 짚고 넘어갈지 보다 명확하게 판단할 수 있습니다.\n\n이 기능은 선생님들이 수업을 더 안정적으로 준비하고, 학생들의 실제 학습 상황에 맞춰 자신 있게 수업을 진행할 수 있도록 돕기 위해 마련되었습니다.",
         "es": "Antes de iniciar la clase, se ha agregado una nueva función en el menú “Clase de hoy” que permite revisar previamente el tema y los objetivos de aprendizaje de la clase programada para el día, junto con el avance de la clase anterior.\n\nA través de esta función, el docente puede identificar con anticipación los contenidos clave que deberá trabajar durante la sesión y verificar si existen clases anteriores incompletas o aspectos que requieren seguimiento. Además, podrá revisar el progreso general del grupo y el estado de aprendizaje de los estudiantes para decidir, antes de comenzar la clase, si es necesario reforzar algún contenido o ajustar el flujo de la sesión.\n\nEsta función ha sido diseñada para apoyar a los docentes en la preparación de sus clases, reducir la incertidumbre al inicio de la jornada y permitirles desarrollar la clase con mayor seguridad, claridad y confianza, de acuerdo con la situación real de sus estudiantes.",
-        "en": "Before starting the class, a new function has been added to the existing “Today’s Class” menu, allowing teachers to preview the topic and learning objectives of the lesson scheduled for the day, as well as review the progress of the previous class.\n\nThrough this function, teachers can identify in advance the key content to be covered in today’s lesson and adjust the class flow if the previous session was not completed or if additional follow-up is needed. In addition, by referring to the overall class progress and each student’s learning status, teachers can more clearly determine which parts should be reviewed before starting the class.\n\nThis function has been designed to help teachers prepare their lessons more stably and conduct classes with greater confidence, based on the actual learning situation of their students.\n"
-      },
-      "category": "urgent"
+        "en": "Before starting the class, a new function has been added to the existing “Today’s Class” menu, allowing teachers to preview the topic and learning objectives of the lesson scheduled for the day, as well as review the progress of the previous class.\n\nThrough this function, teachers can identify in advance the key content to be covered in today’s lesson and adjust the class flow if the previous session was not completed or if additional follow-up is needed. In addition, by referring to the overall class progress and each student’s learning status, teachers can more clearly determine which parts should be reviewed before starting the class.\n\nThis function has been designed to help teachers prepare their lessons more stably and conduct classes with greater confidence, based on the actual learning situation of their students."
+      }
     }
   ],
   "student": [],
@@ -4845,7 +4902,7 @@ itemDeleteBtn.addEventListener('click', async () => {
   if (!found) return;
   const hasChildren = found.node.children && found.node.children.length > 0;
   const msg = hasChildren ? t('admin_confirm_delete_with_children') : t('admin_confirm_delete_node');
-  if (!confirm(msg + '\n\n' + (found.node.num || '') + ' ' + ((found.node.title && found.node.title[state.lang]) || ''))) return;
+  if (!confirm(msg + '\n\n' + (found.node.num || '') + ' ' + (pickLangValue(found.node.title, state.lang) || ''))) return;
   await deleteNodeAndSources(itemModalCtx.role, itemModalCtx.nodeId, kind);
   closeItemModal();
   showToast(t('admin_item_deleted'), 'success');
@@ -5192,7 +5249,7 @@ function renderDownloadScreen(role, opts = {}) {
         openPostViewModal(node);
       } else {
         // Other (full playlist card etc.): keep download fallback
-        attemptDownload(node, (node.title && node.title[state.lang]) || node.id);
+        attemptDownload(node, pickLangValue(node.title, state.lang) || node.id);
       }
     });
   });
@@ -5224,7 +5281,7 @@ function renderTopSection(section) {
     <div class="section-block">
       <div class="section-header">
         <span class="section-num">${section.num}</span>
-        <h3>${(section.title && section.title[state.lang]) || ''}</h3>
+        <h3>${pickLangValue(section.title, state.lang) || ''}</h3>
       </div>
       <div>${childrenHtml}</div>
     </div>
@@ -5236,7 +5293,7 @@ function renderNode(node, depth) {
   const hasChildren = !!(node.children && node.children.length);
   const src = getNodeSource(node);
   const isDownloadable = src.type !== 'none';
-  const title = (node.title && node.title[state.lang]) || '';
+  const title = pickLangValue(node.title, state.lang) || '';
 
   if (hasChildren && !isDownloadable) {
     const inner = node.children.map(c => renderNode(c, depth + 1)).join('');
@@ -5258,12 +5315,12 @@ function renderNode(node, depth) {
 // Render a single video card (for the videos download view)
 function renderVideoCard(video, displayIndex) {
   downloadNodeMap[video.id] = video;
-  const title = (video.title && video.title[state.lang]) || '';
+  const title = pickLangValue(video.title, state.lang) || '';
   const src = getNodeSource(video);
   const hasSource = src.type !== 'none';
   const childrenHtml = (video.children || []).map(c => {
     downloadNodeMap[c.id] = c;
-    const childTitle = (c.title && c.title[state.lang]) || '';
+    const childTitle = pickLangValue(c.title, state.lang) || '';
     return `<li><span class="vc-bullet"></span>${childTitle}</li>`;
   }).join('');
 
@@ -5604,7 +5661,7 @@ updateDeleteBtn.addEventListener('click', async () => {
   if (!updateModalCtx || updateModalCtx.mode !== 'edit') return;
   const post = (getUpdates(updateModalCtx.role) || []).find(p => p.id === updateModalCtx.postId);
   if (!post) return;
-  const title = (post.title && post.title[state.lang]) || '';
+  const title = pickLangValue(post.title, state.lang) || '';
   if (!confirm(t('admin_confirm_delete_node') + '\n\n' + title)) return;
   await deleteUpdate(updateModalCtx.role, updateModalCtx.postId);
   closeUpdateModal();
@@ -5974,13 +6031,13 @@ function renderAdminVideosWysiwyg(role, tree) {
 }
 
 function renderAdminVideoCard(video, role, index, total) {
-  const title = (video.title && video.title[state.lang]) || `<span class="wys-placeholder">${t('admin_untitled')}</span>`;
+  const title = pickLangValue(video.title, state.lang) || `<span class="wys-placeholder">${t('admin_untitled')}</span>`;
   const link = getLink(video.id);
   const hasFile = state.uploadedKeys.has(video.id);
   const hasSource = !!(link || hasFile || video.file);
 
   const childrenHtml = (video.children || []).map(c => {
-    const ct = (c.title && c.title[state.lang]) || `<span class="wys-placeholder">—</span>`;
+    const ct = pickLangValue(c.title, state.lang) || `<span class="wys-placeholder">—</span>`;
     return `<li><span class="vc-bullet"></span>${ct}</li>`;
   }).join('');
 
@@ -6090,7 +6147,7 @@ function renderPromoBannerEditor(role) {
 }
 
 function renderAdminManualSection(section, role, index, total) {
-  const titleText = (section.title && section.title[state.lang]) || `<span class="wys-placeholder">${t('admin_untitled')}</span>`;
+  const titleText = pickLangValue(section.title, state.lang) || `<span class="wys-placeholder">${t('admin_untitled')}</span>`;
   const childrenHtml = (section.children || []).map(c => renderAdminManualNode(c, role, section.id, 1)).join('');
 
   return `
@@ -6110,7 +6167,7 @@ function renderAdminManualNode(node, role, parentId, depth) {
   const link = getLink(node.id);
   const hasFile = state.uploadedKeys.has(node.id);
   const hasSource = !!(link || hasFile || node.file);
-  const titleText = (node.title && node.title[state.lang]) || `<span class="wys-placeholder">${t('admin_untitled')}</span>`;
+  const titleText = pickLangValue(node.title, state.lang) || `<span class="wys-placeholder">${t('admin_untitled')}</span>`;
   const dc = depth >= 3 ? 'depth-3' : (depth === 2 ? 'depth-2' : '');
   const hasChildren = node.children && node.children.length > 0;
 
@@ -6126,7 +6183,7 @@ function renderAdminManualNode(node, role, parentId, depth) {
 
 // (Re-define renderAdminManualNode with index)
 function renderAdminManualSection(section, role, index, total) {
-  const titleText = (section.title && section.title[state.lang]) || `<span class="wys-placeholder">${t('admin_untitled')}</span>`;
+  const titleText = pickLangValue(section.title, state.lang) || `<span class="wys-placeholder">${t('admin_untitled')}</span>`;
   const childrenList = section.children || [];
   const childrenHtml = childrenList.map((c, i) => renderAdminManualNodeIdx(c, role, section.id, i, depthFor(1))).join('');
 
@@ -6148,7 +6205,7 @@ function renderAdminManualNodeIdx(node, role, parentId, index, depth) {
   const link = getLink(node.id);
   const hasFile = state.uploadedKeys.has(node.id);
   const hasSource = !!(link || hasFile || node.file);
-  const titleText = (node.title && node.title[state.lang]) || `<span class="wys-placeholder">${t('admin_untitled')}</span>`;
+  const titleText = pickLangValue(node.title, state.lang) || `<span class="wys-placeholder">${t('admin_untitled')}</span>`;
   const dc = depth >= 3 ? 'depth-3' : (depth === 2 ? 'depth-2' : '');
   const hasChildren = node.children && node.children.length > 0;
 
@@ -6286,7 +6343,7 @@ async function handleAdminAction(action, nodeId, parentId) {
       openUpdateModal({ mode: 'edit', role, postId: nodeId });
     } else if (action === 'download-source') {
       const post = (getUpdates(role) || []).find(p => p.id === nodeId);
-      if (post) attemptDownload({ id: post.id, title: post.title }, (post.title && post.title[state.lang]) || nodeId);
+      if (post) attemptDownload({ id: post.id, title: post.title }, pickLangValue(post.title, state.lang) || nodeId);
     }
     return;
   }
@@ -6297,7 +6354,7 @@ async function handleAdminAction(action, nodeId, parentId) {
     openItemModal({ mode: 'add-child', role, parentId: nodeId, kind });
   } else if (action === 'download-source') {
     const found = findNode(role, nodeId, kind);
-    if (found) attemptDownload(found.node, (found.node.title && found.node.title[state.lang]) || nodeId);
+    if (found) attemptDownload(found.node, pickLangValue(found.node.title, state.lang) || nodeId);
   }
 }
 
@@ -6481,7 +6538,7 @@ async function openPostViewModal(node) {
   postViewCurrentNode = node;
   const myToken = ++postViewRenderToken;  // token for this open; invalidate older renders
 
-  const title = (node.title && node.title[state.lang]) || node.id;
+  const title = pickLangValue(node.title, state.lang) || node.id;
   postViewTitle.textContent = title;
   postViewNum.textContent = node.num || '';
 
@@ -6696,7 +6753,7 @@ const videoModalContents = document.getElementById('video-preview-contents');
 let videoModalNodeMap = {};
 
 function openVideoPreviewModal(video, role) {
-  const title = (video.title && video.title[state.lang]) || '';
+  const title = pickLangValue(video.title, state.lang) || '';
   videoModalNum.textContent = t('video_label') + ' ' + video.num;
   videoModalTitle.textContent = title;
 
@@ -6745,7 +6802,7 @@ function openVideoPreviewModal(video, role) {
 
   // Render the contents list (video children)
   const childrenList = (video.children || []).map(c => {
-    const ct = (c.title && c.title[state.lang]) || '';
+    const ct = pickLangValue(c.title, state.lang) || '';
     return `<li><span class="vc-bullet"></span>${c.num} ${ct}</li>`;
   }).join('');
   videoModalContents.innerHTML = childrenList
@@ -6768,7 +6825,7 @@ function openVideoPreviewModal(video, role) {
         <div class="vp-manual-group">
           <div class="vp-manual-section">
             <span class="vp-manual-num">${matched.num}</span>
-            <span class="vp-manual-title">${(matched.title && matched.title[state.lang]) || ''}</span>
+            <span class="vp-manual-title">${pickLangValue(matched.title, state.lang) || ''}</span>
           </div>
       `;
       // If this node is itself downloadable, render it as a clickable row
@@ -6823,7 +6880,7 @@ function openVideoPreviewModal(video, role) {
 
 function renderManualPanelNode(node, depth) {
   videoModalNodeMap[node.id] = node;
-  const title = (node.title && node.title[state.lang]) || '';
+  const title = pickLangValue(node.title, state.lang) || '';
   const src = getNodeSource(node);
   const isDownloadable = src.type !== 'none';
   const indent = depth >= 2 ? 'depth-2' : '';
@@ -6940,7 +6997,7 @@ let videoPanelRenderToken = 0;
 async function openInlineManualInVideoPanel(node, siblings, currentIndex) {
   if (!node) return;
   const myToken = ++videoPanelRenderToken;
-  const title = (node.title && node.title[state.lang]) || node.id;
+  const title = pickLangValue(node.title, state.lang) || node.id;
   const num = node.num || '';
 
   // siblings + currentIndex enable prev/next navigation. Default: single-item list.
