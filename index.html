@@ -2122,11 +2122,9 @@
     <p class="welcome-message" data-i18n="welcome_message">Bienvenido al Manual del LXP. Por favor, introduce tu contraseña para continuar.</p>
     <form class="welcome-form" id="welcome-form" autocomplete="off">
       <div class="welcome-input-wrap">
-        <input type="password" id="welcome-password-input" class="welcome-input"
-               data-i18n-placeholder="welcome_input_placeholder" placeholder="Contraseña"
-               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <input type="password" id="welcome-password-input" class="welcome-input" data-i18n-placeholder="welcome_input_placeholder" placeholder="Contraseña" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         <button type="submit" class="welcome-input-btn" id="btn-enter-manual" aria-label="Enter">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </button>
       </div>
       <div class="welcome-error" id="welcome-error" data-i18n="error_msg" style="display:none">Contraseña incorrecta. Inténtalo de nuevo.</div>
@@ -2183,6 +2181,10 @@
     <div class="form-row">
       <label data-i18n="item_modal_title_es_label">Título (Español)</label>
       <input type="text" id="item-title-es-input">
+    </div>
+    <div class="form-row">
+      <label data-i18n="item_modal_title_en_label">Title (English)</label>
+      <input type="text" id="item-title-en-input">
     </div>
 
     <div class="form-row stacked" style="margin-top: 18px;">
@@ -2281,7 +2283,7 @@
       <div class="source-pane" id="update-source-pane-link">
         <input type="text" id="update-link-input" placeholder="https://drive.google.com/...">
         <label class="form-checkbox">
-          <input type="checkbox" id="update-link-convert" checked>
+          <input type="checkbox" id="update-link-convert" checked="">
           <span data-i18n="admin_link_modal_convert">Auto-convert Drive URL</span>
         </label>
       </div>
@@ -2325,13 +2327,13 @@
       </div>
       <div class="pv-header-actions">
         <button class="pv-btn-icon" id="post-view-download" title="Download" style="display:none">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
         </button>
         <a class="pv-btn-icon" id="post-view-external" target="_blank" rel="noopener" title="Open externally" style="display:none">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
         </a>
         <button class="preview-modal-close" id="post-view-close" aria-label="Close">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
     </div>
@@ -2598,7 +2600,8 @@ const I18N = {
     "update_cat_general": "일반 안내",
     "update_modal_title_label_en": "제목 (English)",
     "update_modal_body_label_en": "본문 (English)",
-    "update_new_badge": "NEW"
+    "update_new_badge": "NEW",
+    "item_modal_title_en_label": "제목 (English)"
   },
   "es": {
     "brand": "LXP · Manual",
@@ -2794,7 +2797,8 @@ const I18N = {
     "update_cat_general": "General",
     "update_modal_title_label_en": "Título (English)",
     "update_modal_body_label_en": "Contenido (English)",
-    "update_new_badge": "NUEVO"
+    "update_new_badge": "NUEVO",
+    "item_modal_title_en_label": "Título (English)"
   },
   "en": {
     "brand": "LXP · Manual",
@@ -2990,7 +2994,8 @@ const I18N = {
     "update_cat_general": "General",
     "update_modal_title_label_en": "Title (English)",
     "update_modal_body_label_en": "Body (English)",
-    "update_new_badge": "NEW"
+    "update_new_badge": "NEW",
+    "item_modal_title_en_label": "Title (English)"
   }
 };
 
@@ -3001,14 +3006,16 @@ const SECTIONS_DATA_DEFAULT = {
       "num": "1",
       "title": {
         "ko": "플랫폼 접속",
-        "es": "Acceso a la plataforma"
+        "es": "Acceso a la plataforma",
+        "en": "Platform Access"
       },
       "children": [
         {
           "num": "1.1",
           "title": {
             "ko": "플랫폼 접속 및 로그인",
-            "es": "Conexión e inicio de sesión en la plataforma"
+            "es": "Conexión e inicio de sesión en la plataforma",
+            "en": "Connection and Login to the Platform"
           },
           "file": "https://drive.google.com/file/d/1Ixifm_sRVQmu8wzQpz6VWxVH3mGBI9Ku/view?usp=drive_link",
           "id": "p:manuals/teacher/1.1.pdf"
@@ -3017,7 +3024,8 @@ const SECTIONS_DATA_DEFAULT = {
           "num": "1.2",
           "title": {
             "ko": "학교 선택",
-            "es": "Selección de escuela"
+            "es": "Selección de escuela",
+            "en": "School Selection"
           },
           "file": "https://drive.google.com/file/d/15s2Rbxny2SoXfOHG5gbLoNgmJ6sHtz0o/view?usp=drive_link",
           "id": "p:manuals/teacher/1.2.pdf"
@@ -3029,21 +3037,24 @@ const SECTIONS_DATA_DEFAULT = {
       "num": "2",
       "title": {
         "ko": "플랫폼 사용 가이드",
-        "es": "Guía de uso de la plataforma"
+        "es": "Guía de uso de la plataforma",
+        "en": "Platform Usage Guide"
       },
       "children": [
         {
           "num": "2.1",
           "title": {
             "ko": "플랫폼 기능 소개",
-            "es": "Introducción a las funciones de la plataforma"
+            "es": "Introducción a las funciones de la plataforma",
+            "en": "Introduction to Platform Features"
           },
           "children": [
             {
               "num": "2.1.1",
               "title": {
                 "ko": "교실 목록",
-                "es": "Lista de Aulas"
+                "es": "Lista de Aulas",
+                "en": "Classroom List"
               },
               "file": "https://drive.google.com/file/d/1SK9XfTfyB4zrP2gg8Rvcd-dCBwZP1e_l/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.1.pdf"
@@ -3052,7 +3063,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.2",
               "title": {
                 "ko": "오늘의 수업",
-                "es": "Clase de hoy"
+                "es": "Clase de hoy",
+                "en": "Today's Class"
               },
               "file": "https://drive.google.com/file/d/18nUsdKLdL5_VyLFszpiFkWvJs7Vobu0N/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.2.pdf"
@@ -3061,7 +3073,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.3",
               "title": {
                 "ko": "수업 목록",
-                "es": "Lista de clases"
+                "es": "Lista de clases",
+                "en": "Class List"
               },
               "file": "https://drive.google.com/file/d/1ZE7dGRqnVpXSjxlAcP_MBReT34qkvuxx/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.3.pdf"
@@ -3070,7 +3083,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.4",
               "title": {
                 "ko": "실시간 정규 수업",
-                "es": "Clase regular en tiempo real"
+                "es": "Clase regular en tiempo real",
+                "en": "Regular Real-Time Class"
               },
               "file": "https://drive.google.com/file/d/1JEN-AJK4WA1cSJL4wZeFWIbNsyUCx5UN/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.4.pdf"
@@ -3079,7 +3093,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.5",
               "title": {
                 "ko": "출석 기능 사용법",
-                "es": "Uso de la función de asistencia"
+                "es": "Uso de la función de asistencia",
+                "en": "Using the Attendance Feature"
               },
               "file": "https://drive.google.com/file/d/1GkY7-VPYM6srbaEfDmhHFXKoQ1acPmcR/view?usp=drive_link",
               "children": [
@@ -3087,7 +3102,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.5.1",
                   "title": {
                     "ko": "수업 모드에서 출석 관리",
-                    "es": "Control de asistencia desde Modo de Clase"
+                    "es": "Control de asistencia desde Modo de Clase",
+                    "en": "Attendance Management from Class Mode"
                   },
                   "file": "https://drive.google.com/file/d/1GNtV-Hjl5d3Nfz11nFtEk45WHRQ982vB/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.5.1.pdf"
@@ -3096,7 +3112,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.5.2",
                   "title": {
                     "ko": "출석 관리 다운로드",
-                    "es": "Descarga de control de asistencia"
+                    "es": "Descarga de control de asistencia",
+                    "en": "Attendance Record Download"
                   },
                   "file": "https://drive.google.com/file/d/18D0OQiLzVOQ7k7fcn4h-n4mv9tgmdE3j/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.5.2.pdf"
@@ -3108,7 +3125,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.6",
               "title": {
                 "ko": "수업 모드",
-                "es": "Modo clase"
+                "es": "Modo clase",
+                "en": "Class Mode"
               },
               "file": "https://drive.google.com/file/d/1E6HTM9Hpf28bEoHfeAtoCVL9mZtQvXjr/view?usp=drive_link",
               "children": [
@@ -3116,7 +3134,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.6.1",
                   "title": {
                     "ko": "화면 잠금",
-                    "es": "Bloqueo de pantalla"
+                    "es": "Bloqueo de pantalla",
+                    "en": "Screen Lock"
                   },
                   "file": "https://drive.google.com/file/d/1ttFwMNknFvZQKwTsxmYjFIsJLvWxIJPx/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.6.1.pdf"
@@ -3125,7 +3144,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.6.2",
                   "title": {
                     "ko": "화면 동기화",
-                    "es": "Sincronización de pantalla"
+                    "es": "Sincronización de pantalla",
+                    "en": "Screen Synchronization"
                   },
                   "file": "https://drive.google.com/file/d/1c5jsFl2UOtA72w8GgXShaNIVWivZ1Ovq/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.6.2.pdf"
@@ -3134,7 +3154,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.6.3",
                   "title": {
                     "ko": "칠판",
-                    "es": "Pizarra"
+                    "es": "Pizarra",
+                    "en": "Whiteboard"
                   },
                   "file": "https://drive.google.com/file/d/1wfmwVBE6cdpxsJJrKBGRq61MgS9fCeFQ/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.6.3.pdf"
@@ -3143,7 +3164,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.6.4",
                   "title": {
                     "ko": "참고 자료",
-                    "es": "Material de referencia"
+                    "es": "Material de referencia",
+                    "en": "Reference Materials"
                   },
                   "file": "https://drive.google.com/file/d/10CjM9bTd4onW2155azgKRkmq3Ssizyoo/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.6.4.pdf"
@@ -3152,7 +3174,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.6.5",
                   "title": {
                     "ko": "전체 화면",
-                    "es": "Pantalla Completa"
+                    "es": "Pantalla Completa",
+                    "en": "Full Screen"
                   },
                   "file": "https://drive.google.com/file/d/1ybCtL42_nWzS-a-VLaTjj_3at09H9e8H/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.6.5.pdf"
@@ -3161,7 +3184,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.6.6",
                   "title": {
                     "ko": "줌 제어",
-                    "es": "Control del Zoom"
+                    "es": "Control del Zoom",
+                    "en": "Zoom Control"
                   },
                   "file": "https://drive.google.com/file/d/1fVX1T2A32L8T9JIlQ7TXYp2I6kj2dHbV/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.6.6.pdf"
@@ -3170,7 +3194,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.6.7",
                   "title": {
                     "ko": "학생 목록",
-                    "es": "Lista de estudiantes"
+                    "es": "Lista de estudiantes",
+                    "en": "Student List"
                   },
                   "file": "https://drive.google.com/file/d/1z4cuUCnPZtn9but3Dkl20DroMfXStpCN/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.6.7.pdf"
@@ -3182,7 +3207,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.7",
               "title": {
                 "ko": "수학 수업 재시도 기능",
-                "es": "Función de reintentar en clase de Matemática"
+                "es": "Función de reintentar en clase de Matemática",
+                "en": "Retry Feature in Math Class"
               },
               "file": "https://drive.google.com/file/d/11LYjVwEZ7gQMvnD0oIMuZ4wEsAPqe2IW/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.7.pdf"
@@ -3191,7 +3217,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.8",
               "title": {
                 "ko": "언어 수업 재시도 기능",
-                "es": "Función de reintentar en clase de Lenguaje"
+                "es": "Función de reintentar en clase de Lenguaje",
+                "en": "Retry Feature in Language Class"
               },
               "file": "https://drive.google.com/file/d/1TyixaMiuUx5SD-318yYODlv17a7d2BNZ/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.8.pdf"
@@ -3200,7 +3227,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.9",
               "title": {
                 "ko": "학습 요약",
-                "es": "Resumen de aprendizaje"
+                "es": "Resumen de aprendizaje",
+                "en": "Learning Summary"
               },
               "file": "https://drive.google.com/file/d/1PEVwkJ8UXzyT8w0ONITklGy2YFhSe-ES/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.9.pdf"
@@ -3209,7 +3237,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.10",
               "title": {
                 "ko": "나의 진도",
-                "es": "Mi progreso"
+                "es": "Mi progreso",
+                "en": "My Progress"
               },
               "file": "https://drive.google.com/file/d/10QCc0mDUGjVthnCIYOA9u2h3tbca_II1/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.10.pdf"
@@ -3218,7 +3247,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.11",
               "title": {
                 "ko": "과제 목록",
-                "es": "Lista de tareas"
+                "es": "Lista de tareas",
+                "en": "Assignment List"
               },
               "file": "https://drive.google.com/file/d/1w9g--4ZvZgIvSwSwmnhS7Pn_pEVIyERx/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.11.pdf"
@@ -3233,14 +3263,16 @@ const SECTIONS_DATA_DEFAULT = {
       "num": "3",
       "title": {
         "ko": "전체 구성",
-        "es": "Estructura General"
+        "es": "Estructura General",
+        "en": "Overall Structure"
       },
       "children": [
         {
           "num": "3.1",
           "title": {
             "ko": "그룹 구성",
-            "es": "Estructura de los grupos"
+            "es": "Estructura de los grupos",
+            "en": "Group Structure"
           },
           "file": "https://drive.google.com/file/d/1bVeAUegsycAeY-Lr1fE-kF-FHks2gHFD/view?usp=drive_link",
           "id": "p:manuals/teacher/3.1.pdf"
@@ -3249,7 +3281,8 @@ const SECTIONS_DATA_DEFAULT = {
           "num": "3.2",
           "title": {
             "ko": "수학 수업 그룹 구성",
-            "es": "Estructura de grupo de clase de matemática"
+            "es": "Estructura de grupo de clase de matemática",
+            "en": "Math Class Group Structure"
           },
           "file": "https://drive.google.com/file/d/1Glj60_cTFsch80Gm0UZaNLrQRMLfS9Kc/view?usp=drive_link",
           "id": "p:manuals/teacher/3.2.pdf"
@@ -3259,7 +3292,8 @@ const SECTIONS_DATA_DEFAULT = {
           "num": "3.3",
           "title": {
             "ko": "언어 수업 그룹 구성",
-            "es": "Estructura de grupo de clase de lenguaje"
+            "es": "Estructura de grupo de clase de lenguaje",
+            "en": "Language Class Group Structure"
           },
           "file": "https://drive.google.com/file/d/1EmAVaM3HGCrMF4i2hOom9xCvt8achlK1/view?usp=drive_link"
         }
@@ -3267,7 +3301,7 @@ const SECTIONS_DATA_DEFAULT = {
       "id": "n_rc9fitw4ztcc"
     }
   ],
-  student: null,
+  student: [{"id":"n_bxxp4idq5cv3","num":"1","title":{"ko":"학생용 매뉴얼","es":"Manual para Estudiantes"},"children":[{"id":"n_tq42xjgm0rcv","num":"1.1","title":{"ko":"전체 매뉴얼","es":"Manual para Estudiantes"},"file":"https://drive.google.com/file/d/11h9zMnO90OnWrcg8UMDo32cYJewDmfYx/view?usp=drive_link"}],"file":"https://drive.google.com/file/d/11h9zMnO90OnWrcg8UMDo32cYJewDmfYx/view?usp=drive_link"}],
   admin: null
 };
 
@@ -3771,7 +3805,9 @@ const FULL_VIDEO_FILES = {
 // Each role has its own object with keys like promoPosition, promo_eyebrow_ko, etc.
 // localStorage wins over this on first load; if both empty, i18n defaults apply.
 const LAYOUT_SETTINGS_DEFAULT = {
-  "teacher": {},
+  "teacher": {
+    "cols": "auto"
+  },
   "student": {},
   "admin": {}
 };
@@ -3780,7 +3816,23 @@ const LAYOUT_SETTINGS_DEFAULT = {
 //   { id, title: {ko, es, en}, date (ISO YYYY-MM-DD), body: {ko, es, en} }
 // Attachments use the same links system as manual/videos (links[post.id] = URL).
 const UPDATES_DATA_DEFAULT = {
-  "teacher": [],
+  "teacher": [
+    {
+      "id": "n_9gft86s7di9o",
+      "title": {
+        "ko": "수업 전 리뷰",
+        "es": "Revisión antes de la clase",
+        "en": "Pre-Class Review"
+      },
+      "date": "2026-05-25",
+      "body": {
+        "ko": "수업을 시작하기 전에, 기존의 「오늘의 수업」 메뉴에서 오늘 진행할 수업의 주제와 학습 목표를 미리 확인하고, 이전 수업의 진행 상황을 함께 리뷰할 수 있는 기능이 추가되었습니다.\n\n교사는 이를 통해 오늘 수업에서 다루어야 할 핵심 내용을 사전에 파악하고, 이전 차시가 완료되지 않았거나 추가 확인이 필요한 경우 수업 흐름을 조정할 수 있습니다. 또한 학급의 전체 진도와 학생별 학습 상태를 참고하여, 수업을 시작하기 전 어떤 부분을 다시 짚고 넘어갈지 보다 명확하게 판단할 수 있습니다.\n\n이 기능은 선생님들이 수업을 더 안정적으로 준비하고, 학생들의 실제 학습 상황에 맞춰 자신 있게 수업을 진행할 수 있도록 돕기 위해 마련되었습니다.",
+        "es": "Antes de iniciar la clase, se ha agregado una nueva función en el menú “Clase de hoy” que permite revisar previamente el tema y los objetivos de aprendizaje de la clase programada para el día, junto con el avance de la clase anterior.\n\nA través de esta función, el docente puede identificar con anticipación los contenidos clave que deberá trabajar durante la sesión y verificar si existen clases anteriores incompletas o aspectos que requieren seguimiento. Además, podrá revisar el progreso general del grupo y el estado de aprendizaje de los estudiantes para decidir, antes de comenzar la clase, si es necesario reforzar algún contenido o ajustar el flujo de la sesión.\n\nEsta función ha sido diseñada para apoyar a los docentes en la preparación de sus clases, reducir la incertidumbre al inicio de la jornada y permitirles desarrollar la clase con mayor seguridad, claridad y confianza, de acuerdo con la situación real de sus estudiantes.",
+        "en": "Before starting the class, a new function has been added to the existing “Today’s Class” menu, allowing teachers to preview the topic and learning objectives of the lesson scheduled for the day, as well as review the progress of the previous class.\n\nThrough this function, teachers can identify in advance the key content to be covered in today’s lesson and adjust the class flow if the previous session was not completed or if additional follow-up is needed. In addition, by referring to the overall class progress and each student’s learning status, teachers can more clearly determine which parts should be reviewed before starting the class.\n\nThis function has been designed to help teachers prepare their lessons more stably and conduct classes with greater confidence, based on the actual learning situation of their students.\n"
+      },
+      "category": "urgent"
+    }
+  ],
   "student": [],
   "admin": []
 };
@@ -4101,7 +4153,7 @@ function addSection(role, partial, kind = 'manual') {
   const newNode = {
     id: genId(),
     num: partial.num || String(sections.length + 1),
-    title: { ko: partial.title_ko || '', es: partial.title_es || '' },
+    title: { ko: partial.title_ko || '', es: partial.title_es || '', en: partial.title_en || '' },
     children: []
   };
   sections.push(newNode);
@@ -4116,7 +4168,7 @@ function addChild(role, parentId, partial, kind = 'manual') {
   const newNode = {
     id: genId(),
     num: partial.num || (found.node.num + '.' + (found.node.children.length + 1)),
-    title: { ko: partial.title_ko || '', es: partial.title_es || '' }
+    title: { ko: partial.title_ko || '', es: partial.title_es || '', en: partial.title_en || '' }
   };
   found.node.children.push(newNode);
   setTree(role, kind, found.sections);
@@ -4129,6 +4181,7 @@ function updateNode(role, id, partial, kind = 'manual') {
   if (partial.num !== undefined) found.node.num = partial.num;
   if (partial.title_ko !== undefined) found.node.title = { ...(found.node.title || {}), ko: partial.title_ko };
   if (partial.title_es !== undefined) found.node.title = { ...(found.node.title || {}), es: partial.title_es };
+  if (partial.title_en !== undefined) found.node.title = { ...(found.node.title || {}), en: partial.title_en };
   if (partial.manualRefs !== undefined) {
     if (Array.isArray(partial.manualRefs) && partial.manualRefs.length > 0) {
       found.node.manualRefs = partial.manualRefs;
@@ -4571,6 +4624,7 @@ const itemModalTitle = document.getElementById('item-modal-title');
 const itemNumInput = document.getElementById('item-num-input');
 const itemTitleKoInput = document.getElementById('item-title-ko-input');
 const itemTitleEsInput = document.getElementById('item-title-es-input');
+const itemTitleEnInput = document.getElementById('item-title-en-input');
 const itemLinkInput = document.getElementById('item-link-input');
 const itemLinkConvert = document.getElementById('item-link-convert');
 const itemFileDisplay = document.getElementById('item-file-display');
@@ -4665,6 +4719,7 @@ async function openItemModal(opts) {
       itemNumInput.value = found.node.num || '';
       itemTitleKoInput.value = (found.node.title && found.node.title.ko) || '';
       itemTitleEsInput.value = (found.node.title && found.node.title.es) || '';
+      itemTitleEnInput.value = (found.node.title && found.node.title.en) || '';
       // Determine current source
       const link = getLink(opts.nodeId);
       const hasFile = state.uploadedKeys.has(opts.nodeId);
@@ -4703,6 +4758,7 @@ async function openItemModal(opts) {
     itemNumInput.value = suggestedNum;
     itemTitleKoInput.value = '';
     itemTitleEsInput.value = '';
+    itemTitleEnInput.value = '';
     itemLinkInput.value = '';
     itemLinkConvert.checked = true;
     itemDeleteBtn.style.display = 'none';
@@ -4805,19 +4861,20 @@ async function saveItemModal() {
   const num = itemNumInput.value.trim();
   const titleKo = itemTitleKoInput.value.trim();
   const titleEs = itemTitleEsInput.value.trim();
+  const titleEn = itemTitleEnInput.value.trim();
   // No required validation: any field may be empty. The user can fill in details later.
 
   let nodeId;
   if (ctx.mode === 'add-section') {
-    const newNode = addSection(ctx.role, { num, title_ko: titleKo, title_es: titleEs }, kind);
+    const newNode = addSection(ctx.role, { num, title_ko: titleKo, title_es: titleEs, title_en: titleEn }, kind);
     nodeId = newNode.id;
   } else if (ctx.mode === 'add-child') {
-    const newNode = addChild(ctx.role, ctx.parentId, { num, title_ko: titleKo, title_es: titleEs }, kind);
+    const newNode = addChild(ctx.role, ctx.parentId, { num, title_ko: titleKo, title_es: titleEs, title_en: titleEn }, kind);
     if (!newNode) { showToast('Error: parent not found', 'error'); return; }
     nodeId = newNode.id;
   } else if (ctx.mode === 'edit') {
     nodeId = ctx.nodeId;
-    updateNode(ctx.role, nodeId, { num, title_ko: titleKo, title_es: titleEs }, kind);
+    updateNode(ctx.role, nodeId, { num, title_ko: titleKo, title_es: titleEs, title_en: titleEn }, kind);
   }
 
   // Save manualRefs (only meaningful for video items)
@@ -6266,6 +6323,8 @@ async function openFullManualEdit(role, nodeId, kind = 'manual') {
   itemTitleKoInput.disabled = true;
   itemTitleEsInput.value = fullLabel;
   itemTitleEsInput.disabled = true;
+  itemTitleEnInput.value = fullLabel;
+  itemTitleEnInput.disabled = true;
 
   const link = getLink(nodeId);
   const hasFile = state.uploadedKeys.has(nodeId);
@@ -6295,6 +6354,7 @@ async function openFullManualEdit(role, nodeId, kind = 'manual') {
     itemNumInput.disabled = false;
     itemTitleKoInput.disabled = false;
     itemTitleEsInput.disabled = false;
+    itemTitleEnInput.disabled = false;
   };
   // Override save behavior temporarily
   // Easier: handle in saveItemModal via mode check. So patch here:
