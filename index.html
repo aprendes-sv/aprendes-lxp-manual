@@ -632,6 +632,23 @@
     display: flex; justify-content: center;
     margin: 4px 0 28px;
   }
+  /* Narrow screens: let the pill span the width and split it evenly so the
+     third tab (Updates) is never pushed off-screen. */
+  @media (max-width: 640px) {
+    .kind-toggle-wrap { padding: 0 4px; }
+    .kind-toggle { display: flex; width: 100%; max-width: 480px; }
+    .kind-toggle button {
+      flex: 1 1 0; min-width: 0;
+      padding: 9px 8px; font-size: 13px; gap: 5px;
+    }
+    .kind-toggle button svg { display: none; }
+    .kind-toggle button > span:not(.badge):not(.tab-new-pip) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .kind-toggle button .badge { padding: 1px 6px; font-size: 9.5px; }
+    .kind-toggle button .tab-new-pip { padding: 1px 5px; font-size: 8.5px; }
+  }
+  @media (max-width: 380px) {
+    .kind-toggle button { font-size: 12px; padding: 8px 6px; }
+  }
 
   /* ─── Video grid & cards ─── */
   .video-grid {
