@@ -859,8 +859,17 @@
     padding: 0; gap: 0; align-items: stretch;
   }
   .pv-body.pv-iframe-mode .pv-iframe-wrap {
-    flex: 1; width: 100%; display: flex;
+    flex: 1; width: 100%; display: flex; flex-direction: column; min-height: 0;
   }
+  .pv-iframe-note {
+    flex: 0 0 auto;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    padding: 7px 12px;
+    font-family: var(--sans); font-size: 12px; color: var(--ink-mute);
+    background: var(--paper-soft); border-top: 1px solid var(--rule);
+  }
+  .pv-iframe-note a { color: var(--accent); font-weight: 600; text-decoration: none; white-space: nowrap; }
+  .pv-iframe-note a:hover { text-decoration: underline; }
   .pv-page-counter {
     position: absolute;
     bottom: 16px; left: 50%; transform: translateX(-50%);
@@ -2620,7 +2629,8 @@ const I18N = {
     "update_modal_title_label_en": "제목 (English)",
     "update_modal_body_label_en": "본문 (English)",
     "update_new_badge": "NEW",
-    "item_modal_title_en_label": "제목 (English)"
+    "item_modal_title_en_label": "제목 (English)",
+    "post_view_iframe_hint": "화면이 비어 보이면 새 탭에서 여세요."
   },
   "es": {
     "brand": "LXP · Manual",
@@ -2817,7 +2827,8 @@ const I18N = {
     "update_modal_title_label_en": "Título (English)",
     "update_modal_body_label_en": "Contenido (English)",
     "update_new_badge": "NUEVO",
-    "item_modal_title_en_label": "Título (English)"
+    "item_modal_title_en_label": "Título (English)",
+    "post_view_iframe_hint": "¿Se ve en blanco? Ábrelo en una pestaña nueva."
   },
   "en": {
     "brand": "LXP · Manual",
@@ -3014,7 +3025,8 @@ const I18N = {
     "update_modal_title_label_en": "Title (English)",
     "update_modal_body_label_en": "Body (English)",
     "update_new_badge": "NEW",
-    "item_modal_title_en_label": "Title (English)"
+    "item_modal_title_en_label": "Title (English)",
+    "post_view_iframe_hint": "Blank? Open it in a new tab."
   }
 };
 
@@ -3025,14 +3037,16 @@ const SECTIONS_DATA_DEFAULT = {
       "num": "1",
       "title": {
         "ko": "플랫폼 접속",
-        "es": "Acceso a la plataforma"
+        "es": "Acceso a la plataforma",
+        "en": "Platform Access"
       },
       "children": [
         {
           "num": "1.1",
           "title": {
             "ko": "플랫폼 접속 및 로그인",
-            "es": "Conexión e inicio de sesión en la plataforma"
+            "es": "Conexión e inicio de sesión en la plataforma",
+            "en": "Connection and Login to the Platform"
           },
           "file": "https://drive.google.com/file/d/1Ixifm_sRVQmu8wzQpz6VWxVH3mGBI9Ku/view?usp=drive_link",
           "id": "p:manuals/teacher/1.1.pdf"
@@ -3041,7 +3055,8 @@ const SECTIONS_DATA_DEFAULT = {
           "num": "1.2",
           "title": {
             "ko": "학교 선택",
-            "es": "Selección de escuela"
+            "es": "Selección de escuela",
+            "en": "School Selection"
           },
           "file": "https://drive.google.com/file/d/15s2Rbxny2SoXfOHG5gbLoNgmJ6sHtz0o/view?usp=drive_link",
           "id": "p:manuals/teacher/1.2.pdf"
@@ -3053,21 +3068,24 @@ const SECTIONS_DATA_DEFAULT = {
       "num": "2",
       "title": {
         "ko": "플랫폼 사용 가이드",
-        "es": "Guía de uso de la plataforma"
+        "es": "Guía de uso de la plataforma",
+        "en": "Platform Usage Guide"
       },
       "children": [
         {
           "num": "2.1",
           "title": {
             "ko": "플랫폼 기능 소개",
-            "es": "Introducción a las funciones de la plataforma"
+            "es": "Introducción a las funciones de la plataforma",
+            "en": "Introduction to Platform Features"
           },
           "children": [
             {
               "num": "2.1.1",
               "title": {
                 "ko": "교실 목록",
-                "es": "Lista de Aulas"
+                "es": "Lista de Aulas",
+                "en": "Classroom List"
               },
               "file": "https://drive.google.com/file/d/1SK9XfTfyB4zrP2gg8Rvcd-dCBwZP1e_l/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.1.pdf"
@@ -3076,7 +3094,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.2",
               "title": {
                 "ko": "오늘의 수업",
-                "es": "Clase de hoy"
+                "es": "Clase de hoy",
+                "en": "Today's Class"
               },
               "file": "https://drive.google.com/file/d/18nUsdKLdL5_VyLFszpiFkWvJs7Vobu0N/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.2.pdf"
@@ -3085,7 +3104,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.3",
               "title": {
                 "ko": "수업 목록",
-                "es": "Lista de clases"
+                "es": "Lista de clases",
+                "en": "Class List"
               },
               "file": "https://drive.google.com/file/d/1ZE7dGRqnVpXSjxlAcP_MBReT34qkvuxx/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.3.pdf"
@@ -3094,7 +3114,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.4",
               "title": {
                 "ko": "실시간 정규 수업",
-                "es": "Clase regular en tiempo real"
+                "es": "Clase regular en tiempo real",
+                "en": "Regular Real-Time Class"
               },
               "file": "https://drive.google.com/file/d/1JEN-AJK4WA1cSJL4wZeFWIbNsyUCx5UN/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.4.pdf"
@@ -3103,7 +3124,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.5",
               "title": {
                 "ko": "출석 기능 사용법",
-                "es": "Uso de la función de asistencia"
+                "es": "Uso de la función de asistencia",
+                "en": "Using the Attendance Feature"
               },
               "file": "https://drive.google.com/file/d/1GkY7-VPYM6srbaEfDmhHFXKoQ1acPmcR/view?usp=drive_link",
               "children": [
@@ -3111,7 +3133,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.5.1",
                   "title": {
                     "ko": "수업 모드에서 출석 관리",
-                    "es": "Control de asistencia desde Modo de Clase"
+                    "es": "Control de asistencia desde Modo de Clase",
+                    "en": "Attendance Management from Class Mode"
                   },
                   "file": "https://drive.google.com/file/d/1GNtV-Hjl5d3Nfz11nFtEk45WHRQ982vB/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.5.1.pdf"
@@ -3120,7 +3143,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.5.2",
                   "title": {
                     "ko": "출석 관리 다운로드",
-                    "es": "Descarga de control de asistencia"
+                    "es": "Descarga de control de asistencia",
+                    "en": "Attendance Record Download"
                   },
                   "file": "https://drive.google.com/file/d/18D0OQiLzVOQ7k7fcn4h-n4mv9tgmdE3j/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.5.2.pdf"
@@ -3132,7 +3156,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.6",
               "title": {
                 "ko": "수업 모드",
-                "es": "Modo clase"
+                "es": "Modo clase",
+                "en": "Class Mode"
               },
               "file": "https://drive.google.com/file/d/1E6HTM9Hpf28bEoHfeAtoCVL9mZtQvXjr/view?usp=drive_link",
               "children": [
@@ -3140,7 +3165,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.6.1",
                   "title": {
                     "ko": "화면 잠금",
-                    "es": "Bloqueo de pantalla"
+                    "es": "Bloqueo de pantalla",
+                    "en": "Screen Lock"
                   },
                   "file": "https://drive.google.com/file/d/1ttFwMNknFvZQKwTsxmYjFIsJLvWxIJPx/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.6.1.pdf"
@@ -3149,7 +3175,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.6.2",
                   "title": {
                     "ko": "화면 동기화",
-                    "es": "Sincronización de pantalla"
+                    "es": "Sincronización de pantalla",
+                    "en": "Screen Synchronization"
                   },
                   "file": "https://drive.google.com/file/d/1c5jsFl2UOtA72w8GgXShaNIVWivZ1Ovq/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.6.2.pdf"
@@ -3158,7 +3185,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.6.3",
                   "title": {
                     "ko": "칠판",
-                    "es": "Pizarra"
+                    "es": "Pizarra",
+                    "en": "Whiteboard"
                   },
                   "file": "https://drive.google.com/file/d/1wfmwVBE6cdpxsJJrKBGRq61MgS9fCeFQ/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.6.3.pdf"
@@ -3167,7 +3195,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.6.4",
                   "title": {
                     "ko": "참고 자료",
-                    "es": "Material de referencia"
+                    "es": "Material de referencia",
+                    "en": "Reference Materials"
                   },
                   "file": "https://drive.google.com/file/d/10CjM9bTd4onW2155azgKRkmq3Ssizyoo/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.6.4.pdf"
@@ -3176,7 +3205,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.6.5",
                   "title": {
                     "ko": "전체 화면",
-                    "es": "Pantalla Completa"
+                    "es": "Pantalla Completa",
+                    "en": "Full Screen"
                   },
                   "file": "https://drive.google.com/file/d/1ybCtL42_nWzS-a-VLaTjj_3at09H9e8H/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.6.5.pdf"
@@ -3185,7 +3215,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.6.6",
                   "title": {
                     "ko": "줌 제어",
-                    "es": "Control del Zoom"
+                    "es": "Control del Zoom",
+                    "en": "Zoom Control"
                   },
                   "file": "https://drive.google.com/file/d/1fVX1T2A32L8T9JIlQ7TXYp2I6kj2dHbV/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.6.6.pdf"
@@ -3194,7 +3225,8 @@ const SECTIONS_DATA_DEFAULT = {
                   "num": "2.1.6.7",
                   "title": {
                     "ko": "학생 목록",
-                    "es": "Lista de estudiantes"
+                    "es": "Lista de estudiantes",
+                    "en": "Student List"
                   },
                   "file": "https://drive.google.com/file/d/1z4cuUCnPZtn9but3Dkl20DroMfXStpCN/view?usp=drive_link",
                   "id": "p:manuals/teacher/2.1.6.7.pdf"
@@ -3206,7 +3238,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.7",
               "title": {
                 "ko": "수학 수업 재시도 기능",
-                "es": "Función de reintentar en clase de Matemática"
+                "es": "Función de reintentar en clase de Matemática",
+                "en": "Retry Feature in Math Class"
               },
               "file": "https://drive.google.com/file/d/11LYjVwEZ7gQMvnD0oIMuZ4wEsAPqe2IW/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.7.pdf"
@@ -3215,7 +3248,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.8",
               "title": {
                 "ko": "언어 수업 재시도 기능",
-                "es": "Función de reintentar en clase de Lenguaje"
+                "es": "Función de reintentar en clase de Lenguaje",
+                "en": "Retry Feature in Language Class"
               },
               "file": "https://drive.google.com/file/d/1TyixaMiuUx5SD-318yYODlv17a7d2BNZ/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.8.pdf"
@@ -3224,7 +3258,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.9",
               "title": {
                 "ko": "학습 요약",
-                "es": "Resumen de aprendizaje"
+                "es": "Resumen de aprendizaje",
+                "en": "Learning Summary"
               },
               "file": "https://drive.google.com/file/d/1PEVwkJ8UXzyT8w0ONITklGy2YFhSe-ES/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.9.pdf"
@@ -3233,7 +3268,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.10",
               "title": {
                 "ko": "나의 진도",
-                "es": "Mi progreso"
+                "es": "Mi progreso",
+                "en": "My Progress"
               },
               "file": "https://drive.google.com/file/d/10QCc0mDUGjVthnCIYOA9u2h3tbca_II1/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.10.pdf"
@@ -3242,7 +3278,8 @@ const SECTIONS_DATA_DEFAULT = {
               "num": "2.1.11",
               "title": {
                 "ko": "과제 목록",
-                "es": "Lista de tareas"
+                "es": "Lista de tareas",
+                "en": "Assignment List"
               },
               "file": "https://drive.google.com/file/d/1w9g--4ZvZgIvSwSwmnhS7Pn_pEVIyERx/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.11.pdf"
@@ -3257,14 +3294,16 @@ const SECTIONS_DATA_DEFAULT = {
       "num": "3",
       "title": {
         "ko": "전체 구성",
-        "es": "Estructura General"
+        "es": "Estructura General",
+        "en": "Overall Structure"
       },
       "children": [
         {
           "num": "3.1",
           "title": {
             "ko": "그룹 구성",
-            "es": "Estructura de los grupos"
+            "es": "Estructura de los grupos",
+            "en": "Group Structure"
           },
           "file": "https://drive.google.com/file/d/1bVeAUegsycAeY-Lr1fE-kF-FHks2gHFD/view?usp=drive_link",
           "id": "p:manuals/teacher/3.1.pdf"
@@ -3273,7 +3312,8 @@ const SECTIONS_DATA_DEFAULT = {
           "num": "3.2",
           "title": {
             "ko": "수학 수업 그룹 구성",
-            "es": "Estructura de grupo de clase de matemática"
+            "es": "Estructura de grupo de clase de matemática",
+            "en": "Math Class Group Structure"
           },
           "file": "https://drive.google.com/file/d/1Glj60_cTFsch80Gm0UZaNLrQRMLfS9Kc/view?usp=drive_link",
           "id": "p:manuals/teacher/3.2.pdf"
@@ -3283,7 +3323,8 @@ const SECTIONS_DATA_DEFAULT = {
           "num": "3.3",
           "title": {
             "ko": "언어 수업 그룹 구성",
-            "es": "Estructura de grupo de clase de lenguaje"
+            "es": "Estructura de grupo de clase de lenguaje",
+            "en": "Language Class Group Structure"
           },
           "file": "https://drive.google.com/file/d/1EmAVaM3HGCrMF4i2hOom9xCvt8achlK1/view?usp=drive_link"
         }
@@ -3291,7 +3332,7 @@ const SECTIONS_DATA_DEFAULT = {
       "id": "n_rc9fitw4ztcc"
     }
   ],
-  student: [{"id":"n_bxxp4idq5cv3","num":"1","title":{"ko":"학생용 매뉴얼","es":"Manual para Estudiantes"},"children":[{"id":"n_tq42xjgm0rcv","num":"1.1","title":{"ko":"전체 매뉴얼","es":"Manual para Estudiantes"},"file":"https://drive.google.com/file/d/11h9zMnO90OnWrcg8UMDo32cYJewDmfYx/view?usp=drive_link"}],"file":"https://drive.google.com/file/d/11h9zMnO90OnWrcg8UMDo32cYJewDmfYx/view?usp=drive_link"}],
+  student: [{"id": "n_bxxp4idq5cv3", "num": "1", "title": {"ko": "학생용 매뉴얼", "es": "Manual para Estudiantes"}, "children": [{"id": "n_tq42xjgm0rcv", "num": "1.1", "title": {"ko": "전체 매뉴얼", "es": "Manual para Estudiantes"}, "file": "https://drive.google.com/file/d/11h9zMnO90OnWrcg8UMDo32cYJewDmfYx/view?usp=drive_link"}], "file": "https://drive.google.com/file/d/11h9zMnO90OnWrcg8UMDo32cYJewDmfYx/view?usp=drive_link"}],
   admin: null
 };
 
@@ -3858,6 +3899,34 @@ const UPDATES_DATA_DEFAULT = {
   "student": [],
   "admin": []
 };
+
+// ── Published data version ─────────────────────────────────────────────
+// Stamped automatically by "HTML 내보내기". A returning visitor keeps a copy of
+// the trees/updates/layout in localStorage, and getTree() prefers that copy —
+// so without this check, a re-publish would never reach anyone who had visited
+// before. On mismatch we discard the stored copies so the newly baked data
+// takes effect. Personal settings (lang/theme/auth/NEW-badge state) and the
+// admin's own link table (lxp_links_v1) are left untouched.
+const DATA_VERSION = '2026-09-11T17:08:11.000Z';
+(function() {
+  try {
+    const KEY = 'lxp_data_version';
+    if (localStorage.getItem(KEY) === DATA_VERSION) return;
+    const toRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (!k) continue;
+      if (k.startsWith('lxp_tree_v3_') ||
+          k.startsWith('lxp_sections_v2_') ||
+          k.startsWith('lxp_layout_') ||
+          (k.startsWith('lxp_updates_') && !k.startsWith('lxp_updates_last_viewed_'))) {
+        toRemove.push(k);
+      }
+    }
+    toRemove.forEach(k => localStorage.removeItem(k));
+    localStorage.setItem(KEY, DATA_VERSION);
+  } catch (e) { console.warn('Data version check failed:', e); }
+})();
 
 const UPDATES_KEY_PREFIX = 'lxp_updates_';
 
@@ -5349,7 +5418,7 @@ function renderUpdatePost(post, role) {
   const title = pickLangValue(post.title, state.lang);
   const date = post.date || '';
   const category = post.category || 'general';
-  const src = getNodeSource({ id: post.id });
+  const src = getNodeSource({ id: post.id, file: post.file });
   const hasSource = src.type !== 'none';
   const recent = isPostRecent(post);
   // Save the full post into downloadNodeMap so the modal can read body, etc.
@@ -5464,7 +5533,7 @@ async function openUpdateModal(opts) {
       updateBodyEsInput.value = (post.body && post.body.es) || '';
       updateBodyEnInput.value = (post.body && post.body.en) || '';
       ctx.currentCategory = post.category || 'general';
-      const link = getLink(opts.postId);
+      const link = getLink(opts.postId) || (post.file && /^https?:\/\//i.test(post.file) ? post.file : null);
       const hasFile = state.uploadedKeys.has(opts.postId);
       if (link) {
         ctx.currentSourceType = 'link';
@@ -6243,7 +6312,7 @@ function renderAdminUpdatePost(post, role, index, total) {
   const title = pickLangValue(post.title, state.lang);
   const date = post.date || '';
   const category = post.category || 'general';
-  const link = getLink(post.id);
+  const link = getLink(post.id) || (post.file && /^https?:\/\//i.test(post.file) ? post.file : null);
   const hasFile = state.uploadedKeys.has(post.id);
   const hasSource = !!(link || hasFile);
 
@@ -6529,23 +6598,17 @@ async function openPostViewModal(node) {
       const rec = await dbGet(node.id);
       if (rec && rec.blob) pdfBlob = rec.blob;
     } catch (e) { console.warn(e); }
-  } else if (src.type === 'link') {
+  } else if ((src.type === 'link' || src.type === 'fallback') && /^https?:\/\//i.test(src.value)) {
     externalUrl = src.value;
-    // Try to convert Google Drive to raw download URL for fetch
-    const rawUrl = driveRawUrl(src.value);
-    if (rawUrl) {
+    // Google Drive never serves PDFs with CORS headers, so fetching is pointless
+    // (it only adds delay and can end up as an HTML blob). Go straight to the
+    // /preview iframe for Drive URLs; only try a direct fetch for other hosts.
+    if (!drivePreviewUrl(src.value)) {
       try {
-        // Note: this fetch will likely fail due to CORS on Drive — graceful fallback to iframe
-        const resp = await fetch(rawUrl, { mode: 'cors' });
-        if (resp.ok) pdfBlob = await resp.blob();
-      } catch (e) { /* expected for Drive; fall through to iframe fallback */ }
+        const resp = await fetch(src.value, { mode: 'cors' });
+        if (resp.ok && /pdf/i.test(resp.headers.get('content-type') || '')) pdfBlob = await resp.blob();
+      } catch (e) { /* fall through to fallback UI */ }
     }
-  } else if (src.type === 'fallback' && /^https?:\/\//i.test(src.value)) {
-    externalUrl = src.value;
-    try {
-      const resp = await fetch(src.value, { mode: 'cors' });
-      if (resp.ok) pdfBlob = await resp.blob();
-    } catch (e) { /* try iframe fallback */ }
   }
 
   // Show external/download buttons
@@ -6566,7 +6629,7 @@ async function openPostViewModal(node) {
     try {
       const arrayBuffer = await pdfBlob.arrayBuffer();
       if (myToken !== postViewRenderToken) return;
-      await renderPdfPages(arrayBuffer, myToken);
+      await renderPdfPages(arrayBuffer, myToken, externalUrl);
     } catch (err) {
       console.warn('PDF.js render failed:', err);
       showPdfFallback(externalUrl);
@@ -6578,9 +6641,9 @@ async function openPostViewModal(node) {
   showPdfFallback(externalUrl);
 }
 
-async function renderPdfPages(arrayBuffer, myToken) {
+async function renderPdfPages(arrayBuffer, myToken, externalUrl = null) {
   if (!window.pdfjsLib) {
-    showPdfFallback(null);
+    showPdfFallback(externalUrl);
     return;
   }
   try {
@@ -6669,6 +6732,10 @@ function showPdfFallback(externalUrl) {
     postViewBody.innerHTML = `
       <div class="pv-iframe-wrap">
         <iframe src="${previewUrl}" title="PDF Preview" style="flex:1; width:100%; height:100%; border:none; background:#fff;"></iframe>
+        <div class="pv-iframe-note">
+          <span>${t('post_view_iframe_hint')}</span>
+          <a href="${externalUrl}" target="_blank" rel="noopener">${t('post_view_open_external')} ↗</a>
+        </div>
       </div>
     `;
   } else if (externalUrl) {
@@ -6923,7 +6990,7 @@ async function openPostPreviewModal(post, role) {
   document.body.classList.add('modal-open');
 
   // Right pane: render the attachment as inline PDF (if any), else show empty hint
-  const src = getNodeSource({ id: post.id });
+  const src = getNodeSource({ id: post.id, file: post.file });
   if (src.type === 'none') {
     // No attachment
     videoModalManualPanel.classList.add('empty');
@@ -6940,6 +7007,7 @@ async function openPostPreviewModal(post, role) {
   // Build a synthetic "node" with this post's ID so getNodeSource picks up its link/file.
   const attachNode = {
     id: post.id,
+    file: post.file,
     num: '',
     title: post.title,
     _kind: 'update'
@@ -7032,21 +7100,14 @@ async function openInlineManualInVideoPanel(node, siblings, currentIndex) {
       const rec = await dbGet(node.id);
       if (rec && rec.blob) pdfBlob = rec.blob;
     } catch (e) { console.warn(e); }
-  } else if (src.type === 'link') {
+  } else if ((src.type === 'link' || src.type === 'fallback') && /^https?:\/\//i.test(src.value)) {
     externalUrl = src.value;
-    const rawUrl = driveRawUrl(src.value);
-    if (rawUrl) {
+    if (!drivePreviewUrl(src.value)) {
       try {
-        const resp = await fetch(rawUrl, { mode: 'cors' });
-        if (resp.ok) pdfBlob = await resp.blob();
-      } catch (e) { /* fall through to iframe */ }
+        const resp = await fetch(src.value, { mode: 'cors' });
+        if (resp.ok && /pdf/i.test(resp.headers.get('content-type') || '')) pdfBlob = await resp.blob();
+      } catch (e) { /* fall through to fallback UI */ }
     }
-  } else if (src.type === 'fallback' && /^https?:\/\//i.test(src.value)) {
-    externalUrl = src.value;
-    try {
-      const resp = await fetch(src.value, { mode: 'cors' });
-      if (resp.ok) pdfBlob = await resp.blob();
-    } catch (e) {}
   }
 
   if (myToken !== videoPanelRenderToken) return;
@@ -7057,7 +7118,7 @@ async function openInlineManualInVideoPanel(node, siblings, currentIndex) {
     try {
       const arrayBuffer = await pdfBlob.arrayBuffer();
       if (myToken !== videoPanelRenderToken) return;
-      await renderInlinePdf(arrayBuffer, inlineBody, () => videoPanelRenderToken, myToken);
+      await renderInlinePdf(arrayBuffer, inlineBody, () => videoPanelRenderToken, myToken, externalUrl);
     } catch (err) {
       console.warn('Inline PDF render failed:', err);
       showInlinePdfFallback(inlineBody, externalUrl);
@@ -7067,9 +7128,9 @@ async function openInlineManualInVideoPanel(node, siblings, currentIndex) {
   showInlinePdfFallback(inlineBody, externalUrl);
 }
 
-async function renderInlinePdf(arrayBuffer, container, getCurrentToken, myToken) {
+async function renderInlinePdf(arrayBuffer, container, getCurrentToken, myToken, externalUrl = null) {
   if (!window.pdfjsLib) {
-    showInlinePdfFallback(container, null);
+    showInlinePdfFallback(container, externalUrl);
     return;
   }
   try {
@@ -7254,15 +7315,31 @@ async function exportHtml() {
     // Bake in updates data (the board-style feed posts).
     // Attachments stay in localStorage (links[postId] = url) and are baked via the
     // FULL_*_FILES / SECTIONS / VIDEOS pipeline. Posts themselves go into UPDATES_DATA_DEFAULT.
+    // Post attachments live in the link table (links[postId]); fold them into
+    // each post's `file` so they travel with the exported HTML like manual links do.
+    function applyLinksToPosts(posts) {
+      return (posts || []).map(p => {
+        const copy = { ...p };
+        if (links[p.id]) copy.file = links[p.id];
+        return copy;
+      });
+    }
     const newUpdates = {
-      teacher: getUpdates('teacher') || [],
-      student: getUpdates('student') || [],
-      admin:   getUpdates('admin') || []
+      teacher: applyLinksToPosts(getUpdates('teacher')),
+      student: applyLinksToPosts(getUpdates('student')),
+      admin:   applyLinksToPosts(getUpdates('admin'))
     };
     const updatesBlockRe = /const\s+UPDATES_DATA_DEFAULT\s*=\s*\{[\s\S]*?\n\};/;
     const newUpdatesBlock = 'const UPDATES_DATA_DEFAULT = ' + JSON.stringify(newUpdates, null, 2) + ';';
     if (updatesBlockRe.test(html)) {
       html = html.replace(updatesBlockRe, newUpdatesBlock);
+    }
+
+    // Stamp a fresh data version so returning visitors drop their stale copy.
+    const versionRe = /const\s+DATA_VERSION\s*=\s*'[^']*';/;
+    const newVersion = "const DATA_VERSION = '" + new Date().toISOString() + "';";
+    if (versionRe.test(html)) {
+      html = html.replace(versionRe, newVersion);
     }
 
     // Bake in layout settings (promo banner position/text, video grid cols).
