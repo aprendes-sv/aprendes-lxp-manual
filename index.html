@@ -1409,6 +1409,23 @@
   .wys-update-post { /* no-op */ }
 
   /* Textarea styling for the update modal */
+  .item-bullets-grid { display: flex; flex-direction: column; gap: 10px; }
+  .item-bullets-grid > div { display: flex; flex-direction: column; gap: 4px; }
+  .item-bullets-grid .promo-lang { font-size: 11px; color: var(--ink-mute); }
+  #item-modal textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-family: var(--sans); font-size: 13.5px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    color: var(--ink);
+    transition: border-color 0.2s;
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.6;
+  }
+  #item-modal textarea:focus { outline: none; border-color: var(--accent); }
   #update-modal textarea {
     width: 100%;
     padding: 10px 12px;
@@ -2267,6 +2284,26 @@
       </div>
     </div>
 
+    <!-- Bullet-point editor (visible only for top-level video items) -->
+    <div class="form-row stacked item-bullets" id="item-bullets-row" style="display:none; margin-top: 18px;">
+      <label data-i18n="item_modal_bullets_label">Puntos del contenido</label>
+      <div class="manual-refs-hint" data-i18n="item_modal_bullets_hint">Un punto por línea. Mantén el mismo orden de líneas en cada idioma.</div>
+      <div class="item-bullets-grid">
+        <div>
+          <span class="promo-lang">한국어</span>
+          <textarea id="item-bullets-ko" rows="5" placeholder="첫 번째 항목&#10;두 번째 항목"></textarea>
+        </div>
+        <div>
+          <span class="promo-lang">Español</span>
+          <textarea id="item-bullets-es" rows="5" placeholder="Primer punto&#10;Segundo punto"></textarea>
+        </div>
+        <div>
+          <span class="promo-lang">English</span>
+          <textarea id="item-bullets-en" rows="5" placeholder="First point&#10;Second point"></textarea>
+        </div>
+      </div>
+    </div>
+
     <div class="error-msg" id="item-error" data-i18n="item_modal_required">Required.</div>
     <div class="modal-actions">
       <button class="btn btn-danger" id="item-modal-delete" data-i18n="admin_btn_delete_node" style="display:none">Eliminar</button>
@@ -2446,7 +2483,7 @@ const PASSWORDS = {
 
 const FULL_MANUAL_FILES = {
   "teacher": "https://drive.google.com/uc?export=download&id=1HXRKQyKGclCr2X5hLXi_qCpYGucf83AM",
-  "student": "https://drive.google.com/uc?export=download&id=11h9zMnO90OnWrcg8UMDo32cYJewDmfYx",
+  "student": "https://drive.google.com/file/d/11h9zMnO90OnWrcg8UMDo32cYJewDmfYx/view?usp=drive_link",
   "admin": "manuals/admin/full.pdf"
 };
 
@@ -2647,7 +2684,9 @@ const I18N = {
     "update_modal_body_label_en": "본문 (English)",
     "update_new_badge": "NEW",
     "item_modal_title_en_label": "제목 (English)",
-    "post_view_iframe_hint": "화면이 비어 보이면 새 탭에서 여세요."
+    "post_view_iframe_hint": "화면이 비어 보이면 새 탭에서 여세요.",
+    "item_modal_bullets_label": "하위 항목 (불렛)",
+    "item_modal_bullets_hint": "한 줄에 하나씩 입력하세요. 언어 간 줄 순서를 맞춰야 같은 항목으로 묶입니다. 비워두면 불렛이 표시되지 않습니다."
   },
   "es": {
     "brand": "LXP · Manual",
@@ -2845,7 +2884,9 @@ const I18N = {
     "update_modal_body_label_en": "Contenido (English)",
     "update_new_badge": "NUEVO",
     "item_modal_title_en_label": "Título (English)",
-    "post_view_iframe_hint": "¿Se ve en blanco? Ábrelo en una pestaña nueva."
+    "post_view_iframe_hint": "¿Se ve en blanco? Ábrelo en una pestaña nueva.",
+    "item_modal_bullets_label": "Puntos del contenido",
+    "item_modal_bullets_hint": "Un punto por línea. Mantén el mismo orden de líneas en cada idioma. Si lo dejas vacío, no se mostrarán puntos."
   },
   "en": {
     "brand": "LXP · Manual",
@@ -3043,7 +3084,9 @@ const I18N = {
     "update_modal_body_label_en": "Body (English)",
     "update_new_badge": "NEW",
     "item_modal_title_en_label": "Title (English)",
-    "post_view_iframe_hint": "Blank? Open it in a new tab."
+    "post_view_iframe_hint": "Blank? Open it in a new tab.",
+    "item_modal_bullets_label": "Content bullets",
+    "item_modal_bullets_hint": "One bullet per line. Keep the same line order across languages. Leave empty to show no bullets."
   }
 };
 
@@ -3114,7 +3157,7 @@ const SECTIONS_DATA_DEFAULT = {
                 "es": "Clase de hoy",
                 "en": "Today's Class"
               },
-              "file": "https://drive.google.com/uc?export=download&id=1Rb7OmZP-JeqhylGK1RyH7JGt9Hu5nFrr",
+              "file": "https://drive.google.com/file/d/18nUsdKLdL5_VyLFszpiFkWvJs7Vobu0N/view?usp=drive_link",
               "id": "p:manuals/teacher/2.1.2.pdf"
             },
             {
@@ -3415,16 +3458,17 @@ const VIDEOS_DATA_DEFAULT = {
         "n_lpfemtz3zu6z",
         "n_8q10m544xxc1",
         "n_62v38z2cttcc",
-        "p:manuals/teacher/1.1.pdf"
+        "p:manuals/teacher/1.1.pdf",
+        "p:manuals/teacher/1.2.pdf"
       ],
-      "file": "https://drive.google.com/file/d/1Ui4FLLghrDJMfEG6iZ5d-wslSGMtK-oe/view?usp=drive_link"
+      "file": "https://drive.google.com/file/d/1tgSwEDyd49pvUHvh9azlAhuBiahngnMv/view?usp=sharing"
     },
     {
       "num": "2",
       "title": {
-        "ko": "학교 선택 및 바로가기",
-        "es": "Selección de escuela y acceso directo",
-        "en": "School Selection and Shortcut"
+        "ko": "강의실 및 오늘의 수업",
+        "es": "Lista de aulas y Clase de hoy",
+        "en": "Classrooms and Today's Class"
       },
       "children": [
         {
@@ -3447,14 +3491,18 @@ const VIDEOS_DATA_DEFAULT = {
         }
       ],
       "id": "n_lo6hgrintnbr",
-      "file": "https://drive.google.com/file/d/12eUi9fC0pkhBJAsgUPXCgzofjlxNgM7m/view?usp=drive_link"
+      "file": "https://drive.google.com/file/d/17ABhyy0iAJs82iPwkYGrcDMgxy1HOXzY/view?usp=drive_link",
+      "manualRefs": [
+        "p:manuals/teacher/2.1.1.pdf",
+        "p:manuals/teacher/2.1.2.pdf"
+      ]
     },
     {
       "num": "3",
       "title": {
-        "ko": "강의실 및 오늘의 수업",
-        "es": "Aulas y clase de hoy",
-        "en": "Classrooms and Today's Class"
+        "ko": "메뉴 옵션 (실시간 정규 수업)",
+        "es": "Opciones de menú (Clase regular, revisión de clase y asistencia)",
+        "en": "Menu options (Regular real-time class)"
       },
       "children": [
         {
@@ -3478,17 +3526,17 @@ const VIDEOS_DATA_DEFAULT = {
       ],
       "id": "n_icd48j7jinbr",
       "manualRefs": [
-        "p:manuals/teacher/2.1.1.pdf",
-        "p:manuals/teacher/2.1.2.pdf"
+        "p:manuals/teacher/2.1.4.pdf",
+        "p:manuals/teacher/2.1.5.pdf"
       ],
-      "file": "https://drive.google.com/file/d/13NF2lZOASdK14zlpXlNCOaHXlou0yfi8/view?usp=drive_link"
+      "file": "https://drive.google.com/file/d/1G0az4CPA8ezEl3urBsEQtd13fwhxuILs/view?usp=drive_link"
     },
     {
       "num": "4",
       "title": {
-        "ko": "수업 목록",
-        "es": "Lista de clases",
-        "en": "Class List"
+        "ko": "메뉴 옵션 (나의 진행 상황, 수업 목록, 과제 목록)",
+        "es": "Opciones de menú (Mi progreso, Lista de Clase y Lista de Tareas)",
+        "en": "Menu options (My progress, Class List and Task List))"
       },
       "children": [
         {
@@ -3503,16 +3551,18 @@ const VIDEOS_DATA_DEFAULT = {
       ],
       "id": "n_i4ft9yfumnbr",
       "manualRefs": [
-        "p:manuals/teacher/2.1.3.pdf"
+        "p:manuals/teacher/2.1.10.pdf",
+        "p:manuals/teacher/2.1.3.pdf",
+        "p:manuals/teacher/2.1.11.pdf"
       ],
-      "file": "https://drive.google.com/file/d/1gqzEESIdZ-ONqg7ZYZVe-zEG7dZp5Olz/view?usp=drive_link"
+      "file": "https://drive.google.com/file/d/1t30yUCWw8Kqj3LqTdVXi3ndqcr0ow5Zc/view?usp=drive_link"
     },
     {
       "num": "5",
       "title": {
-        "ko": "정규 수업",
-        "es": "Clase regular",
-        "en": "Regular Class"
+        "ko": "메뉴 옵션 (과제 목록, 교실 정보 및 출석 관리)",
+        "es": "Opciones de menú (Lista de tareas, información del aula y control de asistencia)",
+        "en": "Menu Options (Task List, Classroom Information, and Attendance Control)"
       },
       "children": [
         {
@@ -3527,16 +3577,16 @@ const VIDEOS_DATA_DEFAULT = {
       ],
       "id": "n_xu3wua66ynbr",
       "manualRefs": [
-        "p:manuals/teacher/2.1.4.pdf"
+        "p:manuals/teacher/2.1.5.2.pdf"
       ],
-      "file": "https://drive.google.com/file/d/1Lw5tQHMxdjYugbnb4v251yAa5xR2mVmq/view?usp=drive_link"
+      "file": "https://drive.google.com/file/d/17cnCBNP3qXAHLAlVFF0d38YvAaXA95fI/view?usp=drive_link"
     },
     {
       "num": "6",
       "title": {
-        "ko": "수업 모드 및 화면 제어",
-        "es": "Modo clase y control de pantalla",
-        "en": "Class Mode and Screen Control"
+        "ko": "수업 목록 (표시 설정)",
+        "es": "Lista de Clases (Configuración de Visibilidad)",
+        "en": "Class List (Visibility Settings)"
       },
       "children": [
         {
@@ -3569,18 +3619,16 @@ const VIDEOS_DATA_DEFAULT = {
       ],
       "id": "n_eamk1u5o7nbr",
       "manualRefs": [
-        "p:manuals/teacher/2.1.6.pdf",
-        "p:manuals/teacher/2.1.6.1.pdf",
-        "p:manuals/teacher/2.1.6.2.pdf"
+        "p:manuals/teacher/2.1.3.pdf"
       ],
-      "file": "https://drive.google.com/file/d/14Y9m5Q-tYZb_jG2wXQyBBmhfvmIkszWX/view?usp=drive_link"
+      "file": "https://drive.google.com/file/d/1j-BZiy7zc0kCl7tlHmzDUN7qMRBE9lNf/view?usp=drive_link"
     },
     {
       "num": "7",
       "title": {
-        "ko": "출석 기능",
-        "es": "Función de asistencia",
-        "en": "Attendance Feature"
+        "ko": "교육과정 구조 (언어)",
+        "es": "Estructura Curricular (Lenguaje)",
+        "en": "Curriculum Structure (Language)"
       },
       "children": [
         {
@@ -3613,18 +3661,17 @@ const VIDEOS_DATA_DEFAULT = {
       ],
       "id": "n_rsn952fahnbr",
       "manualRefs": [
-        "p:manuals/teacher/2.1.5.pdf",
-        "p:manuals/teacher/2.1.5.1.pdf",
-        "p:manuals/teacher/2.1.5.2.pdf"
+        "p:manuals/teacher/3.1.pdf",
+        "n_mn6ggzfmnfyr"
       ],
-      "file": "https://drive.google.com/file/d/1DlhZ0XrryQ16X9ySZ55AHjQmdfKmkBMO/view?usp=drive_link"
+      "file": "https://drive.google.com/file/d/1bmviX3-C2lWBOka9WZQTgQvEtpWqIPiY/view?usp=drive_link"
     },
     {
       "num": "8",
       "title": {
-        "ko": "판서, 자료, 화면 제어",
-        "es": "Pizarra, materiales y control de pantalla",
-        "en": "Whiteboard, Materials, and Screen Control"
+        "ko": "교육과정 구조 (수학)",
+        "es": "Estructura Curricular (Matemática)",
+        "en": "Curriculum Structure (Math)"
       },
       "children": [
         {
@@ -3666,19 +3713,17 @@ const VIDEOS_DATA_DEFAULT = {
       ],
       "id": "n_8ghkb6svlnbr",
       "manualRefs": [
-        "p:manuals/teacher/2.1.6.3.pdf",
-        "p:manuals/teacher/2.1.6.4.pdf",
-        "p:manuals/teacher/2.1.6.5.pdf",
-        "p:manuals/teacher/2.1.6.6.pdf"
+        "p:manuals/teacher/3.1.pdf",
+        "p:manuals/teacher/3.2.pdf"
       ],
-      "file": "https://drive.google.com/file/d/14UubVvryWCRA5nXeFK0euOx9Sl5KXeAn/view?usp=drive_link"
+      "file": "https://drive.google.com/file/d/1wPEvbrkueaaMDQRo8QcfibYHqglhbJiE/view?usp=drive_link"
     },
     {
       "num": "9",
       "title": {
-        "ko": "학생 목록 및 재시도 기능",
-        "es": "Lista de estudiantes y función de reintentar",
-        "en": "Student List and Retry Feature"
+        "ko": "수업 모드 (동기화 및 화면 잠금)",
+        "es": "Modo de Clase (Sincronización y Bloqueo de pantalla)",
+        "en": "Class Mode (Synchronization and Screen Lock)"
       },
       "children": [
         {
@@ -3702,18 +3747,17 @@ const VIDEOS_DATA_DEFAULT = {
       ],
       "id": "n_d93zxox22nbr",
       "manualRefs": [
-        "p:manuals/teacher/2.1.6.7.pdf",
-        "p:manuals/teacher/2.1.7.pdf",
-        "p:manuals/teacher/2.1.8.pdf"
+        "p:manuals/teacher/2.1.6.1.pdf",
+        "p:manuals/teacher/2.1.6.2.pdf"
       ],
-      "file": "https://drive.google.com/file/d/102Crucax4I4_OVCjVatE60oCF8bVXEBj/view?usp=drive_link"
+      "file": "https://drive.google.com/file/d/1lKyI9c4GyYlo98Iw7xGMwO85UfeEaWeS/view?usp=drive_link"
     },
     {
       "num": "10",
       "title": {
-        "ko": "나의 진도",
-        "es": "Mi progreso",
-        "en": "My Progress"
+        "ko": "수업 모드 (칠판 및 참고 자료)",
+        "es": "Modo de Clase (Pizarra y Material de referencia)",
+        "en": "Class Mode (Whiteboard and Reference Materials)"
       },
       "children": [
         {
@@ -3728,16 +3772,17 @@ const VIDEOS_DATA_DEFAULT = {
       ],
       "id": "n_gpra5wejdnbr",
       "manualRefs": [
-        "p:manuals/teacher/2.1.10.pdf"
+        "p:manuals/teacher/2.1.6.3.pdf",
+        "p:manuals/teacher/2.1.6.4.pdf"
       ],
-      "file": "https://drive.google.com/uc?export=download&id=13uausK1fKHZ21EbTzT46cOYWhrDgkQLw"
+      "file": "https://drive.google.com/file/d/1xfCq7ttu7TbSZ2dsYYcF3oRym6Rn21Be/view?usp=drive_link"
     },
     {
       "num": "11",
       "title": {
-        "ko": "학습 요약 및 과제",
-        "es": "Resumen de aprendizaje y tareas",
-        "en": "Learning Summary and Assignments"
+        "ko": "수업 모드 (전체 화면, 확대/축소 및 출석 확인)",
+        "es": "Modo de Clase (Pantalla Completa, Zoom y Asistencia)",
+        "en": "Class Mode (Full Screen, Zoom, and Attendance)"
       },
       "children": [
         {
@@ -3761,17 +3806,18 @@ const VIDEOS_DATA_DEFAULT = {
       ],
       "id": "n_szhy7nvusnbr",
       "manualRefs": [
-        "p:manuals/teacher/2.1.9.pdf",
-        "p:manuals/teacher/2.1.11.pdf"
+        "p:manuals/teacher/2.1.6.5.pdf",
+        "p:manuals/teacher/2.1.6.6.pdf",
+        "p:manuals/teacher/2.1.5.1.pdf"
       ],
-      "file": "https://drive.google.com/file/d/1ccL1QItzLAbpAzjodHRTL39o0_lPc69K/view?usp=drive_link"
+      "file": "https://drive.google.com/file/d/1K6Y1cgcCBK9kihA_62drZ2hoaiFfnhTU/view?usp=drive_link"
     },
     {
       "num": "12",
       "title": {
-        "ko": "수학 수업 그룹 구성",
-        "es": "Estructura de grupo de clase de matemática",
-        "en": "Math Class Group Structure"
+        "ko": "수업 모드 (재시도 기능)",
+        "es": "Modo de Clase (Función reintentar)",
+        "en": "Class Mode (Retry Function)"
       },
       "children": [
         {
@@ -3804,17 +3850,17 @@ const VIDEOS_DATA_DEFAULT = {
       ],
       "id": "n_8v4g06i4unbr",
       "manualRefs": [
-        "p:manuals/teacher/3.1.pdf",
-        "p:manuals/teacher/3.2.pdf"
+        "p:manuals/teacher/2.1.7.pdf",
+        "p:manuals/teacher/2.1.8.pdf"
       ],
-      "file": "https://drive.google.com/uc?export=download&id=16o6p3mi-RceFIOAVB_q-moChW3lCiNTr"
+      "file": "https://drive.google.com/file/d/1XvGT4wHgsOW9PnInPmqZs9SUuUn6oesX/view?usp=drive_link"
     },
     {
       "num": "13",
       "title": {
-        "ko": "언어 수업 그룹 구성",
-        "es": "Estructura de grupo de clase de lenguaje",
-        "en": "Language Class Group Structure"
+        "ko": "모니터링 도구 (학생 목록)",
+        "es": "Herramientas de Monitoreo (Lista de Estudiantes)",
+        "en": "Monitoring Tools (Student List)"
       },
       "children": [
         {
@@ -3861,14 +3907,61 @@ const VIDEOS_DATA_DEFAULT = {
             "en": "Writing Cross-axis"
           },
           "id": "n_lcpblqlwxnbr"
+        },
+        {
+          "id": "n_cga291yhr8c9",
+          "num": "14",
+          "title": {
+            "ko": "",
+            "es": "",
+            "en": ""
+          }
         }
       ],
       "id": "n_rdoqsukf3nbr",
       "manualRefs": [
-        "p:manuals/teacher/3.1.pdf",
-        "n_mn6ggzfmnfyr"
+        "p:manuals/teacher/2.1.6.7.pdf"
       ],
-      "file": "https://drive.google.com/uc?export=download&id=1HkU0cPGdSlgQqWVTJ1XSGLWjAGsgKFC6"
+      "file": "https://drive.google.com/file/d/12SRKkqtDw-pcq1dP1s2Icp2dgWcSJrm6/view?usp=drive_link"
+    },
+    {
+      "id": "n_rix0ir8v1sbi",
+      "num": "14",
+      "title": {
+        "ko": "모니터링 도구 (학습 요약)",
+        "es": "Herramientas de Monitoreo (Resumen de Aprendizaje)",
+        "en": "Monitoring Tools (Learning Summary)"
+      },
+      "children": [],
+      "manualRefs": [
+        "p:manuals/teacher/2.1.9.pdf"
+      ],
+      "file": "https://drive.google.com/file/d/1JLjvJwOjKNwIbaxPC5WpAastNxwwum_m/view?usp=drive_link"
+    },
+    {
+      "id": "n_h4aspcktrwfu",
+      "num": "15",
+      "title": {
+        "ko": "모니터링 도구 (나의 진행 상황)",
+        "es": "Herramientas de Monitoreo (Mi progreso)",
+        "en": "Monitoring Tools (My Progress)"
+      },
+      "children": [],
+      "manualRefs": [
+        "p:manuals/teacher/2.1.10.pdf"
+      ],
+      "file": "https://drive.google.com/file/d/1h4pdyTgWgFB6tzBJjmLJLgvBvvCYbp_L/view?usp=drive_link"
+    },
+    {
+      "id": "n_fub0d6oxs0rk",
+      "num": "16",
+      "title": {
+        "ko": "수업 진행 흐름",
+        "es": "Flujo de Clase",
+        "en": "Class Flow"
+      },
+      "children": [],
+      "file": "https://drive.google.com/file/d/1Ij7kqbKJAVqHDhJQB_bXKOhLpDN73Ltd/view?usp=drive_link"
     }
   ],
   student: null,
@@ -3925,7 +4018,7 @@ const UPDATES_DATA_DEFAULT = {
 // before. On mismatch we discard the stored copies so the newly baked data
 // takes effect. Personal settings (lang/theme/auth/NEW-badge state) and the
 // admin's own link table (lxp_links_v1) are left untouched.
-const DATA_VERSION = '2026-09-11T21:12:30.252Z';
+const DATA_VERSION = '2026-10-23T16:36:08.938Z';
 (function() {
   try {
     const KEY = 'lxp_data_version';
@@ -4291,6 +4384,7 @@ function updateNode(role, id, partial, kind = 'manual') {
   if (partial.title_ko !== undefined) found.node.title = { ...(found.node.title || {}), ko: partial.title_ko };
   if (partial.title_es !== undefined) found.node.title = { ...(found.node.title || {}), es: partial.title_es };
   if (partial.title_en !== undefined) found.node.title = { ...(found.node.title || {}), en: partial.title_en };
+  if (partial.children !== undefined) found.node.children = Array.isArray(partial.children) ? partial.children : [];
   if (partial.manualRefs !== undefined) {
     if (Array.isArray(partial.manualRefs) && partial.manualRefs.length > 0) {
       found.node.manualRefs = partial.manualRefs;
@@ -4876,9 +4970,60 @@ async function openItemModal(opts) {
   setSourceTab(ctx.currentSourceType);
   updateFileDisplay();
   populateManualRefsPicker(ctx);
+  populateBulletsEditor(ctx);
   itemError.classList.remove('show');
   itemModal.classList.add('active');
   setTimeout(() => itemNumInput.focus(), 100);
+}
+
+// Bullet-point editor: edits a top-level video's `children` (the list shown under
+// the card title). One line per bullet, index-aligned across the three languages.
+const itemBulletsKo = document.getElementById('item-bullets-ko');
+const itemBulletsEs = document.getElementById('item-bullets-es');
+const itemBulletsEn = document.getElementById('item-bullets-en');
+
+function populateBulletsEditor(ctx) {
+  const row = document.getElementById('item-bullets-row');
+  ctx.bulletsEnabled = false;
+  itemBulletsKo.value = ''; itemBulletsEs.value = ''; itemBulletsEn.value = '';
+  if (ctx.kind !== 'videos') { row.style.display = 'none'; return; }
+  let children = [];
+  if (ctx.mode === 'edit' && ctx.nodeId) {
+    const found = findNode(ctx.role, ctx.nodeId, 'videos');
+    if (!found) { row.style.display = 'none'; return; }
+    // Only top-level videos have bullets; a bullet itself has none.
+    if (found.parentArr !== found.sections) { row.style.display = 'none'; return; }
+    children = found.node.children || [];
+  } else if (ctx.mode !== 'add-section') {
+    row.style.display = 'none'; return;
+  }
+  ctx.bulletsEnabled = true;
+  ctx.bulletsExisting = children;
+  itemBulletsKo.value = children.map(c => (c.title && c.title.ko) || '').join('\n');
+  itemBulletsEs.value = children.map(c => (c.title && c.title.es) || '').join('\n');
+  itemBulletsEn.value = children.map(c => (c.title && c.title.en) || '').join('\n');
+  row.style.display = 'block';
+}
+
+// Build a children array from the three textareas. Reuses existing child IDs by
+// position so nothing referencing them breaks; drops rows empty in all languages.
+function collectBulletsFromEditor(ctx, parentNum) {
+  const split = v => v.replace(/\r/g, '').split('\n').map(x => x.trim());
+  const ko = split(itemBulletsKo.value), es = split(itemBulletsEs.value), en = split(itemBulletsEn.value);
+  const n = Math.max(ko.length, es.length, en.length);
+  const existing = ctx.bulletsExisting || [];
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const t = { ko: ko[i] || '', es: es[i] || '', en: en[i] || '' };
+    if (!t.ko && !t.es && !t.en) continue;
+    const prev = existing[i];
+    out.push({
+      id: prev && prev.id ? prev.id : genId(),
+      num: (parentNum || '') + '.' + (out.length + 1),
+      title: t
+    });
+  }
+  return out;
 }
 
 // Populate the manual-refs picker (only visible when editing a video item).
@@ -4984,6 +5129,11 @@ async function saveItemModal() {
   } else if (ctx.mode === 'edit') {
     nodeId = ctx.nodeId;
     updateNode(ctx.role, nodeId, { num, title_ko: titleKo, title_es: titleEs, title_en: titleEn }, kind);
+  }
+
+  // Save bullet points (top-level video items only)
+  if (kind === 'videos' && ctx.bulletsEnabled) {
+    updateNode(ctx.role, nodeId, { children: collectBulletsFromEditor(ctx, num) }, kind);
   }
 
   // Save manualRefs (only meaningful for video items)
@@ -6434,6 +6584,8 @@ async function openFullManualEdit(role, nodeId, kind = 'manual') {
   itemTitleEsInput.disabled = true;
   itemTitleEnInput.value = fullLabel;
   itemTitleEnInput.disabled = true;
+  // Full-item modal has no bullets / manual refs
+  document.getElementById('item-bullets-row').style.display = 'none';
 
   const link = getLink(nodeId);
   const hasFile = state.uploadedKeys.has(nodeId);
